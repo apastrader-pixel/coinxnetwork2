@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoinX Network – Mining & Staking</title>
+    <meta name="google" content="notranslate">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -153,6 +154,7 @@
         .history-item .type-deposit { color: #3b82f6; }
         .history-item .type-withdrawal { color: #f59e0b; }
         .history-item .type-trade { color: #a78bfa; }
+        .history-item .type-admin { color: #f59e0b; }
         .transfer-box {
             background: #0f172a;
             border: 1px solid #334155;
@@ -217,6 +219,87 @@
         .referral-log .ref-name { font-weight: bold; color: #e2e8f0; }
         .referral-log .ref-detail { font-size: 9px; color: #94a3b8; }
         .referral-log .ref-bonus { color: #4ade80; font-weight: bold; }
+
+        /* Slider styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        .slider-track {
+            display: flex;
+            width: 1500%;
+            height: 100%;
+            animation: slide 60s infinite ease-in-out;
+        }
+        .slider-track .slide-item {
+            width: 6.66%;
+            height: 100%;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .slider-track .slide-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slider-track .slide-item .slide-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 14px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            color: white;
+        }
+        .slide-text h3 { font-size: 14px; font-weight: bold; color: #f59e0b; }
+        .slide-text p { font-size: 10px; color: #e2e8f0; }
+        .slide-text .badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: #0f172a;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 8px;
+            font-weight: bold;
+        }
+        @keyframes slide {
+            0%, 5% { transform: translateX(0); }
+            7%, 12% { transform: translateX(-6.66%); }
+            14%, 19% { transform: translateX(-13.33%); }
+            21%, 26% { transform: translateX(-20%); }
+            28%, 33% { transform: translateX(-26.66%); }
+            35%, 40% { transform: translateX(-33.33%); }
+            42%, 47% { transform: translateX(-40%); }
+            49%, 54% { transform: translateX(-46.66%); }
+            56%, 61% { transform: translateX(-53.33%); }
+            63%, 68% { transform: translateX(-60%); }
+            70%, 75% { transform: translateX(-66.66%); }
+            77%, 82% { transform: translateX(-73.33%); }
+            84%, 89% { transform: translateX(-80%); }
+            91%, 96% { transform: translateX(-86.66%); }
+            98%, 100% { transform: translateX(-93.33%); }
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        .slider-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            margin: 0 3px;
+            transition: all 0.5s;
+        }
+        .slider-dots span.active { background: #f59e0b; width: 20px; border-radius: 10px; }
     </style>
 </head>
 <body class="text-white relative min-h-screen flex flex-col items-center justify-start">
@@ -368,7 +451,8 @@
                             </div>
                             <div>
                                 <h4 id="userWelcomeName" class="font-bold text-sm text-slate-200">User</h4>
-                                <p id="userWelcomeId" class="text-[10px] text-slate-400">ID: CX-XXXXXX</p>
+                                <!-- Removed ID: CX-XXXXXX as requested -->
+                                <p id="userWelcomeId" class="text-[9px] text-slate-400 hidden">ID: CX-XXXXXX</p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -376,10 +460,10 @@
                         </div>
                     </div>
 
-                    <!-- Unique CoinX ID & Email -->
+                    <!-- Unique CoinX ID with Copy -->
                     <div class="id-box id-box-coinx">
                         <div>
-                            <span class="id-label">🆔 Unique CoinX ID</span>
+                            <span class="id-label">🆔 आपकी Unique CoinX ID</span>
                             <span class="id-value" id="userCoinXId">CoinX123456789</span>
                             <span class="id-usage">इस ID से कॉइन भेजें/ले सकते हैं</span>
                         </div>
@@ -401,28 +485,28 @@
                     <!-- Balances -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80">
-                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-coins mr-1 text-amber-400"></i> User Panel</span>
-                            <span id="statAvailable" class="text-md font-bold text-green-400">0.00 CX</span>
+                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-dollar-sign mr-1 text-green-400"></i> Total Investment</span>
+                            <span id="statInvestment" class="text-md font-bold text-white">$0.00</span>
                         </div>
                         <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80">
-                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-wallet mr-1 text-indigo-400"></i> Buy/Sell Wallet</span>
-                            <span id="statTradeWallet" class="text-md font-bold text-indigo-400">0.00 CX</span>
-                        </div>
-                        <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80">
-                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-lock mr-1 text-amber-400"></i> Staked</span>
+                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-lock mr-1 text-amber-400"></i> Locked Staking</span>
                             <span id="statLocked" class="text-md font-bold text-amber-400">0.00 CX</span>
                         </div>
                         <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80">
-                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-arrow-trend-up mr-1 text-amber-400"></i> Daily Release</span>
+                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-gift mr-1 text-amber-400"></i> Daily Release (0.5%)</span>
                             <span id="statDailyRelease" class="text-md font-bold text-slate-200">0.00 CX</span>
+                        </div>
+                        <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-3.5 rounded-xl border border-slate-800/80">
+                            <span class="text-[10px] text-slate-400 block mb-1"><i class="fa-solid fa-wallet mr-1 text-green-400"></i> Available Balance</span>
+                            <span id="statAvailable" class="text-md font-bold text-green-400">0.00 CX</span>
                         </div>
                     </div>
 
-                    <!-- Mining Star -->
+                    <!-- Mining Star - Now requires staking -->
                     <div class="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-slate-800/80 flex flex-col items-center justify-center text-center py-8 space-y-5">
                         <div class="space-y-1">
-                            <h3 class="text-sm font-semibold tracking-wider text-slate-300 uppercase">माइनिंग रिवॉर्ड स्टार</h3>
-                            <p class="text-[11px] text-slate-400">डेली 0.5% कॉइन रिलीज करने के लिए स्टार दबाएं</p>
+                            <h3 class="text-sm font-semibold tracking-wider text-slate-300 uppercase">🌟 माइनिंग रिवॉर्ड स्टार</h3>
+                            <p class="text-[11px] text-slate-400">डेली 0.5% कॉइन रिलीज — पहले स्टेकिंग करें</p>
                         </div>
                         <button id="miningStarBtn" onclick="triggerMiningReward(this)" class="w-32 h-32 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 flex items-center justify-center shadow-2xl cursor-pointer hover:scale-105 transition-all duration-300 animate-star relative group btn-animate">
                             <div class="absolute inset-2 bg-slate-950 rounded-full flex items-center justify-center transition-all group-hover:bg-slate-950/80">
@@ -433,6 +517,9 @@
                             <span id="miningTimerText" class="text-xs text-amber-400 font-semibold tracking-wide">
                                 <i class="fa-solid fa-circle-play mr-1 text-green-400 animate-pulse"></i> रिलीज के लिए अभी दबाएं!
                             </span>
+                        </div>
+                        <div id="stakingWarning" class="hidden w-full bg-red-500/20 border border-red-500/30 rounded-lg p-2 text-center">
+                            <span class="text-xs text-red-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ⚠️ पहले स्टेकिंग कीजिए! स्टार बटन से रिवॉर्ड पाने के लिए कम से कम 50 CX स्टेक करें।</span>
                         </div>
                     </div>
                 </section>
@@ -598,18 +685,28 @@
                             <div>
                                 <h3 id="profileName" class="font-bold text-slate-200">User Profile</h3>
                                 <p id="profileEmail" class="text-[10px] text-slate-400">user@example.com</p>
-                                <p id="profileCoinXId" class="text-[9px] text-amber-400 font-mono">CoinX: CoinX123456789</p>
+                                <!-- Only CoinX ID shown with copy -->
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[9px] text-amber-400 font-mono">CoinX: </span>
+                                    <span id="profileCoinXId" class="text-[9px] text-amber-400 font-mono font-bold">CoinX123456789</span>
+                                    <button onclick="copyToClipboard('profileCoinXId', '✅ CoinX ID कॉपी हो गई!')" class="text-amber-400 hover:text-white btn-animate text-xs">
+                                        <i class="fa-solid fa-copy"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="text-right flex flex-col">
                             <span class="text-[9px] text-slate-500">रेफरल कोड:</span>
                             <span id="profileReferralCode" class="text-xs font-bold text-amber-400 uppercase select-all font-mono">CX-XXXX</span>
+                            <button onclick="copyToClipboard('profileReferralCode', '✅ रेफरल कोड कॉपी हो गया!')" class="text-amber-400 hover:text-white btn-animate text-xs mt-0.5">
+                                <i class="fa-solid fa-copy mr-1"></i> कॉपी
+                            </button>
                         </div>
                     </div>
 
                     <div class="bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-slate-800 space-y-3">
                         <h4 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-share-nodes mr-1.5"></i> Invite Friends & Earn 2%</h4>
-                        <p class="text-[10px] text-slate-400">जब आपके द्वारा आमंत्रित सदस्य स्टेक करेंगे, आपको 2% बोनस मिलेगा!</p>
+                        <p class="text-[10px] text-slate-400">जब आपके द्वारा आमंत्रित सदस्य स्टेक करेंगे, आपको 2% बोनस तुरंत मिलेगा!</p>
                         <div class="w-full bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between text-[11px]">
                             <span id="referralShareLink" class="text-slate-400 truncate mr-2 select-all font-mono">https://coinxnetwork.online/?ref=</span>
                             <button onclick="copyToClipboard('referralShareLink', '✅ रेफरल लिंक कॉपी हो गया!')" class="text-amber-400 hover:text-white shrink-0"><i class="fa-solid fa-copy"></i></button>
@@ -1397,7 +1494,7 @@
                 transactions: JSON.stringify([]),
                 buySellWallet: 0,
                 coinxId: generateCoinXId(),
-                referredBy: referralInput || null,  // store who referred
+                referredBy: referralInput || null,
                 isBlocked: false
             };
 
@@ -1408,8 +1505,6 @@
                 userData
             );
 
-            // If user registered with referral, we don't give bonus immediately; bonus only on staking.
-            // We'll store the referral code in localStorage for later use (if needed).
             if (referralInput) {
                 localStorage.setItem('cx_pending_referral_code', referralInput);
             }
@@ -1514,7 +1609,7 @@
     }
 
     // ============================================================
-    // MINING REWARD
+    // MINING REWARD - Now requires staking
     // ============================================================
     function getLastClaimed() {
         return parseInt(localStorage.getItem('cx_last_claimed_' + (currentUser?.$id || '')) || '0', 10);
@@ -1526,6 +1621,15 @@
 
     async function triggerMiningReward(btn) {
         if (isAdminMode || !currentUser) return;
+
+        // Check if user has staking
+        const stakedAmount = parseFloat(currentUser.staked || 0);
+        if (stakedAmount < 50) {
+            const warning = document.getElementById('stakingWarning');
+            if (warning) warning.classList.remove('hidden');
+            showToast("⚠️ पहले स्टेकिंग कीजिए! स्टार बटन से रिवॉर्ड पाने के लिए कम से कम 50 CX स्टेक करें।", 'info');
+            return;
+        }
 
         const now = Date.now();
         const oneDayMs = 24 * 60 * 60 * 1000;
@@ -1541,25 +1645,21 @@
 
         setButtonLoading(btn, true);
         try {
-            let reward = 0;
-            if (parseFloat(currentUser.staked || 0) > 0) {
-                reward = parseFloat(currentUser.staked) * 0.005;
-            } else {
-                reward = 2.50;
-            }
-
+            // 0.5% of staked amount
+            const reward = stakedAmount * 0.005;
             const newCoins = parseFloat(currentUser.coins || 0) + reward;
+
             await saveUserFields({ coins: newCoins });
             setLastClaimed(now);
             updateDashboardStats();
 
             if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance("कांग्रेचुलेशन! आपका दिन शुभ हो।");
+                const utterance = new SpeechSynthesisUtterance(`${reward.toFixed(2)} CX रिवॉर्ड मिला!`);
                 utterance.lang = 'hi-IN';
                 window.speechSynthesis.speak(utterance);
             }
 
-            showToast(`✅ ${reward.toFixed(2)} CX रिवॉर्ड रिलीज किया गया!`, 'success');
+            showToast(`✅ ${reward.toFixed(2)} CX रिवॉर्ड रिलीज किया गया! (0.5% of ${stakedAmount.toFixed(2)} CX)`, 'success');
         } catch (e) {
             console.error(e);
             showToast('रिवॉर्ड सेव करने में त्रुटि!', 'error');
@@ -1575,28 +1675,45 @@
         if (isAdminMode || !currentUser) return;
 
         document.getElementById('userWelcomeName').innerText = currentUser.name || 'User';
-        document.getElementById('userWelcomeId').innerText = `ID: ${currentUser.email || ''}`;
+        // userWelcomeId is hidden now
         document.getElementById('userCoinXId').innerText = currentUser.coinxId || 'N/A';
         document.getElementById('userEmailId').innerText = currentUser.email || '';
 
-        document.getElementById('statAvailable').innerText = `${parseFloat(currentUser.coins || 0).toFixed(2)} CX`;
-        document.getElementById('statTradeWallet').innerText = `${parseFloat(currentUser.buySellWallet || 0).toFixed(2)} CX`;
-        document.getElementById('statLocked').innerText = `${parseFloat(currentUser.staked || 0).toFixed(2)} CX`;
-        document.getElementById('statDailyRelease').innerText = `${(parseFloat(currentUser.staked || 0) * 0.005).toFixed(2)} CX`;
+        // Total Investment in $ (USDT)
+        const totalInvestment = (currentUser.approvedDeposits || []).reduce((a, d) => a + parseFloat(d.amountUSD || 0), 0);
+        document.getElementById('statInvestment').innerText = `$${totalInvestment.toFixed(2)}`;
 
+        // Locked Staking in CX
+        document.getElementById('statLocked').innerText = `${parseFloat(currentUser.staked || 0).toFixed(2)} CX`;
+
+        // Daily Release (0.5%)
+        const dailyRelease = parseFloat(currentUser.staked || 0) * 0.005;
+        document.getElementById('statDailyRelease').innerText = `${dailyRelease.toFixed(2)} CX`;
+
+        // Available Balance
+        document.getElementById('statAvailable').innerText = `${parseFloat(currentUser.coins || 0).toFixed(2)} CX`;
+
+        // Timer text
         const timerText = document.getElementById('miningTimerText');
         const now = Date.now();
         const oneDayMs = 24 * 60 * 60 * 1000;
         const lastClaimed = getLastClaimed();
 
-        if (lastClaimed && (now - lastClaimed) < oneDayMs) {
+        // Check if staking exists
+        const stakedAmount = parseFloat(currentUser.staked || 0);
+        if (stakedAmount < 50) {
+            timerText.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400 mr-1"></i> ⚠️ पहले 50 CX स्टेक करें!`;
+            document.getElementById('stakingWarning')?.classList.remove('hidden');
+        } else if (lastClaimed && (now - lastClaimed) < oneDayMs) {
             const nextClaim = lastClaimed + oneDayMs;
             const diff = nextClaim - now;
             const h = Math.floor(diff / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             timerText.innerHTML = `<i class="fa-solid fa-hourglass-half text-amber-500 animate-spin mr-1"></i> अगला रिलीज: ${h} घंटे ${m} मिनट में।`;
+            document.getElementById('stakingWarning')?.classList.add('hidden');
         } else {
             timerText.innerHTML = `<i class="fa-solid fa-circle-play mr-1 text-green-400 animate-pulse"></i> रिलीज के लिए अभी दबाएं!`;
+            document.getElementById('stakingWarning')?.classList.add('hidden');
         }
     }
 
@@ -1805,6 +1922,10 @@
             showToast("कृपया स्टेकिंग के लिए वैध कॉइन्स दर्ज करें।", 'error');
             return;
         }
+        if (amountToStake < 50) {
+            showToast("न्यूनतम स्टेकिंग 50 CX है।", 'error');
+            return;
+        }
         if (amountToStake > parseFloat(currentUser.coins || 0)) {
             showToast("अवेलेबल बैलेंस से अधिक कॉइन नहीं लगा सकते।", 'error');
             return;
@@ -1834,22 +1955,20 @@
             });
 
             // === REFERRAL BONUS ===
-            // If this user was referred by someone, award bonus to referrer.
             if (currentUser.referredBy) {
                 await awardReferralBonus(currentUser.referredBy, amountToStake);
             }
 
-            // Also check if there is a pending referral code from registration (if not saved)
             const pendingRef = localStorage.getItem('cx_pending_referral_code');
             if (pendingRef && !currentUser.referredBy) {
                 await awardReferralBonus(pendingRef, amountToStake);
-                // Update user to mark referredBy to avoid double bonus
                 await saveUserFields({ referredBy: pendingRef });
                 localStorage.removeItem('cx_pending_referral_code');
             }
 
             document.getElementById('stakeInputCoins').value = '';
             renderStakingDetails();
+            updateDashboardStats();
             showToast(`✅ कॉइन्स ${selectedStakingDays} दिनों के लिए लॉक हुए!`, 'success');
         } catch (e) {
             console.error(e);
@@ -1875,7 +1994,6 @@
             const newReferrerCoins = parseFloat(referrerDoc.coins || 0) + bonusCoins;
             const referrerReferrals = parseJsonSafe(referrerDoc.referrals, []);
             
-            // Add detailed referral log
             referrerReferrals.push({
                 referredId: currentUser.$id,
                 referredName: currentUser.name,
@@ -1892,19 +2010,17 @@
                 referrals: JSON.stringify(referrerReferrals)
             });
 
-            // Update currentUser's referredBy to avoid duplicate bonus
             if (!currentUser.referredBy) {
                 await saveUserFields({ referredBy: referralCode });
             }
 
-            // Also update local referrer object if in users array
             const idx = users.findIndex(u => u.$id === referrerDoc.$id);
             if (idx !== -1) {
                 users[idx].coins = newReferrerCoins;
                 users[idx].referrals = referrerReferrals;
             }
 
-            showToast(`✅ ${referrerDoc.name} को ${bonusCoins.toFixed(2)} CX रेफरल बोनस मिला!`, 'success');
+            showToast(`✅ ${referrerDoc.name} को ${bonusCoins.toFixed(2)} CX रेफरल बोनस तुरंत मिला!`, 'success');
         } catch (e) {
             console.error('Referral bonus error:', e);
         }
@@ -1965,6 +2081,7 @@
             });
 
             renderStakingDetails();
+            updateDashboardStats();
             showToast("✅ मूल राशि अनलॉक होकर बैलेंस में क्रेडिट हो गई!", 'success');
         } catch (e) {
             console.error(e);
@@ -1981,9 +2098,8 @@
         if (isAdminMode || !currentUser) return;
         document.getElementById('profileName').innerText = currentUser.name || 'User';
         document.getElementById('profileEmail').innerText = currentUser.email || '';
-        document.getElementById('profileCoinXId').innerText = `CoinX: ${currentUser.coinxId || 'N/A'}`;
+        document.getElementById('profileCoinXId').innerText = currentUser.coinxId || 'N/A';
 
-        // Referral code is the user's document ID
         const myRef = currentUser.$id;
         document.getElementById('profileReferralCode').innerText = myRef;
 
@@ -2071,7 +2187,6 @@
             const newWithdrawal = {
                 coinsAmount: amount,
                 dateTime: new Date().toLocaleString('hi-IN')
-                // type removed – now all withdrawals are shown in admin
             };
 
             const newCoins = parseFloat(currentUser.coins) - amount;
@@ -2281,7 +2396,6 @@
         });
     }
 
-    // Deposit: User Panel → Buy/Sell Wallet
     async function depositToTradeWallet() {
         if (isAdminMode || !currentUser) {
             showToast("❌ पहले लॉगिन करें।", 'error');
@@ -2331,7 +2445,6 @@
         }
     }
 
-    // Withdraw: Buy/Sell Wallet → User Panel
     async function withdrawFromTradeWallet() {
         if (isAdminMode || !currentUser) {
             showToast("❌ पहले लॉगिन करें।", 'error');
@@ -2382,7 +2495,7 @@
     }
 
     // ============================================================
-    // ADMIN FUNCTIONS (with withdrawal fix)
+    // ADMIN FUNCTIONS
     // ============================================================
     async function verifyAdminAccess() {
         try {
@@ -2473,6 +2586,7 @@
         if (tabName === 'referrals') renderAdminReferrals();
     }
 
+    // ===== ADMIN USERS - with copy options =====
     function renderAdminUsers() {
         if (!isAdminMode) return;
         const list = document.getElementById('adminUserList');
@@ -2490,6 +2604,7 @@
                     <span>ईमेल: ${u.email || 'N/A'} <button onclick="copyToClipboard('adminEmail-${u.$id}', '✅ Email कॉपी!')" class="text-amber-400 hover:text-white"><i class="fa-solid fa-copy text-[8px]"></i></button></span>
                     <span>मोबाइल: ${u.phone || 'N/A'} <button onclick="copyToClipboard('adminPhone-${u.$id}', '✅ Phone कॉपी!')" class="text-amber-400 hover:text-white"><i class="fa-solid fa-copy text-[8px]"></i></button></span>
                     <span>CoinX ID: ${u.coinxId || 'N/A'} <button onclick="copyToClipboard('adminCoinX-${u.$id}', '✅ CoinX ID कॉपी!')" class="text-amber-400 hover:text-white"><i class="fa-solid fa-copy text-[8px]"></i></button></span>
+                    <span>रेफरल कोड: ${u.$id || 'N/A'} <button onclick="copyToClipboard('adminRef-${u.$id}', '✅ रेफरल कोड कॉपी!')" class="text-amber-400 hover:text-white"><i class="fa-solid fa-copy text-[8px]"></i></button></span>
                 </div>
                 <div class="flex justify-between items-center pt-1 border-t border-slate-900/60 text-[10px] text-slate-500">
                     <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
@@ -2603,12 +2718,10 @@
         finally { setButtonLoading(btn, false); }
     }
 
-    // ===== WITHDRAWALS – FIXED: SHOW ALL PENDING =====
     function renderAdminWithdrawals() {
         if (!isAdminMode) return;
         const list = document.getElementById('adminWithdrawalsList');
         list.innerHTML = '';
-        // Show all pending withdrawals, regardless of type
         const pending = users.filter(u => u.pendingWithdrawal);
         if (pending.length === 0) {
             list.innerHTML = `<p class="text-slate-500 text-center py-4">कोई पेंडिंग विथड्रॉवल नहीं है।</p>`;
@@ -2732,7 +2845,6 @@
         } catch(e) { showToast('स्टेकिंग अपडेट में त्रुटि!', 'error'); }
     }
 
-    // ===== REFERRALS – FULL DETAILED VIEW =====
     function renderAdminReferrals() {
         if (!isAdminMode) return;
         const list = document.getElementById('adminReferralsList');
@@ -2787,6 +2899,21 @@
     }
 
     // ============================================================
+    // SLIDER DOTS UPDATE
+    // ============================================================
+    function updateSliderDots() {
+        const dots = document.querySelectorAll('.slider-dots span');
+        const track = document.querySelector('.slider-track');
+        if (!track || !dots.length) return;
+        const scrollLeft = track.scrollLeft || 0;
+        const itemWidth = track.querySelector('.slide-item')?.offsetWidth || 0;
+        const index = Math.round(scrollLeft / itemWidth);
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+
+    // ============================================================
     // INITIALIZATION
     // ============================================================
     window.onload = async function() {
@@ -2801,6 +2928,8 @@
                 } else { showPage('registrationPage'); checkReferralParam(); }
             } catch(e) { showPage('registrationPage'); checkReferralParam(); }
         }
+        // Update slider dots periodically
+        setInterval(updateSliderDots, 5000);
     };
     </script>
 
