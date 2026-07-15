@@ -208,6 +208,15 @@
         .filter-tabs button:hover:not(.active) { color: #e2e8f0; }
         .admin-section { border-color: #ef4444 !important; }
         .admin-section .admin-label { color: #ef4444; }
+        .referral-log {
+            background: #0f172a;
+            border-left: 3px solid #f59e0b;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        .referral-log .ref-name { font-weight: bold; color: #e2e8f0; }
+        .referral-log .ref-detail { font-size: 9px; color: #94a3b8; }
+        .referral-log .ref-bonus { color: #4ade80; font-weight: bold; }
     </style>
 </head>
 <body class="text-white relative min-h-screen flex flex-col items-center justify-start">
@@ -521,12 +530,12 @@
                 </section>
 
                 <!-- ========================================================= -->
-                <!-- 🔄 TRANSFER PAGE (NEW) – CoinX Network से Buy/Sell में भेजें -->
+                <!-- 🔄 TRANSFER PAGE (ONLY TWO OPTIONS)                       -->
                 <!-- ========================================================= -->
                 <section id="transferPage" class="app-page w-full hidden space-y-4">
                     <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl border border-purple-500/30">
                         <h3 class="text-sm font-bold text-purple-400"><i class="fa-solid fa-exchange mr-1.5"></i> कॉइन ट्रांसफर</h3>
-                        <p class="text-[11px] text-slate-400">Unique CoinX ID या Email के ज़रिए किसी को भी कॉइन भेजें।</p>
+                        <p class="text-[11px] text-slate-400">अपने दोनों वॉलेट के बीच कॉइन भेजें/ले सकते हैं।</p>
                     </div>
 
                     <!-- Balance Summary -->
@@ -541,9 +550,9 @@
                         </div>
                     </div>
 
-                    <!-- Transfer Options -->
+                    <!-- Only two options -->
                     <div class="space-y-3">
-                        <!-- Option 1: User Panel → Buy/Sell Wallet (Deposit to Trade) -->
+                        <!-- Option 1: User Panel → Buy/Sell Wallet -->
                         <div class="bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-blue-500/30">
                             <h4 class="text-xs font-bold text-blue-400"><i class="fa-solid fa-arrow-right mr-1"></i> User Panel → Buy/Sell Wallet</h4>
                             <p class="text-[9px] text-slate-400">अपने User Panel से Buy/Sell Wallet में कॉइन जमा करें</p>
@@ -556,7 +565,7 @@
                             </div>
                         </div>
 
-                        <!-- Option 2: Buy/Sell Wallet → User Panel (Withdraw from Trade) -->
+                        <!-- Option 2: Buy/Sell Wallet → User Panel -->
                         <div class="bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-amber-500/30">
                             <h4 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-arrow-left mr-1"></i> Buy/Sell Wallet → User Panel</h4>
                             <p class="text-[9px] text-slate-400">अपने Buy/Sell Wallet से User Panel में कॉइन निकालें</p>
@@ -565,34 +574,6 @@
                                 <div class="text-[10px] text-slate-500">अधिकतम: <span id="maxWithdrawFromTrade">0</span> CX</div>
                                 <button onclick="withdrawFromTradeWallet()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2 rounded-lg text-xs transition-all btn-animate">
                                     <i class="fa-solid fa-arrow-left mr-1"></i> निकालें
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Option 3: Transfer to another user (User Panel) -->
-                        <div class="bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-purple-500/30">
-                            <h4 class="text-xs font-bold text-purple-400"><i class="fa-solid fa-paper-plane mr-1"></i> किसी अन्य को भेजें (User Panel)</h4>
-                            <p class="text-[9px] text-slate-400">किसी अन्य यूजर के User Panel में कॉइन भेजें (ईमेल या CoinX ID)</p>
-                            <div class="mt-2 space-y-2">
-                                <input type="text" id="transferToUserEmail" placeholder="ईमेल या CoinX ID" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-purple-500 text-white">
-                                <input type="number" id="transferToUserAmount" placeholder="कॉइन संख्या" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-purple-500 text-white" oninput="checkMaxTransferUser()">
-                                <div class="text-[10px] text-slate-500">अधिकतम: <span id="maxTransferUserDisplay">0</span> CX</div>
-                                <button onclick="transferCoinsToUser()" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 rounded-lg text-xs transition-all btn-animate">
-                                    <i class="fa-solid fa-paper-plane mr-1"></i> भेजें
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Option 4: Transfer to another user (Buy/Sell Wallet) -->
-                        <div class="bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-pink-500/30">
-                            <h4 class="text-xs font-bold text-pink-400"><i class="fa-solid fa-paper-plane mr-1"></i> किसी अन्य को भेजें (Buy/Sell Wallet)</h4>
-                            <p class="text-[9px] text-slate-400">किसी अन्य यूजर के Buy/Sell Wallet में कॉइन भेजें (ईमेल या CoinX ID)</p>
-                            <div class="mt-2 space-y-2">
-                                <input type="text" id="transferToOtherTradeEmail" placeholder="ईमेल या CoinX ID" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-pink-500 text-white">
-                                <input type="number" id="transferToOtherTradeAmount" placeholder="कॉइन संख्या" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-pink-500 text-white" oninput="checkMaxTransferOtherTrade()">
-                                <div class="text-[10px] text-slate-500">अधिकतम: <span id="maxTransferOtherTradeDisplay">0</span> CX</div>
-                                <button onclick="transferCoinsToOtherTrade()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 rounded-lg text-xs transition-all btn-animate">
-                                    <i class="fa-solid fa-paper-plane mr-1"></i> भेजें
                                 </button>
                             </div>
                         </div>
@@ -1416,6 +1397,7 @@
                 transactions: JSON.stringify([]),
                 buySellWallet: 0,
                 coinxId: generateCoinXId(),
+                referredBy: referralInput || null,  // store who referred
                 isBlocked: false
             };
 
@@ -1426,6 +1408,8 @@
                 userData
             );
 
+            // If user registered with referral, we don't give bonus immediately; bonus only on staking.
+            // We'll store the referral code in localStorage for later use (if needed).
             if (referralInput) {
                 localStorage.setItem('cx_pending_referral_code', referralInput);
             }
@@ -1777,7 +1761,7 @@
     }
 
     // ============================================================
-    // STAKING
+    // STAKING – WITH REFERRAL BONUS
     // ============================================================
     function renderStakingDetails() {
         if (isAdminMode || !currentUser) return;
@@ -1849,9 +1833,19 @@
                 staking: JSON.stringify(newStakingList)
             });
 
-            const referralCode = localStorage.getItem('cx_pending_referral_code');
-            if (referralCode) {
-                await awardReferralBonus(referralCode, amountToStake);
+            // === REFERRAL BONUS ===
+            // If this user was referred by someone, award bonus to referrer.
+            if (currentUser.referredBy) {
+                await awardReferralBonus(currentUser.referredBy, amountToStake);
+            }
+
+            // Also check if there is a pending referral code from registration (if not saved)
+            const pendingRef = localStorage.getItem('cx_pending_referral_code');
+            if (pendingRef && !currentUser.referredBy) {
+                await awardReferralBonus(pendingRef, amountToStake);
+                // Update user to mark referredBy to avoid double bonus
+                await saveUserFields({ referredBy: pendingRef });
+                localStorage.removeItem('cx_pending_referral_code');
             }
 
             document.getElementById('stakeInputCoins').value = '';
@@ -1880,12 +1874,17 @@
             const bonusCoins = stakedAmount * 0.02;
             const newReferrerCoins = parseFloat(referrerDoc.coins || 0) + bonusCoins;
             const referrerReferrals = parseJsonSafe(referrerDoc.referrals, []);
+            
+            // Add detailed referral log
             referrerReferrals.push({
                 referredId: currentUser.$id,
                 referredName: currentUser.name,
+                referredEmail: currentUser.email,
+                referredPhone: currentUser.phone || 'N/A',
                 stakedAmount: stakedAmount,
                 bonusReceived: bonusCoins,
-                dateTime: new Date().toLocaleString('hi-IN')
+                dateTime: new Date().toLocaleString('hi-IN'),
+                timestamp: Date.now()
             });
 
             await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, referrerDoc.$id, {
@@ -1893,7 +1892,19 @@
                 referrals: JSON.stringify(referrerReferrals)
             });
 
-            localStorage.removeItem('cx_pending_referral_code');
+            // Update currentUser's referredBy to avoid duplicate bonus
+            if (!currentUser.referredBy) {
+                await saveUserFields({ referredBy: referralCode });
+            }
+
+            // Also update local referrer object if in users array
+            const idx = users.findIndex(u => u.$id === referrerDoc.$id);
+            if (idx !== -1) {
+                users[idx].coins = newReferrerCoins;
+                users[idx].referrals = referrerReferrals;
+            }
+
+            showToast(`✅ ${referrerDoc.name} को ${bonusCoins.toFixed(2)} CX रेफरल बोनस मिला!`, 'success');
         } catch (e) {
             console.error('Referral bonus error:', e);
         }
@@ -1972,6 +1983,7 @@
         document.getElementById('profileEmail').innerText = currentUser.email || '';
         document.getElementById('profileCoinXId').innerText = `CoinX: ${currentUser.coinxId || 'N/A'}`;
 
+        // Referral code is the user's document ID
         const myRef = currentUser.$id;
         document.getElementById('profileReferralCode').innerText = myRef;
 
@@ -2058,8 +2070,8 @@
         try {
             const newWithdrawal = {
                 coinsAmount: amount,
-                dateTime: new Date().toLocaleString('hi-IN'),
-                type: 'user'
+                dateTime: new Date().toLocaleString('hi-IN')
+                // type removed – now all withdrawals are shown in admin
             };
 
             const newCoins = parseFloat(currentUser.coins) - amount;
@@ -2113,15 +2125,15 @@
             div.innerHTML = `
                 <div class="flex justify-between font-bold text-slate-300 text-xs">
                     <span>${log.referredName || 'N/A'}</span>
-                    <span class="text-green-400">Staking Done</span>
+                    <span class="text-green-400">+${Number(log.bonusReceived || 0).toFixed(2)} CX</span>
                 </div>
                 <div class="text-[10px] text-slate-500 flex justify-between">
-                    <span>तिथि: ${log.dateTime || 'N/A'}</span>
-                    <span>Staking: ${Number(log.stakedAmount || 0).toFixed(2)} CX</span>
+                    <span>ईमेल: ${log.referredEmail || 'N/A'}</span>
+                    <span>मोबाइल: ${log.referredPhone || 'N/A'}</span>
                 </div>
-                <div class="text-[10px] text-amber-500 flex justify-between pt-0.5 border-t border-slate-900">
-                    <span>बोनस:</span>
-                    <span class="font-bold">${Number(log.bonusReceived || 0).toFixed(2)} CX</span>
+                <div class="text-[10px] text-slate-500 flex justify-between">
+                    <span>स्टेक: ${Number(log.stakedAmount || 0).toFixed(2)} CX</span>
+                    <span>तिथि: ${log.dateTime || 'N/A'}</span>
                 </div>
             `;
             listArea.appendChild(div);
@@ -2230,7 +2242,7 @@
     }
 
     // ============================================================
-    // 🔄 TRANSFER FUNCTIONS – CoinX Network से Buy/Sell में
+    // 🔄 TRANSFER FUNCTIONS – ONLY TWO OPTIONS
     // ============================================================
     function renderTransferPage() {
         if (isAdminMode || !currentUser) return;
@@ -2238,8 +2250,6 @@
         document.getElementById('transferTradeBalance').innerText = parseFloat(currentUser.buySellWallet || 0).toFixed(2) + ' CX';
         document.getElementById('maxDepositToTrade').innerText = parseFloat(currentUser.coins || 0).toFixed(0);
         document.getElementById('maxWithdrawFromTrade').innerText = parseFloat(currentUser.buySellWallet || 0).toFixed(0);
-        document.getElementById('maxTransferUserDisplay').innerText = parseFloat(currentUser.coins || 0).toFixed(0);
-        document.getElementById('maxTransferOtherTradeDisplay').innerText = parseFloat(currentUser.buySellWallet || 0).toFixed(0);
         renderTransferHistory();
     }
 
@@ -2247,7 +2257,7 @@
         const list = document.getElementById('transferHistoryList');
         list.innerHTML = '';
         const txs = currentUser?.transactions || [];
-        const transferTxs = txs.filter(t => ['deposit_to_trade', 'withdraw_from_trade', 'transfer_to_user', 'transfer_to_trade'].includes(t.type));
+        const transferTxs = txs.filter(t => ['deposit_to_trade', 'withdraw_from_trade'].includes(t.type));
         if (transferTxs.length === 0) {
             list.innerHTML = `<p class="text-[10px] text-slate-500 text-center py-2">कोई ट्रांसफर हिस्ट्री नहीं है।</p>`;
             return;
@@ -2255,12 +2265,8 @@
         transferTxs.reverse().forEach(t => {
             const div = document.createElement('div');
             div.className = 'history-item';
-            let label = t.type;
-            let color = 'type-transfer';
-            if (t.type === 'deposit_to_trade') { label = '🔵 User → Trade'; color = 'type-deposit'; }
-            else if (t.type === 'withdraw_from_trade') { label = '🟡 Trade → User'; color = 'type-withdrawal'; }
-            else if (t.type === 'transfer_to_user') { label = '🟣 To User Panel'; color = 'type-transfer'; }
-            else if (t.type === 'transfer_to_trade') { label = '🟣 To Trade Wallet'; color = 'type-transfer'; }
+            let label = t.type === 'deposit_to_trade' ? '🔵 User → Trade' : '🟡 Trade → User';
+            let color = t.type === 'deposit_to_trade' ? 'type-deposit' : 'type-withdrawal';
             div.innerHTML = `
                 <div class="flex justify-between items-center">
                     <span class="font-bold ${color}">${label}</span>
@@ -2273,24 +2279,6 @@
             `;
             list.appendChild(div);
         });
-    }
-
-    function checkMaxTransferUser() {
-        const amount = parseFloat(document.getElementById('transferToUserAmount').value) || 0;
-        const wallet = parseFloat(currentUser?.coins || 0);
-        if (amount > wallet) {
-            document.getElementById('transferToUserAmount').value = wallet;
-            showToast(`⚠️ सिर्फ ${wallet.toFixed(0)} CX है!`, 'info');
-        }
-    }
-
-    function checkMaxTransferOtherTrade() {
-        const amount = parseFloat(document.getElementById('transferToOtherTradeAmount').value) || 0;
-        const wallet = parseFloat(currentUser?.buySellWallet || 0);
-        if (amount > wallet) {
-            document.getElementById('transferToOtherTradeAmount').value = wallet;
-            showToast(`⚠️ सिर्फ ${wallet.toFixed(0)} CX है!`, 'info');
-        }
     }
 
     // Deposit: User Panel → Buy/Sell Wallet
@@ -2393,156 +2381,8 @@
         }
     }
 
-    // Transfer to other user's User Panel
-    async function transferCoinsToUser() {
-        if (isAdminMode || !currentUser) {
-            showToast("❌ पहले लॉगिन करें।", 'error');
-            return;
-        }
-        const identifier = document.getElementById('transferToUserEmail').value.trim();
-        const amount = parseFloat(document.getElementById('transferToUserAmount').value);
-
-        if (!identifier) {
-            showToast("❌ ईमेल या CoinX ID दर्ज करें।", 'error');
-            return;
-        }
-        if (!amount || amount <= 0) {
-            showToast("❌ सही कॉइन संख्या दर्ज करें।", 'error');
-            return;
-        }
-        if (amount > parseFloat(currentUser.coins || 0)) {
-            showToast("⚠️ आपके पास इतने कॉइन नहीं हैं!", 'error');
-            return;
-        }
-
-        try {
-            let targetUser = users.find(u => u.email === identifier);
-            if (!targetUser) targetUser = users.find(u => u.coinxId === identifier);
-            if (!targetUser) {
-                showToast("❌ यूजर नहीं मिला!", 'error');
-                return;
-            }
-            if (targetUser.$id === currentUser.$id) {
-                showToast("❌ खुद को ट्रांसफर नहीं कर सकते!", 'error');
-                return;
-            }
-
-            const newSenderCoins = parseFloat(currentUser.coins || 0) - amount;
-            const newReceiverCoins = parseFloat(targetUser.coins || 0) + amount;
-
-            await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, {
-                coins: newSenderCoins
-            });
-            await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, targetUser.$id, {
-                coins: newReceiverCoins
-            });
-
-            const tx = {
-                type: 'transfer_to_user',
-                amount: amount,
-                toEmail: targetUser.email,
-                fromEmail: currentUser.email,
-                toCoinXId: targetUser.coinxId,
-                fromCoinXId: currentUser.coinxId,
-                status: 'completed',
-                dateTime: new Date().toLocaleString('hi-IN')
-            };
-            const transactions = [...(currentUser.transactions || [])];
-            transactions.push(tx);
-            await saveUserFields({ transactions: JSON.stringify(transactions) });
-
-            currentUser.coins = newSenderCoins;
-            currentUser.transactions = transactions;
-            const idx = users.findIndex(u => u.$id === targetUser.$id);
-            if (idx !== -1) users[idx].coins = newReceiverCoins;
-
-            document.getElementById('transferToUserEmail').value = '';
-            document.getElementById('transferToUserAmount').value = '';
-            renderTransferPage();
-            updateDashboardStats();
-            showToast(`✅ ${amount} CX ${targetUser.email} के User Panel में भेज दिए गए।`, 'success');
-        } catch (e) {
-            console.error(e);
-            showToast('ट्रांसफर में त्रुटि!', 'error');
-        }
-    }
-
-    // Transfer to other user's Buy/Sell Wallet
-    async function transferCoinsToOtherTrade() {
-        if (isAdminMode || !currentUser) {
-            showToast("❌ पहले लॉगिन करें।", 'error');
-            return;
-        }
-        const identifier = document.getElementById('transferToOtherTradeEmail').value.trim();
-        const amount = parseFloat(document.getElementById('transferToOtherTradeAmount').value);
-
-        if (!identifier) {
-            showToast("❌ ईमेल या CoinX ID दर्ज करें।", 'error');
-            return;
-        }
-        if (!amount || amount <= 0) {
-            showToast("❌ सही कॉइन संख्या दर्ज करें।", 'error');
-            return;
-        }
-        if (amount > parseFloat(currentUser.buySellWallet || 0)) {
-            showToast("⚠️ आपके पास इतने कॉइन नहीं हैं!", 'error');
-            return;
-        }
-
-        try {
-            let targetUser = users.find(u => u.email === identifier);
-            if (!targetUser) targetUser = users.find(u => u.coinxId === identifier);
-            if (!targetUser) {
-                showToast("❌ यूजर नहीं मिला!", 'error');
-                return;
-            }
-            if (targetUser.$id === currentUser.$id) {
-                showToast("❌ खुद को ट्रांसफर नहीं कर सकते!", 'error');
-                return;
-            }
-
-            const newSenderWallet = parseFloat(currentUser.buySellWallet || 0) - amount;
-            const newReceiverWallet = parseFloat(targetUser.buySellWallet || 0) + amount;
-
-            await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, {
-                buySellWallet: newSenderWallet
-            });
-            await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, targetUser.$id, {
-                buySellWallet: newReceiverWallet
-            });
-
-            const tx = {
-                type: 'transfer_to_trade',
-                amount: amount,
-                toEmail: targetUser.email,
-                fromEmail: currentUser.email,
-                toCoinXId: targetUser.coinxId,
-                fromCoinXId: currentUser.coinxId,
-                status: 'completed',
-                dateTime: new Date().toLocaleString('hi-IN')
-            };
-            const transactions = [...(currentUser.transactions || [])];
-            transactions.push(tx);
-            await saveUserFields({ transactions: JSON.stringify(transactions) });
-
-            currentUser.buySellWallet = newSenderWallet;
-            currentUser.transactions = transactions;
-            const idx = users.findIndex(u => u.$id === targetUser.$id);
-            if (idx !== -1) users[idx].buySellWallet = newReceiverWallet;
-
-            document.getElementById('transferToOtherTradeEmail').value = '';
-            document.getElementById('transferToOtherTradeAmount').value = '';
-            renderTransferPage();
-            updateDashboardStats();
-            showToast(`✅ ${amount} CX ${targetUser.email} के Buy/Sell Wallet में भेज दिए गए।`, 'success');
-        } catch (e) {
-            console.error(e);
-            showToast('ट्रांसफर में त्रुटि!', 'error');
-        }
-    }
-
     // ============================================================
-    // ADMIN FUNCTIONS (Compressed for space)
+    // ADMIN FUNCTIONS (with withdrawal fix)
     // ============================================================
     async function verifyAdminAccess() {
         try {
@@ -2763,12 +2603,17 @@
         finally { setButtonLoading(btn, false); }
     }
 
+    // ===== WITHDRAWALS – FIXED: SHOW ALL PENDING =====
     function renderAdminWithdrawals() {
         if (!isAdminMode) return;
         const list = document.getElementById('adminWithdrawalsList');
         list.innerHTML = '';
-        const pending = users.filter(u => u.pendingWithdrawal && u.pendingWithdrawal.type === 'user');
-        if (pending.length === 0) { list.innerHTML = `<p class="text-slate-500 text-center py-4">कोई पेंडिंग विथड्रॉवल नहीं है।</p>`; return; }
+        // Show all pending withdrawals, regardless of type
+        const pending = users.filter(u => u.pendingWithdrawal);
+        if (pending.length === 0) {
+            list.innerHTML = `<p class="text-slate-500 text-center py-4">कोई पेंडिंग विथड्रॉवल नहीं है।</p>`;
+            return;
+        }
         pending.forEach(u => {
             const w = u.pendingWithdrawal;
             let qrHtml = u.withdrawal_screenshot ? `<div class="mt-2 text-center bg-slate-900 p-2 rounded border border-slate-800"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-20 h-20 object-contain inline-block bg-white p-1 rounded cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>` : '';
@@ -2802,7 +2647,7 @@
         try {
             const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userDocId);
             const freshPending = parseJsonSafe(fresh.pending_withdrawal, null);
-            if (!freshPending || freshPending.type !== 'user') { showToast('यह विथड्रॉवल पहले ही प्रोसेस हो चुका है!', 'info'); users[uIndex].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
+            if (!freshPending) { showToast('यह विथड्रॉवल पहले ही प्रोसेस हो चुका है!', 'info'); users[uIndex].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
             const approvedList = parseJsonSafe(fresh.approved_withdrawal, []);
             approvedList.push({ ...freshPending, completedAt: new Date().toISOString() });
             const newLifetimeWithdrawn = parseFloat(fresh.withdrawal || 0) + parseFloat(freshPending.coinsAmount || 0);
@@ -2822,7 +2667,7 @@
         try {
             const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userDocId);
             const freshPending = parseJsonSafe(fresh.pending_withdrawal, null);
-            if (!freshPending || freshPending.type !== 'user') { showToast('यह विथड्रॉवल पहले ही प्रोसेस हो चुका है!', 'info'); users[uIndex].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
+            if (!freshPending) { showToast('यह विथड्रॉवल पहले ही प्रोसेस हो चुका है!', 'info'); users[uIndex].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
             const refundedCoins = parseFloat(fresh.coins || 0) + parseFloat(freshPending.coinsAmount || 0);
             await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userDocId, { coins: refundedCoins, pending_withdrawal: '' });
             users[uIndex].coins = refundedCoins; users[uIndex].pendingWithdrawal = null;
@@ -2887,15 +2732,44 @@
         } catch(e) { showToast('स्टेकिंग अपडेट में त्रुटि!', 'error'); }
     }
 
+    // ===== REFERRALS – FULL DETAILED VIEW =====
     function renderAdminReferrals() {
         if (!isAdminMode) return;
         const list = document.getElementById('adminReferralsList');
         list.innerHTML = '';
         const flattened = [];
-        users.forEach(u => { (u.referrals || []).forEach(r => { flattened.push({ ...r, referrerName: u.name, referrerEmail: u.email }); }); });
-        if (flattened.length === 0) { list.innerHTML = `<p class="text-slate-500 text-center py-4">कोई रेफ़रल रिकॉर्ड नहीं है।</p>`; return; }
+        users.forEach(u => {
+            (u.referrals || []).forEach(r => {
+                flattened.push({ 
+                    ...r, 
+                    referrerName: u.name, 
+                    referrerEmail: u.email,
+                    referrerId: u.$id
+                });
+            });
+        });
+        if (flattened.length === 0) {
+            list.innerHTML = `<p class="text-slate-500 text-center py-4">कोई रेफ़रल रिकॉर्ड नहीं है।</p>`;
+            return;
+        }
+        flattened.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         flattened.forEach(log => {
-            list.innerHTML += `<div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1"><div class="flex justify-between items-center text-xs"><span class="font-bold text-amber-400">Referred: ${log.referredName || log.referredId || 'N/A'}</span><span class="text-green-400">+${Number(log.bonusReceived || 0).toFixed(2)} CX</span></div><div class="text-[10px] text-slate-500 flex justify-between"><span>Referrer: ${log.referrerName} (${log.referrerEmail})</span><span>स्टेक: ${Number(log.stakedAmount || 0).toFixed(2)} CX</span></div><div class="text-[9px] text-slate-500 border-t border-slate-900/60 pt-0.5 text-right">${log.dateTime || 'N/A'}</div></div>`;
+            list.innerHTML += `
+                <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-amber-400">रेफरर: ${log.referrerName} (${log.referrerEmail})</span>
+                        <span class="text-green-400">+${Number(log.bonusReceived || 0).toFixed(2)} CX</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 flex justify-between">
+                        <span>रेफर किया: ${log.referredName || 'N/A'} (${log.referredEmail || 'N/A'})</span>
+                        <span>मोबाइल: ${log.referredPhone || 'N/A'}</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 flex justify-between">
+                        <span>स्टेक: ${Number(log.stakedAmount || 0).toFixed(2)} CX</span>
+                        <span>तिथि: ${log.dateTime || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
         });
     }
 
