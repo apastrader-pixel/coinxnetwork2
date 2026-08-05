@@ -693,34 +693,9 @@
             color: #5a3a6a;
         }
 
-        /* ── SC ADDRESS BOX ── */
+        /* ── SC ADDRESS BOX (HIDDEN - removed) ── */
         .sc-address-box {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(6px);
-            transition: all 0.3s;
-        }
-        .sc-address-box:hover {
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
-        }
-        .sc-address-box .sc-label {
-            font-size: 9px;
-            color: #6b4a7a;
-            display: block;
-        }
-        .sc-address-box .sc-address {
-            font-size: 13px;
-            font-weight: 600;
-            font-family: monospace;
-            color: #26A17B;
-            letter-spacing: 0.5px;
-            word-break: break-all;
+            display: none !important;
         }
 
         /* ── TOAST ── */
@@ -3150,7 +3125,7 @@
         }
 
         // ============================================================
-        // USER AUTH
+        // USER AUTH - FIXED
         // ============================================================
         async function handleLogin(btn) {
             const email = document.getElementById('loginUserId').value.trim();
@@ -3158,11 +3133,18 @@
             if (!email || !password) { showToast('ईमेल और पासवर्ड दर्ज करें', 'error'); return; }
             setButtonLoading(btn, true);
             try {
-                try { await account.get();
-                    await account.deleteSession('current'); } catch (e) {}
+                // Clear any existing session first
+                try { await account.deleteSession('current'); } catch (e) {}
+                // Create new session
                 await account.createEmailPasswordSession(email, password);
+                // Load user data - this now auto-creates missing documents
                 const loaded = await loadCurrentUserData();
-                if (!loaded) { showToast('यूजर डेटा लोड नहीं हो पाया!', 'error'); return; }
+                if (!loaded) {
+                    showToast('यूजर डेटा लोड नहीं हो पाया! कृपया पुनः प्रयास करें।', 'error');
+                    await account.deleteSession('current');
+                    currentUser = null;
+                    return;
+                }
                 if (currentUser.isBlocked) {
                     showToast('आपका खाता ब्लॉक है!', 'error');
                     await account.deleteSession('current');
@@ -3172,7 +3154,14 @@
                 showToast('✅ लॉगिन सफल!', 'success');
                 showPage('dashboardPage');
             } catch (e) {
-                showToast('❌ गलत ईमेल या पासवर्ड', 'error');
+                console.error('Login error:', e);
+                if (e.message && e.message.includes('Invalid credentials')) {
+                    showToast('❌ गलत ईमेल या पासवर्ड', 'error');
+                } else if (e.message && e.message.includes('rate limit')) {
+                    showToast('⏳ बहुत सारे प्रयास, कृपया थोड़ी देर बाद प्रयास करें।', 'error');
+                } else {
+                    showToast('❌ लॉगिन विफल: ' + (e.message || 'अज्ञात त्रुटि'), 'error');
+                }
             } finally { setButtonLoading(btn, false); }
         }
 
@@ -3186,7 +3175,47 @@
         async function loadCurrentUserData() {
             try {
                 const acc = await account.get();
-                const doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id);
+                let doc;
+                try {
+                    doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id);
+                } catch (e) {
+                    // If document not found, create it automatically
+                    if (e.code === 404) {
+                        console.log('User document not found, creating one for:', acc.email);
+                        const coinxId = generateCoinXId();
+                        const userData = {
+                            name: acc.name || acc.email || 'User',
+                            email: acc.email || '',
+                            phone: acc.phone || '',
+                            coins: 0,
+                            staked: 0,
+                            withdrawal: 0,
+                            staking: JSON.stringify([]),
+                            stakingHistory: JSON.stringify([]),
+                            pending_deposit: '',
+                            approved_deposit: JSON.stringify([]),
+                            pending_withdrawal: '',
+                            approved_withdrawal: JSON.stringify([]),
+                            withdrawal_address: '',
+                            withdrawal_screenshot: '',
+                            referrals: JSON.stringify([]),
+                            transactions: JSON.stringify([]),
+                            tradeHistory: JSON.stringify([]),
+                            buySellWallet: 0,
+                            tradeWallet: 0,
+                            coinxId: coinxId,
+                            referredBy: null,
+                            isBlocked: false,
+                            coinxWalletSC: '',
+                            dailyRewards: JSON.stringify([])
+                        };
+                        doc = await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id, userData);
+                        showToast('✅ नया खाता बनाया गया!', 'success');
+                    } else {
+                        throw e;
+                    }
+                }
+                // Ensure all required fields exist
                 if (!doc.coinxId && !doc.coinxid) {
                     const newId = generateCoinXId();
                     await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { coinxId: newId });
@@ -3196,10 +3225,21 @@
                     await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { dailyRewards: JSON.stringify([]) });
                     doc.dailyRewards = [];
                 }
+                if (!doc.stakingHistory) {
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { stakingHistory: JSON.stringify([]) });
+                    doc.stakingHistory = [];
+                }
+                if (!doc.coinxWalletSC) {
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { coinxWalletSC: '' });
+                    doc.coinxWalletSC = '';
+                }
                 currentUser = mapUserDoc(doc);
                 await loadStakingSettings();
                 return true;
-            } catch (e) { return false; }
+            } catch (e) {
+                console.error('loadCurrentUserData error:', e);
+                return false;
+            }
         }
 
         // ============================================================
@@ -3748,7 +3788,7 @@
             container.innerHTML = '';
             const img = document.createElement('img');
             img.src =
-            `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+                `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
             img.alt = 'Referral QR Code';
             img.className = 'w-24 h-24 rounded-xl border-2 border-amber-500/40 p-1 bg-white shadow-lg';
             img.loading = 'lazy';
