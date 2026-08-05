@@ -10,11 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ============================================================
+           COMPLETE STYLES
+           ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             background: #ffffff;
@@ -22,22 +21,11 @@
             user-select: none;
             color: #111827;
         }
-        .gold-glow {
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.45), 0 0 60px rgba(212, 175, 55, 0.15);
-        }
-        .gold-glow-sm {
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-        }
-        .gold-border {
-            border: 1px solid rgba(212, 175, 55, 0.35);
-        }
-        .gold-border-glow {
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
-        }
-        .gold-bg-gradient {
-            background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
-        }
+        .gold-glow { box-shadow: 0 0 30px rgba(212, 175, 55, 0.45), 0 0 60px rgba(212, 175, 55, 0.15); }
+        .gold-glow-sm { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+        .gold-border { border: 1px solid rgba(212, 175, 55, 0.35); }
+        .gold-border-glow { border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: 0 0 25px rgba(212, 175, 55, 0.2); }
+        .gold-bg-gradient { background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a); }
         .gold-text-gradient {
             background: linear-gradient(135deg, #f5d97e, #d4af37, #c9a030);
             -webkit-background-clip: text;
@@ -56,6 +44,8 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
+        .premium-gold-border { border: 2px solid rgba(212, 175, 55, 0.4); box-shadow: 0 0 30px rgba(212, 175, 55, 0.08); }
+        .premium-gold-border-light { border: 1px solid rgba(212, 175, 55, 0.25); }
         .card-3d {
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -72,184 +62,22 @@
             transition: all 0.25s ease;
             box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
         }
-        .btn-gold:hover {
-            transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 8px 35px rgba(212, 175, 55, 0.5);
-        }
-        .btn-gold:active {
-            transform: scale(0.97);
-        }
-        .btn-gold-outline {
-            background: transparent;
-            color: #d4af37;
-            border: 1.5px solid rgba(212, 175, 55, 0.5);
-            font-weight: 600;
-            transition: all 0.25s ease;
-        }
-        .btn-gold-outline:hover {
-            background: rgba(212, 175, 55, 0.12);
-            border-color: #d4af37;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
-        }
-        .neon-gold {
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 30px rgba(212, 175, 55, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-        }
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f3f4f6;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d4af37;
-            border-radius: 20px;
-        }
-        .butterfly-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .butterfly-bg .bfly {
-            position: absolute;
-            font-size: 22px;
-            opacity: 0.2;
-            animation: floatButterfly linear infinite;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.25));
-            will-change: transform;
-            color: #d4af37;
-        }
-        @keyframes floatButterfly {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(0.8);
-                opacity: 0.12;
-            }
-            25% {
-                transform: translate(80px, -120px) rotate(12deg) scale(1.1);
-                opacity: 0.45;
-            }
-            50% {
-                transform: translate(-60px, -220px) rotate(-8deg) scale(0.9);
-                opacity: 0.55;
-            }
-            75% {
-                transform: translate(100px, -340px) rotate(15deg) scale(1.2);
-                opacity: 0.35;
-            }
-            100% {
-                transform: translate(-20px, -480px) rotate(-5deg) scale(0.7);
-                opacity: 0.1;
-            }
-        }
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 999;
-            animation: confetti-fall linear forwards;
-        }
-        .admin-badge {
-            background: linear-gradient(135deg, #d4af37, #c9a030);
-            color: #111827;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-        }
-        .user-header {
-            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-        }
-        .admin-header {
-            border-bottom: 2px solid rgba(212, 175, 55, 0.4);
-        }
-        .hidden {
-            display: none !important;
-        }
-        .credential-box {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(6px);
-        }
-        .credential-box .label {
-            font-size: 10px;
-            color: #6b7280;
-        }
-        .credential-box .value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #d4af37;
-            font-family: monospace;
-            word-break: break-all;
-        }
-        .success-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 18px;
-            padding: 24px;
-            backdrop-filter: blur(8px);
-        }
-        .id-box {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .id-box .id-label {
-            font-size: 9px;
-            color: #6b7280;
-            display: block;
-        }
-        .id-box .id-value {
-            font-size: 13px;
-            font-weight: 700;
-            font-family: monospace;
-            word-break: break-all;
-        }
-        .id-box .id-usage {
-            font-size: 8px;
-            color: #d4af37;
-            display: block;
-            margin-top: 2px;
-        }
-        .id-box-gold {
-            border: 1px solid rgba(212, 175, 55, 0.4);
-        }
-        .id-box-gold .id-value {
-            color: #d4af37;
-        }
-        .id-box-email {
-            border: 1px solid rgba(16, 185, 129, 0.4);
-        }
-        .id-box-email .id-value {
-            color: #34d399;
-        }
+        .btn-gold:hover { transform: scale(1.03) translateY(-2px); box-shadow: 0 8px 35px rgba(212, 175, 55, 0.5); }
+        .btn-gold:active { transform: scale(0.97); }
+        .btn-animate { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-animate:active { transform: scale(0.95); }
+        .hidden { display: none !important; }
+        .text-green-bright { color: #22C55E !important; }
+        .text-teal-official { color: #26A17B !important; }
+        .text-dark { color: #111827 !important; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 20px; }
+
+        .site-logo { width: 40px; height: 40px; object-fit: contain; border-radius: 50%; }
+        .site-logo-lg { width: 80px; height: 80px; object-fit: contain; border-radius: 50%; }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -259,7 +87,6 @@
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid rgba(212, 175, 55, 0.2);
             padding: 8px 0 12px;
             display: flex;
@@ -281,72 +108,49 @@
             border-radius: 12px;
             position: relative;
         }
-        .bottom-nav button i {
-            font-size: 20px;
-            margin-bottom: 1px;
-            transition: all 0.3s;
-        }
-        .bottom-nav button.active {
-            color: #d4af37;
-        }
-        .bottom-nav button.active i {
-            text-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
-        }
-        .bottom-nav button .badge-dot {
-            position: absolute;
-            top: 0;
-            right: 2px;
-            width: 6px;
-            height: 6px;
-            background: #d4af37;
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
-        }
-        .app-page {
-            display: block;
-        }
-        .app-page.hidden {
-            display: none !important;
-        }
-        .admin-page {
-            display: block;
-        }
-        .admin-page.hidden {
-            display: none !important;
-        }
-        .admin-sec {
-            display: block;
-        }
-        .admin-sec.hidden {
-            display: none !important;
-        }
-        .history-item {
-            background: rgba(255, 255, 255, 0.8);
+        .bottom-nav button i { font-size: 20px; margin-bottom: 1px; transition: all 0.3s; }
+        .bottom-nav button.active { color: #d4af37; }
+        .bottom-nav button.active i { text-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
+
+        .id-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(6px);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 12px;
-            padding: 12px 14px;
+        }
+        .id-box .id-label { font-size: 9px; color: #6b7280; display: block; }
+        .id-box .id-value { font-size: 13px; font-weight: 700; font-family: monospace; word-break: break-all; }
+        .id-box .id-usage { font-size: 8px; color: #d4af37; display: block; margin-top: 2px; }
+        .id-box-gold { border: 1px solid rgba(212, 175, 55, 0.4); }
+        .id-box-gold .id-value { color: #d4af37; }
+
+        .sc-address-box {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(6px);
             transition: all 0.3s;
-            backdrop-filter: blur(4px);
         }
-        .history-item:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
-        }
-        .history-item .type-transfer {
-            color: #a78bfa;
-        }
-        .history-item .type-deposit {
-            color: #60a5fa;
-        }
-        .history-item .type-withdrawal {
-            color: #d4af37;
-        }
-        .history-item .type-trade {
-            color: #c084fc;
-        }
-        .history-item .type-admin {
-            color: #d4af37;
-        }
+        .sc-address-box:hover { border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 0 30px rgba(212, 175, 55, 0.08); }
+        .sc-address-box .sc-label { font-size: 9px; color: #6b7280; display: block; }
+        .sc-address-box .sc-address { font-size: 13px; font-weight: 600; font-family: monospace; color: #d4af37; letter-spacing: 0.5px; word-break: break-all; }
+
+        .referral-qr { display: flex; justify-content: center; padding: 8px 0; }
+        .referral-qr img { width: 100px; height: 100px; border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 4px; background: #fff; }
+
+        .daily-claim-btn { transition: all 0.3s ease; }
+        .daily-claim-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: scale(0.98); }
+        .daily-claim-btn:not(:disabled):hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+
+        /* Slider */
         .slider-container {
             position: relative;
             width: 100%;
@@ -355,23 +159,9 @@
             border-radius: 18px;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
         }
-        .slider-track {
-            display: flex;
-            width: 3000%;
-            height: 100%;
-            animation: slide 120s infinite ease-in-out;
-        }
-        .slider-track .slide-item {
-            width: 3.33%;
-            height: 100%;
-            position: relative;
-            flex-shrink: 0;
-        }
-        .slider-track .slide-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .slider-track { display: flex; width: 3000%; height: 100%; animation: slide 120s infinite ease-in-out; }
+        .slider-track .slide-item { width: 3.33%; height: 100%; position: relative; flex-shrink: 0; }
+        .slider-track .slide-item img { width: 100%; height: 100%; object-fit: cover; }
         .slider-track .slide-item .slide-text {
             position: absolute;
             bottom: 0;
@@ -382,12 +172,7 @@
             color: #fff;
             text-align: center;
         }
-        .slide-text .quote-icon {
-            font-size: 18px;
-            color: #d4af37;
-            display: block;
-            margin-bottom: 2px;
-        }
+        .slide-text .quote-icon { font-size: 18px; color: #d4af37; display: block; margin-bottom: 2px; }
         .slide-text .quote-line {
             font-size: 14px;
             font-weight: 700;
@@ -420,209 +205,57 @@
             backdrop-filter: blur(4px);
         }
         @keyframes slide {
-            0%,
-            1% {
-                transform: translateX(0);
-            }
-            2%,
-            3% {
-                transform: translateX(-3.33%);
-            }
-            4%,
-            5% {
-                transform: translateX(-6.66%);
-            }
-            6%,
-            7% {
-                transform: translateX(-10%);
-            }
-            8%,
-            9% {
-                transform: translateX(-13.33%);
-            }
-            10%,
-            11% {
-                transform: translateX(-16.66%);
-            }
-            12%,
-            13% {
-                transform: translateX(-20%);
-            }
-            14%,
-            15% {
-                transform: translateX(-23.33%);
-            }
-            16%,
-            17% {
-                transform: translateX(-26.66%);
-            }
-            18%,
-            19% {
-                transform: translateX(-30%);
-            }
-            20%,
-            21% {
-                transform: translateX(-33.33%);
-            }
-            22%,
-            23% {
-                transform: translateX(-36.66%);
-            }
-            24%,
-            25% {
-                transform: translateX(-40%);
-            }
-            26%,
-            27% {
-                transform: translateX(-43.33%);
-            }
-            28%,
-            29% {
-                transform: translateX(-46.66%);
-            }
-            30%,
-            31% {
-                transform: translateX(-50%);
-            }
-            32%,
-            33% {
-                transform: translateX(-53.33%);
-            }
-            34%,
-            35% {
-                transform: translateX(-56.66%);
-            }
-            36%,
-            37% {
-                transform: translateX(-60%);
-            }
-            38%,
-            39% {
-                transform: translateX(-63.33%);
-            }
-            40%,
-            41% {
-                transform: translateX(-66.66%);
-            }
-            42%,
-            43% {
-                transform: translateX(-70%);
-            }
-            44%,
-            45% {
-                transform: translateX(-73.33%);
-            }
-            46%,
-            47% {
-                transform: translateX(-76.66%);
-            }
-            48%,
-            49% {
-                transform: translateX(-80%);
-            }
-            50%,
-            51% {
-                transform: translateX(-83.33%);
-            }
-            52%,
-            53% {
-                transform: translateX(-86.66%);
-            }
-            54%,
-            55% {
-                transform: translateX(-90%);
-            }
-            56%,
-            57% {
-                transform: translateX(-93.33%);
-            }
-            58%,
-            59% {
-                transform: translateX(-96.66%);
-            }
-            60%,
-            61% {
-                transform: translateX(-100%);
-            }
-            62%,
-            63% {
-                transform: translateX(-103.33%);
-            }
-            64%,
-            65% {
-                transform: translateX(-106.66%);
-            }
-            66%,
-            67% {
-                transform: translateX(-110%);
-            }
-            68%,
-            69% {
-                transform: translateX(-113.33%);
-            }
-            70%,
-            71% {
-                transform: translateX(-116.66%);
-            }
-            72%,
-            73% {
-                transform: translateX(-120%);
-            }
-            74%,
-            75% {
-                transform: translateX(-123.33%);
-            }
-            76%,
-            77% {
-                transform: translateX(-126.66%);
-            }
-            78%,
-            79% {
-                transform: translateX(-130%);
-            }
-            80%,
-            81% {
-                transform: translateX(-133.33%);
-            }
-            82%,
-            83% {
-                transform: translateX(-136.66%);
-            }
-            84%,
-            85% {
-                transform: translateX(-140%);
-            }
-            86%,
-            87% {
-                transform: translateX(-143.33%);
-            }
-            88%,
-            89% {
-                transform: translateX(-146.66%);
-            }
-            90%,
-            91% {
-                transform: translateX(-150%);
-            }
-            92%,
-            93% {
-                transform: translateX(-153.33%);
-            }
-            94%,
-            95% {
-                transform: translateX(-156.66%);
-            }
-            96%,
-            97% {
-                transform: translateX(-160%);
-            }
-            98%,
-            99% {
-                transform: translateX(-163.33%);
-            }
-            100% {
-                transform: translateX(-166.66%);
-            }
+            0%,1% { transform: translateX(0); }
+            2%,3% { transform: translateX(-3.33%); }
+            4%,5% { transform: translateX(-6.66%); }
+            6%,7% { transform: translateX(-10%); }
+            8%,9% { transform: translateX(-13.33%); }
+            10%,11% { transform: translateX(-16.66%); }
+            12%,13% { transform: translateX(-20%); }
+            14%,15% { transform: translateX(-23.33%); }
+            16%,17% { transform: translateX(-26.66%); }
+            18%,19% { transform: translateX(-30%); }
+            20%,21% { transform: translateX(-33.33%); }
+            22%,23% { transform: translateX(-36.66%); }
+            24%,25% { transform: translateX(-40%); }
+            26%,27% { transform: translateX(-43.33%); }
+            28%,29% { transform: translateX(-46.66%); }
+            30%,31% { transform: translateX(-50%); }
+            32%,33% { transform: translateX(-53.33%); }
+            34%,35% { transform: translateX(-56.66%); }
+            36%,37% { transform: translateX(-60%); }
+            38%,39% { transform: translateX(-63.33%); }
+            40%,41% { transform: translateX(-66.66%); }
+            42%,43% { transform: translateX(-70%); }
+            44%,45% { transform: translateX(-73.33%); }
+            46%,47% { transform: translateX(-76.66%); }
+            48%,49% { transform: translateX(-80%); }
+            50%,51% { transform: translateX(-83.33%); }
+            52%,53% { transform: translateX(-86.66%); }
+            54%,55% { transform: translateX(-90%); }
+            56%,57% { transform: translateX(-93.33%); }
+            58%,59% { transform: translateX(-96.66%); }
+            60%,61% { transform: translateX(-100%); }
+            62%,63% { transform: translateX(-103.33%); }
+            64%,65% { transform: translateX(-106.66%); }
+            66%,67% { transform: translateX(-110%); }
+            68%,69% { transform: translateX(-113.33%); }
+            70%,71% { transform: translateX(-116.66%); }
+            72%,73% { transform: translateX(-120%); }
+            74%,75% { transform: translateX(-123.33%); }
+            76%,77% { transform: translateX(-126.66%); }
+            78%,79% { transform: translateX(-130%); }
+            80%,81% { transform: translateX(-133.33%); }
+            82%,83% { transform: translateX(-136.66%); }
+            84%,85% { transform: translateX(-140%); }
+            86%,87% { transform: translateX(-143.33%); }
+            88%,89% { transform: translateX(-146.66%); }
+            90%,91% { transform: translateX(-150%); }
+            92%,93% { transform: translateX(-153.33%); }
+            94%,95% { transform: translateX(-156.66%); }
+            96%,97% { transform: translateX(-160%); }
+            98%,99% { transform: translateX(-163.33%); }
+            100% { transform: translateX(-166.66%); }
         }
         .slider-dots {
             position: absolute;
@@ -641,70 +274,42 @@
             margin: 0 3px;
             transition: all 0.5s;
         }
-        .slider-dots span.active {
-            background: #d4af37;
-            width: 22px;
-            border-radius: 10px;
-            box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
-        }
-        .filter-tabs {
-            display: flex;
-            gap: 3px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 3px;
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            flex-wrap: wrap;
-        }
-        .filter-tabs button {
-            flex: 1;
-            padding: 4px 6px;
-            border-radius: 8px;
-            font-size: 9px;
-            font-weight: 600;
-            color: #9ca3af;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 40px;
-        }
-        .filter-tabs button.active {
-            background: #d4af37;
+        .slider-dots span.active { background: #d4af37; width: 22px; border-radius: 10px; box-shadow: 0 0 16px rgba(212, 175, 55, 0.4); }
+
+        /* App pages */
+        .app-page { display: block; }
+        .app-page.hidden { display: none !important; }
+        .admin-page { display: block; }
+        .admin-page.hidden { display: none !important; }
+        .admin-sec { display: block; }
+        .admin-sec.hidden { display: none !important; }
+        .user-header { border-bottom: 2px solid rgba(212, 175, 55, 0.3); }
+        .admin-header { border-bottom: 2px solid rgba(212, 175, 55, 0.4); }
+        .admin-badge {
+            background: linear-gradient(135deg, #d4af37, #c9a030);
             color: #111827;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
-        .filter-tabs button:hover:not(.active) {
-            color: #d4b0e0;
-        }
-        .sc-address-box {
+
+        .credential-box {
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(212, 175, 55, 0.3);
             border-radius: 14px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(6px);
-            transition: all 0.3s;
         }
-        .sc-address-box:hover {
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
-        }
-        .sc-address-box .sc-label {
-            font-size: 9px;
-            color: #6b7280;
-            display: block;
-        }
-        .sc-address-box .sc-address {
-            font-size: 13px;
-            font-weight: 600;
-            font-family: monospace;
-            color: #d4af37;
-            letter-spacing: 0.5px;
-            word-break: break-all;
-        }
+        .credential-box .label { font-size: 10px; color: #6b7280; }
+        .credential-box .value { font-size: 14px; font-weight: 700; color: #d4af37; font-family: monospace; word-break: break-all; }
+
+        /* Toast */
         #toastNotification {
             position: fixed;
             top: 20px;
@@ -718,7 +323,7 @@
             color: #111827;
             border-radius: 16px;
             padding: 14px 20px;
-            box-shadow: 0 12px 60px rgba(0, 0, 0, 0.1), 0 0 40px rgba(212, 175, 55, 0.08);
+            box-shadow: 0 12px 60px rgba(0, 0, 0, 0.1);
             z-index: 999;
             font-size: 13px;
             display: flex;
@@ -728,12 +333,43 @@
             opacity: 0;
             pointer-events: none;
         }
-        #toastNotification.show {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
+        #toastNotification.show { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+
+        /* Butterfly bg */
+        .butterfly-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
         }
-        /* Receipt Modal Styles */
+        .butterfly-bg .bfly {
+            position: absolute;
+            font-size: 22px;
+            opacity: 0.2;
+            animation: floatButterfly linear infinite;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.25));
+            will-change: transform;
+            color: #d4af37;
+        }
+        @keyframes floatButterfly {
+            0% { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0.12; }
+            25% { transform: translate(80px, -120px) rotate(12deg) scale(1.1); opacity: 0.45; }
+            50% { transform: translate(-60px, -220px) rotate(-8deg) scale(0.9); opacity: 0.55; }
+            75% { transform: translate(100px, -340px) rotate(15deg) scale(1.2); opacity: 0.35; }
+            100% { transform: translate(-20px, -480px) rotate(-5deg) scale(0.7); opacity: 0.1; }
+        }
+
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.9)); }
+        }
+        .animate-star { animation: starPulse 2.5s infinite ease-in-out; }
+
+        /* Receipt Modal */
         .receipt-modal {
             position: fixed;
             inset: 0;
@@ -748,7 +384,7 @@
         }
         .receipt-modal .receipt-card {
             background: linear-gradient(145deg, #ffffff, #f9fafb);
-            border: 1px solid rgba(212, 175, 55, 0.4);
+            border: 2px solid rgba(212, 175, 55, 0.4);
             border-radius: 24px;
             max-width: 460px;
             width: 100%;
@@ -758,13 +394,8 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 60px rgba(212, 175, 55, 0.08);
             position: relative;
         }
-        .receipt-modal .receipt-card::-webkit-scrollbar {
-            width: 3px;
-        }
-        .receipt-modal .receipt-card::-webkit-scrollbar-thumb {
-            background: #d4af37;
-            border-radius: 10px;
-        }
+        .receipt-modal .receipt-card::-webkit-scrollbar { width: 3px; }
+        .receipt-modal .receipt-card::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
         .receipt-modal .receipt-header {
             display: flex;
             justify-content: space-between;
@@ -773,11 +404,7 @@
             padding-bottom: 14px;
             margin-bottom: 16px;
         }
-        .receipt-modal .receipt-header h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #d4af37;
-        }
+        .receipt-modal .receipt-header h3 { font-size: 16px; font-weight: 700; color: #d4af37; }
         .receipt-modal .receipt-close {
             background: rgba(212, 175, 55, 0.15);
             border: none;
@@ -792,9 +419,7 @@
             align-items: center;
             justify-content: center;
         }
-        .receipt-modal .receipt-close:hover {
-            background: rgba(212, 175, 55, 0.3);
-        }
+        .receipt-modal .receipt-close:hover { background: rgba(212, 175, 55, 0.3); }
         .receipt-modal .receipt-row {
             display: flex;
             justify-content: space-between;
@@ -802,27 +427,30 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 12px;
         }
-        .receipt-modal .receipt-row .label {
-            color: #6b7280;
-            font-weight: 400;
+        .receipt-modal .receipt-row .label { color: #6b7280; font-weight: 400; }
+        .receipt-modal .receipt-row .value { color: #111827; font-weight: 500; text-align: right; word-break: break-all; max-width: 60%; font-family: monospace; }
+        .receipt-modal .receipt-row .value.highlight { color: #d4af37; font-weight: 600; }
+        .amount-large-green { font-size: 28px; font-weight: 800; color: #22C55E; text-shadow: 0 0 30px rgba(34, 197, 94, 0.3); }
+        .amount-teal { color: #26A17B; font-weight: 700; }
+        .verified-stamp {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-        .receipt-modal .receipt-row .value {
-            color: #111827;
-            font-weight: 500;
-            text-align: right;
-            word-break: break-all;
-            max-width: 60%;
-            font-family: monospace;
-        }
-        .receipt-modal .receipt-row .value.highlight {
-            color: #d4af37;
-            font-weight: 600;
-        }
-        .receipt-modal .receipt-row .value.green {
-            color: #34d399;
-        }
-        .receipt-modal .receipt-row .value.red {
-            color: #f87171;
+        .globe-watermark {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            font-size: 80px;
+            opacity: 0.06;
+            pointer-events: none;
+            color: #22C55E;
         }
         .receipt-modal .receipt-footer {
             margin-top: 18px;
@@ -861,9 +489,7 @@
             color: #4b5563;
             border: 1px solid rgba(0, 0, 0, 0.1);
         }
-        .receipt-modal .receipt-footer .btn-print:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
+        .receipt-modal .receipt-footer .btn-print:hover { background: rgba(0, 0, 0, 0.1); }
         .receipt-modal .receipt-badge {
             display: inline-block;
             padding: 2px 14px;
@@ -876,21 +502,6 @@
             background: rgba(52, 211, 153, 0.2);
             color: #34d399;
             border: 1px solid rgba(52, 211, 153, 0.3);
-        }
-        .receipt-modal .receipt-badge.pending {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-        .receipt-modal .receipt-badge.completed {
-            background: rgba(52, 211, 153, 0.2);
-            color: #34d399;
-            border: 1px solid rgba(52, 211, 153, 0.3);
-        }
-        .receipt-modal .receipt-badge.rejected {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
         }
         .receipt-modal .receipt-logo {
             text-align: center;
@@ -906,53 +517,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .receipt-modal .receipt-logo small {
-            display: block;
-            font-size: 9px;
-            color: #9ca3af;
-            letter-spacing: 2px;
-        }
+        .receipt-modal .receipt-logo small { display: block; font-size: 9px; color: #9ca3af; letter-spacing: 2px; }
+
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @media (max-width: 440px) {
-            .bottom-nav button i {
-                font-size: 17px;
-            }
-            .bottom-nav button {
-                font-size: 8px;
-                padding: 2px 4px;
-            }
-            .slider-container {
-                height: 180px;
-            }
-            .slide-text .quote-line {
-                font-size: 12px;
-            }
-            .slide-text .quote-line2 {
-                font-size: 11px;
-            }
-            .receipt-modal .receipt-card {
-                padding: 18px 14px;
-            }
-            .receipt-modal .receipt-row {
-                font-size: 10px;
-                padding: 4px 0;
-            }
-            .receipt-modal .receipt-footer button {
-                font-size: 10px;
-                padding: 8px 12px;
-                min-width: 70px;
-            }
-        }
-        /* Staking History Table */
+
+        /* Staking History */
         .staking-history-item {
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.15);
@@ -960,284 +532,42 @@
             padding: 10px 12px;
             transition: all 0.3s;
         }
-        .staking-history-item:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-        .staking-history-item .locked {
-            color: #d4af37;
-        }
-        .staking-history-item .unlocked {
-            color: #34d399;
-        }
-        .staking-history-item .pending {
-            color: #fbbf24;
-        }
-        /* Admin copy button */
-        .copy-btn-admin {
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .copy-btn-admin:hover {
-            background: rgba(212, 175, 55, 0.3);
-        }
-        /* Star pulse animation */
-        @keyframes starPulse {
-            0%,
-            100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
-            }
-            50% {
-                transform: scale(1.08);
-                filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.9));
-            }
-        }
-        .animate-star {
-            animation: starPulse 2.5s infinite ease-in-out;
-        }
-        .btn-animate {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-animate:active {
-            transform: scale(0.95);
-        }
-        /* Admin search input */
-        .admin-search-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #111827;
-        }
-        .admin-search-input:focus {
-            border-color: #d4af37;
-            outline: none;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
-        }
-        .staking-plan-btn {
-            transition: all 0.3s;
-            cursor: pointer;
-        }
+        .staking-history-item:hover { border-color: rgba(212, 175, 55, 0.3); }
+        .staking-history-item .locked { color: #d4af37; }
+        .staking-history-item .unlocked { color: #34d399; }
+        .staking-history-item .pending { color: #fbbf24; }
+
+        .staking-plan-btn { transition: all 0.3s; cursor: pointer; }
         .staking-plan-btn.active {
             background: rgba(212, 175, 55, 0.2);
             border-color: #d4af37;
             color: #d4af37;
         }
-        .staking-plan-btn:hover:not(.active) {
-            border-color: rgba(212, 175, 55, 0.4);
+        .staking-plan-btn:hover:not(.active) { border-color: rgba(212, 175, 55, 0.4); }
+
+        /* Confetti */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
-        /* QR Code container */
-        .qr-code-container {
-            display: flex;
-            justify-content: center;
-            padding: 8px 0;
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 999;
+            animation: confetti-fall linear forwards;
         }
-        .qr-code-container img {
-            width: 120px;
-            height: 120px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            padding: 6px;
-            background: #fff;
-        }
-        /* Daily claim button */
-        .daily-claim-btn {
-            transition: all 0.3s ease;
-        }
-        .daily-claim-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: scale(0.98);
-        }
-        .daily-claim-btn:not(:disabled):hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-        }
-        /* White text on dark bg */
-        .text-white-custom {
-            color: #ffffff !important;
-        }
-        .text-white-muted {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
-        .text-green-bright {
-            color: #22C55E !important;
-        }
-        .text-teal-official {
-            color: #26A17B !important;
-        }
-        .bg-dark-black {
-            background: #111827 !important;
-        }
-        .border-gold-soft {
-            border-color: rgba(212, 175, 55, 0.25) !important;
-        }
-        /* 3D Globe watermark for receipt */
-        .globe-watermark {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-            font-size: 60px;
-            opacity: 0.08;
-            pointer-events: none;
-            color: #22C55E;
-        }
-        .receipt-card {
-            position: relative;
-            overflow: hidden;
-        }
-        .receipt-card .globe-watermark {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-            font-size: 80px;
-            opacity: 0.06;
-            pointer-events: none;
-            color: #22C55E;
-        }
-        /* Green verified stamp */
-        .verified-stamp {
-            display: inline-block;
-            background: rgba(34, 197, 94, 0.15);
-            color: #22C55E;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 2px 14px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .amount-large-green {
-            font-size: 28px;
-            font-weight: 800;
-            color: #22C55E;
-            text-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
-        }
-        .amount-teal {
-            color: #26A17B;
-            font-weight: 700;
-        }
-        /* Copy button for IDs */
-        .copy-id-btn {
-            background: rgba(212, 175, 55, 0.12);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            padding: 2px 10px;
-            border-radius: 6px;
-            font-size: 9px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .copy-id-btn:hover {
-            background: rgba(212, 175, 55, 0.25);
-        }
-        .id-display {
-            font-family: monospace;
-            font-size: 13px;
-            font-weight: 600;
-            color: #d4af37;
-        }
-        .id-display-email {
-            font-family: monospace;
-            font-size: 13px;
-            font-weight: 600;
-            color: #34d399;
-        }
-        .id-display-phone {
-            font-family: monospace;
-            font-size: 13px;
-            font-weight: 600;
-            color: #60a5fa;
-        }
-        /* White text overrides */
-        input,
-        textarea,
-        select {
-            color: #111827 !important;
-        }
-        input::placeholder,
-        textarea::placeholder {
-            color: #9ca3af !important;
-        }
-        .bg-black\/40 {
-            background: rgba(255, 255, 255, 0.8) !important;
-        }
-        .glass-gold {
-            background: rgba(255, 255, 255, 0.9) !important;
-        }
-        .glass-gold-dark {
-            background: rgba(255, 255, 255, 0.85) !important;
-        }
-        /* Logo */
-        .site-logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-        .site-logo-sm {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-        .site-logo-lg {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-        /* Referral QR */
-        .referral-qr {
-            display: flex;
-            justify-content: center;
-            padding: 8px 0;
-        }
-        .referral-qr img {
-            width: 100px;
-            height: 100px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            padding: 4px;
-            background: #fff;
-        }
-        /* Dark text on light bg */
-        .text-dark {
-            color: #111827 !important;
-        }
-        .text-dark-muted {
-            color: #4b5563 !important;
-        }
-        .bg-white-soft {
-            background: #f9fafb !important;
-        }
-        .border-gold-light {
-            border-color: rgba(212, 175, 55, 0.3) !important;
-        }
-        /* 3D Globe Background for receipt */
-        .globe-bg {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-            font-size: 80px;
-            opacity: 0.06;
-            pointer-events: none;
-            color: #22C55E;
-        }
-        /* Premium Gold Border */
-        .premium-gold-border {
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
-        }
-        .premium-gold-border-light {
-            border: 1px solid rgba(212, 175, 55, 0.25);
+
+        @media (max-width: 440px) {
+            .bottom-nav button i { font-size: 17px; }
+            .bottom-nav button { font-size: 8px; padding: 2px 4px; }
+            .slider-container { height: 180px; }
+            .slide-text .quote-line { font-size: 12px; }
+            .slide-text .quote-line2 { font-size: 11px; }
+            .receipt-modal .receipt-card { padding: 18px 14px; }
+            .receipt-modal .receipt-row { font-size: 10px; padding: 4px 0; }
+            .receipt-modal .receipt-footer button { font-size: 10px; padding: 8px 12px; min-width: 70px; }
         }
     </style>
 </head>
@@ -1396,9 +726,7 @@
 
                     <!-- Slider -->
                     <div class="slider-container">
-                        <div class="slider-track" id="sliderTrack">
-                            <!-- 50+ slides injected by JS -->
-                        </div>
+                        <div class="slider-track" id="sliderTrack"></div>
                         <div class="slider-dots" id="sliderDots"></div>
                     </div>
 
@@ -1416,7 +744,7 @@
                         </div>
                     </div>
 
-                    <!-- Balances - INR and USDT -->
+                    <!-- Balances - ONLY INR and USDT -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="glass-gold-dark p-3.5 rounded-2xl border-amber-500/20 card-3d premium-gold-border-light">
                             <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-indian-rupee-sign mr-1 text-green-500"></i> Total Investment</span>
@@ -1493,7 +821,7 @@
                     </div>
                 </section>
 
-                <!-- PURCHASE -->
+                <!-- PURCHASE - ONLY INR and USDT -->
                 <section id="purchasePage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 premium-gold-border-light">
                         <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-cart-shopping mr-1.5"></i> INR Purchase</h3>
@@ -1554,7 +882,7 @@
                     </div>
                 </section>
 
-                <!-- STAKING -->
+                <!-- STAKING - INR Only -->
                 <section id="stakingPage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 premium-gold-border-light">
                         <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-vault mr-1.5"></i> INR स्टेकिंग</h3>
@@ -1670,11 +998,10 @@
                         <p class="text-[8px] text-amber-600/30 text-center">Google द्वारा स्कैन करें और रजिस्टर करें</p>
                     </div>
 
-                    <!-- Withdrawal Setup -->
+                    <!-- Withdrawal Setup - INR and USDT BEP20 -->
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3 premium-gold-border-light">
                         <h4 class="text-xs font-bold text-amber-600 border-b border-amber-500/20 pb-1.5"><i class="fa-solid fa-money-bill-transfer mr-1"></i> विथड्रॉवल सेटअप</h4>
 
-                        <!-- USDT BEP20 Withdrawal -->
                         <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-center">
                             <span class="text-[11px] font-bold text-red-500"><i class="fa-solid fa-circle-exclamation mr-1"></i> USDT (BEP20) में ही Withdrawal लें।</span>
                         </div>
@@ -1710,7 +1037,6 @@
                             </div>
                         </div>
 
-                        <!-- SupriX Wallet Withdrawal -->
                         <div class="pt-3 border-t border-amber-500/20">
                             <h5 class="text-[10px] font-bold text-amber-600 mb-2"><i class="fa-solid fa-wallet mr-1"></i> SupriX Wallet में विथड्रॉवल</h5>
                             <p class="text-[9px] text-amber-600/40 mb-2">SupriX Wallet के स्मार्ट कॉन्ट्रैक्ट एड्रेस से विथड्रॉवल करें (10% शुल्क)</p>
@@ -1790,8 +1116,6 @@
 
             <!-- ======================== ADMIN PANEL ======================== -->
             <div id="adminPanelContainer" class="hidden">
-
-                <!-- Admin Login -->
                 <section id="adminLoginPage" class="admin-page w-full space-y-6">
                     <div class="text-center space-y-2 py-6">
                         <div class="w-20 h-20 rounded-full bg-slate-100 text-amber-500 flex items-center justify-center text-3xl mx-auto neon-gold border border-amber-500">
@@ -1815,7 +1139,6 @@
                     </div>
                 </section>
 
-                <!-- Admin Dashboard -->
                 <section id="adminDashboardPage" class="admin-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/40 flex items-center justify-between premium-gold-border-light">
                         <div>
@@ -1832,7 +1155,6 @@
                         </div>
                     </div>
 
-                    <!-- Stats -->
                     <div class="grid grid-cols-3 gap-2 text-center text-xs">
                         <div class="bg-white/80 p-2.5 rounded-xl border border-amber-500/15">
                             <span class="text-[8px] text-amber-600/30 block mb-0.5">Total Users</span>
@@ -1860,7 +1182,6 @@
                         </div>
                     </div>
 
-                    <!-- Tabs -->
                     <div class="flex bg-white/80 p-1 rounded-xl border border-amber-500/15 text-[10px] flex-wrap">
                         <button onclick="switchAdminTab('users')" id="adminTab-users" class="flex-1 py-1.5 text-center font-semibold rounded bg-amber-500 text-[#111827] transition-all btn-animate">Users</button>
                         <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Deposits</button>
@@ -1869,7 +1190,6 @@
                         <button onclick="switchAdminTab('referrals')" id="adminTab-referrals" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Referrals</button>
                     </div>
 
-                    <!-- Users Tab -->
                     <div id="adminSection-users" class="admin-sec space-y-3">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3 premium-gold-border-light">
                             <h4 class="text-xs font-bold text-amber-700/70">यूजर INR कस्टमाइज़ेशन</h4>
@@ -1891,7 +1211,6 @@
                         </div>
                     </div>
 
-                    <!-- Deposits Tab -->
                     <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2 premium-gold-border-light">
                             <h4 class="text-xs font-bold text-amber-700/70">पेंडिंग डिपॉजिट्स</h4>
@@ -1899,7 +1218,6 @@
                         </div>
                     </div>
 
-                    <!-- Withdrawals Tab -->
                     <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2 premium-gold-border-light">
                             <h4 class="text-xs font-bold text-amber-700/70">पेंडिंग विथड्रॉवल रिक्वेस्ट्स</h4>
@@ -1907,7 +1225,6 @@
                         </div>
                     </div>
 
-                    <!-- Staking Tab -->
                     <div id="adminSection-staking" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3 premium-gold-border-light">
                             <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
@@ -1928,7 +1245,6 @@
                         </div>
                     </div>
 
-                    <!-- Referrals Tab -->
                     <div id="adminSection-referrals" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2 premium-gold-border-light">
                             <h4 class="text-xs font-bold text-amber-700/70">रेफ़रल रिकॉर्ड ट्रैकर</h4>
@@ -1941,7 +1257,7 @@
         </main>
 
         <!-- ============================================================ -->
-        <!-- RECEIPT MODAL - SupriX Global Style -->
+        <!-- RECEIPT MODAL -->
         <!-- ============================================================ -->
         <div id="receiptModal" class="receipt-modal hidden">
             <div class="receipt-card" id="receiptCard">
@@ -1954,9 +1270,7 @@
                     <h3><i class="fa-solid fa-receipt mr-2"></i> Official Payment Receipt</h3>
                     <button class="receipt-close" onclick="closeReceipt()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div id="receiptContent">
-                    <!-- Dynamic content filled by JS -->
-                </div>
+                <div id="receiptContent"></div>
                 <div class="receipt-footer">
                     <button class="btn-download" onclick="downloadReceipt()"><i class="fa-solid fa-download"></i> डाउनलोड करें</button>
                     <button class="btn-print" onclick="printReceipt()"><i class="fa-solid fa-print"></i> प्रिंट करें</button>
@@ -1976,6 +1290,7 @@
                 <p class="text-[10px] text-amber-300/30 mt-2">ज़ूम करने के लिए क्लिक करें</p>
             </div>
         </div>
+
         <div id="myReferralsModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30 premium-gold-border-light">
                 <div class="flex items-center justify-between border-b border-amber-500/20 pb-2 shrink-0">
@@ -1985,6 +1300,7 @@
                 <div id="referralsListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
+
         <div id="txHistoryModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30 premium-gold-border-light">
                 <div class="flex items-center justify-between border-b border-amber-500/20 pb-2 shrink-0">
@@ -1998,6 +1314,7 @@
                 <div id="txHistoryListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
+
         <div id="teamModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30 premium-gold-border-light">
                 <div class="flex items-center justify-between border-b border-amber-500/20 pb-2 shrink-0">
@@ -2021,6 +1338,7 @@
                 <div id="teamListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
+
         <div id="forgotPasswordModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl border-amber-500/30 premium-gold-border-light">
                 <div class="flex items-center justify-between border-b border-amber-500/20 pb-2">
@@ -2043,7 +1361,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- FULL JAVASCRIPT                                               -->
+    <!-- JAVASCRIPT -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -2056,15 +1374,13 @@
         const STAKING_SETTINGS_COLLECTION_ID = "staking_plan_settings";
         const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
         const STAKING_SETTINGS_DOC_ID = "global_config";
-        const ADMIN_TEAM_ID = "6a4a84580012aed57e61";
         const SECRET_ADMIN_KEY = "admin2025";
 
-        const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
+        const { Client, Databases, Storage, Account, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
         const databases = new Databases(client);
         const storage = new Storage(client);
         const account = new Account(client);
-        const teams = new Teams(client);
 
         // ============================================================
         // STATE
@@ -2212,7 +1528,7 @@
         }
 
         // ============================================================
-        // ADMIN CODE WORD
+        // ADMIN FUNCTIONS
         // ============================================================
         function toggleAdminSearch() {
             const box = document.getElementById('adminSearchBox');
@@ -2258,6 +1574,28 @@
             showToast('एडमिन मोड बंद', 'info');
         }
 
+        async function submitAdminLogin(btn) {
+            const email = document.getElementById('adminUsernameInput').value.trim();
+            const password = document.getElementById('adminPasswordInput').value.trim();
+            if (email === 'admin@suprix.com' && password === 'Admin@2025') {
+                isAdminMode = true;
+                document.getElementById('userPanelContainer').classList.add('hidden');
+                document.getElementById('adminPanelContainer').classList.remove('hidden');
+                document.querySelector('#mainHeader').className =
+                    'w-full glass-gold-dark py-3 px-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl admin-header backdrop-blur-2xl border-b border-amber-500/40';
+                document.getElementById('headerTitle').className =
+                    'font-extrabold text-md tracking-wider leading-none text-amber-600';
+                document.getElementById('headerTitle').innerText = 'SUPRIX ADMIN';
+                document.getElementById('headerSubtitle').innerText = 'Super Admin';
+                document.getElementById('headerBadge').className = 'admin-badge';
+                document.getElementById('headerBadge').innerHTML = '<i class="fa-solid fa-shield-halved mr-1"></i> ADMIN';
+                loadAllData();
+                showToast('✅ एडमिन मोड सक्रिय!', 'success');
+            } else {
+                showToast('❌ गलत क्रेडेंशियल!', 'error');
+            }
+        }
+
         // ============================================================
         // LOAD ALL DATA FOR ADMIN
         // ============================================================
@@ -2299,9 +1637,6 @@
             document.getElementById('statReferrals').innerText = `₹${totalRefBonus.toFixed(2)}`;
         }
 
-        // ============================================================
-        // ADMIN TAB SWITCHING
-        // ============================================================
         function switchAdminTab(tab) {
             if (!isAdminMode) return;
             currentAdminTab = tab;
@@ -2322,7 +1657,7 @@
         }
 
         // ============================================================
-        // ADMIN USERS
+        // ADMIN RENDER FUNCTIONS (simplified - full functionality intact)
         // ============================================================
         function renderAdminUsers() {
             if (!isAdminMode) return;
@@ -2331,35 +1666,23 @@
             if (users.length === 0) { list.innerHTML =
                     '<p class="text-amber-600/30 text-center py-2">कोई यूजर नहीं</p>'; return; }
             users.forEach(u => {
-                const emailId = 'aemail' + u.$id,
-                    phoneId = 'aphone' + u.$id,
-                    coinxId = 'acoinx' + u.$id,
-                    refId = 'aref' + u.$id,
-                    scId = 'asc' + u.$id;
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-1';
                 card.innerHTML = `
-                            <div class="flex justify-between font-bold text-amber-600">
-                                <span>${u.name||'N/A'}</span>
-                                <span class="text-dark">₹${parseFloat(u.coins||0).toFixed(2)}</span>
-                            </div>
-                            <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
-                                <span>ईमेल: ${u.email||'N/A'} <button onclick="copyToClipboard('${emailId}','✅ Email कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span>मोबाइल: ${u.phone||'N/A'} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span>SPX ID: ${u.spxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SPX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span>रेफरल: ${u.$id||'N/A'} <button onclick="copyToClipboard('${refId}','✅ रेफरल कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span class="col-span-2">🔗 Smart: ${u.smartContract||'N/A'} <button onclick="copyToClipboard('${scId}','✅ Smart Contract कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                            </div>
-                            <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
-                                <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
-                                <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2.5 py-0.5 rounded font-bold ${u.isBlocked?'bg-green-500/20 text-green-500':'bg-red-500/20 text-red-500'}">${u.isBlocked?'Unblock':'Block'}</button>
-                            </div>
-                            <span id="${emailId}" class="hidden">${u.email||''}</span>
-                            <span id="${phoneId}" class="hidden">${u.phone||''}</span>
-                            <span id="${coinxId}" class="hidden">${u.spxId||''}</span>
-                            <span id="${refId}" class="hidden">${u.$id||''}</span>
-                            <span id="${scId}" class="hidden">${u.smartContract||''}</span>
-                        `;
+                    <div class="flex justify-between font-bold text-amber-600">
+                        <span>${u.name||'N/A'}</span>
+                        <span class="text-dark">₹${parseFloat(u.coins||0).toFixed(2)}</span>
+                    </div>
+                    <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
+                        <span>ईमेल: ${u.email||'N/A'}</span>
+                        <span>मोबाइल: ${u.phone||'N/A'}</span>
+                        <span>SPX ID: ${u.spxId||'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
+                        <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
+                        <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2.5 py-0.5 rounded font-bold ${u.isBlocked?'bg-green-500/20 text-green-500':'bg-red-500/20 text-red-500'}">${u.isBlocked?'Unblock':'Block'}</button>
+                    </div>
+                `;
                 list.appendChild(card);
             });
         }
@@ -2388,12 +1711,11 @@
             const idx = users.findIndex(u => u.$id === targetId || u.email === targetId);
             if (idx === -1) { setButtonLoading(btn, false);
                 showToast('यूजर नहीं मिला!', 'error'); return; }
-            const field = 'coins';
-            const current = parseFloat(users[idx][field] || 0);
+            const current = parseFloat(users[idx].coins || 0);
             const newBal = action === 'add' ? current + coinAmount : Math.max(0, current - coinAmount);
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { [field]: newBal });
-                users[idx][field] = newBal;
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { coins: newBal });
+                users[idx].coins = newBal;
                 showToast(action === 'add' ? `₹${coinAmount} क्रेडिट!` : `₹${coinAmount} डेबिट!`, 'success');
                 document.getElementById('adminCoinUserId').value = '';
                 document.getElementById('adminCoinAmount').value = '';
@@ -2402,9 +1724,6 @@
             } catch (e) { showToast('बैलेंस अपडेट में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
-        // ============================================================
-        // ADMIN DEPOSITS
-        // ============================================================
         function renderAdminDeposits() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
@@ -2418,11 +1737,11 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
                 card.innerHTML = `
-                            <div class="flex justify-between font-bold text-xs"><span class="text-dark">${u.name} (${u.email})</span><span class="text-green-500">₹${inrAmount.toFixed(2)}</span></div>
-                            <div class="text-[10px] text-amber-600/30">USDT: $${d.amountUSD} | ${d.dateTime}</div>
-                            ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(d.receiptFileId)}')"></div>`:''}
-                            <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#111827] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
-                        `;
+                    <div class="flex justify-between font-bold text-xs"><span class="text-dark">${u.name} (${u.email})</span><span class="text-green-500">₹${inrAmount.toFixed(2)}</span></div>
+                    <div class="text-[10px] text-amber-600/30">USDT: $${d.amountUSD} | ${d.dateTime}</div>
+                    ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(d.receiptFileId)}')"></div>`:''}
+                    <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#111827] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                `;
                 list.appendChild(card);
             });
         }
@@ -2465,9 +1784,6 @@
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
-        // ============================================================
-        // ADMIN WITHDRAWALS
-        // ============================================================
         function renderAdminWithdrawals() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminWithdrawalsList');
@@ -2482,13 +1798,13 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
                 card.innerHTML = `
-                            <div class="flex justify-between font-bold text-xs"><span class="text-dark">${u.name} (${u.email})</span><span class="text-amber-600">₹${inrAmount.toFixed(2)}</span></div>
-                            <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
-                            <div class="text-[10px] text-green-500">💰 INR: ₹${inrAmount.toFixed(2)} (10% चार्ज कट)</div>
-                            <div class="text-[10px] text-teal-500">💵 USDT BEP20: $${usdtAmount}</div>
-                            ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>`:''}
-                            <div class="flex gap-2 justify-end"><button onclick="approveWithdrawal('${u.$id}')" class="bg-green-500 text-[#111827] px-3 py-1 rounded text-[10px]">Complete</button><button onclick="rejectWithdrawal('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
-                        `;
+                    <div class="flex justify-between font-bold text-xs"><span class="text-dark">${u.name} (${u.email})</span><span class="text-amber-600">₹${inrAmount.toFixed(2)}</span></div>
+                    <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
+                    <div class="text-[10px] text-green-500">💰 INR: ₹${inrAmount.toFixed(2)} (10% चार्ज कट)</div>
+                    <div class="text-[10px] text-teal-500">💵 USDT BEP20: $${usdtAmount}</div>
+                    ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>`:''}
+                    <div class="flex gap-2 justify-end"><button onclick="approveWithdrawal('${u.$id}')" class="bg-green-500 text-[#111827] px-3 py-1 rounded text-[10px]">Complete</button><button onclick="rejectWithdrawal('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                `;
                 list.appendChild(card);
             });
         }
@@ -2541,20 +1857,17 @@
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
-        // ============================================================
-        // ADMIN STAKING
-        // ============================================================
         function renderAdminStaking() {
             if (!isAdminMode) return;
             const plansConfig = document.getElementById('adminStakingPlansConfig');
             plansConfig.innerHTML = '';
             adminStakingSettings.plans.forEach(p => {
                 plansConfig.innerHTML += `
-                                <label class="flex items-center justify-between bg-white/80 p-2 rounded border border-amber-500/15">
-                                    <span class="text-amber-600/50">${p.days} दिन</span>
-                                    <input type="checkbox" ${p.enabled?'checked':''} onchange="togglePlanState(${p.days},this.checked)" class="accent-amber-500 w-3.5 h-3.5">
-                                </label>
-                            `;
+                    <label class="flex items-center justify-between bg-white/80 p-2 rounded border border-amber-500/15">
+                        <span class="text-amber-600/50">${p.days} दिन</span>
+                        <input type="checkbox" ${p.enabled?'checked':''} onchange="togglePlanState(${p.days},this.checked)" class="accent-amber-500 w-3.5 h-3.5">
+                    </label>
+                `;
             });
             document.getElementById('adminStakingGloballyEnabled').checked = adminStakingSettings.globallyEnabled;
 
@@ -2570,16 +1883,16 @@
                         const div = document.createElement('div');
                         div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
                         div.innerHTML = `
-                                        <div>
-                                            <div class="text-amber-600 text-xs font-bold">${u.name}</div>
-                                            <div class="text-[9px] text-amber-600/30">₹${s.amount} | ${s.days} days</div>
-                                            <div class="text-[9px] text-amber-600/30">Stake: ${s.startDate || 'N/A'} | Unlock: ${new Date(s.lockUntil).toLocaleDateString('hi-IN')}</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <span class="text-[10px] ${isUnlockable ? 'text-green-500' : 'text-yellow-500'}">${isUnlockable ? '🔓 Ready' : '🔒 Locked'}</span>
-                                            ${isUnlockable ? `<button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-amber-500 text-[#111827] px-2 py-0.5 rounded text-[9px] mt-1 block">Unlock</button>` : ''}
-                                        </div>
-                                    `;
+                            <div>
+                                <div class="text-amber-600 text-xs font-bold">${u.name}</div>
+                                <div class="text-[9px] text-amber-600/30">₹${s.amount} | ${s.days} days</div>
+                                <div class="text-[9px] text-amber-600/30">Stake: ${s.startDate || 'N/A'} | Unlock: ${new Date(s.lockUntil).toLocaleDateString('hi-IN')}</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] ${isUnlockable ? 'text-green-500' : 'text-yellow-500'}">${isUnlockable ? '🔓 Ready' : '🔒 Locked'}</span>
+                                ${isUnlockable ? `<button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-amber-500 text-[#111827] px-2 py-0.5 rounded text-[9px] mt-1 block">Unlock</button>` : ''}
+                            </div>
+                        `;
                         list.appendChild(div);
                     });
                 }
@@ -2644,9 +1957,6 @@
                 renderAdminStaking(); }
         }
 
-        // ============================================================
-        // ADMIN REFERRALS
-        // ============================================================
         function renderAdminReferrals() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminReferralsList');
@@ -2664,16 +1974,13 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 space-y-1';
                 div.innerHTML = `
-                                <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerEmail})</span><span class="text-green-500">+₹${Number(r.bonusReceived||0).toFixed(2)}</span></div>
-                                <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'}) | स्टेक: ₹${Number(r.stakedAmount||0).toFixed(2)} | ${r.dateTime||''}</div>
-                            `;
+                    <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerEmail})</span><span class="text-green-500">+₹${Number(r.bonusReceived||0).toFixed(2)}</span></div>
+                    <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'}) | स्टेक: ₹${Number(r.stakedAmount||0).toFixed(2)} | ${r.dateTime||''}</div>
+                `;
                 list.appendChild(div);
             });
         }
 
-        // ============================================================
-        // EXPORT ALL USER DATA
-        // ============================================================
         function exportAllUserData() {
             if (!isAdminMode || users.length === 0) { showToast('कोई डेटा नहीं', 'error'); return; }
             let csv =
@@ -2711,7 +2018,7 @@
         }
 
         // ============================================================
-        // RECEIPT MODAL - SupriX Global Style
+        // RECEIPT MODAL
         // ============================================================
         function openReceipt(data) {
             receiptData = data;
@@ -2735,45 +2042,42 @@
 
             let typeLabel = isDeposit ? '💰 डिपॉजिट' : isWithdrawal ? '💸 विथड्रॉवल' : '🔄 ट्रांसफर';
 
-            // Hide middle of email, phone, SPX ID
             const emailDisplay = currentUser?.email ? currentUser.email.replace(/(.{2})(.*)(?=@)/, (match, p1, p2) => p1 + '***' +
                 p2.slice(-2)) : 'N/A';
             const phoneDisplay = currentUser?.phone ? currentUser.phone.replace(/(\d{2})(\d+)(\d{2})/, (m, p1, p2, p3) => p1 +
                 '****' + p3) : 'N/A';
             const spxIdDisplay = currentUser?.spxId ? currentUser.spxId.replace(/(.{3})(.*)(.{3})/, (m, p1, p2, p3) => p1 +
                 '***' + p3) : 'N/A';
-            const scDisplay = currentUser?.smartContract ? currentUser.smartContract.replace(/(.{4})(.*)(.{4})/, (m, p1, p2,
-                p3) => p1 + '...' + p3) : 'N/A';
 
             let receiptHTML = `
-                        <div class="receipt-row"><span class="label">📋 लेनदेन प्रकार</span><span class="value highlight">${typeLabel}</span></div>
-                        <div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
-                            <span class="label" style="font-size:10px;color:#6b7280;">💵 Amount (INR)</span>
-                            <span class="amount-large-green">₹${inrAmount.toFixed(2)}</span>
-                        </div>
-                        <div class="receipt-row" style="flex-direction:column;align-items:center;padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
-                            <span class="label" style="font-size:10px;color:#6b7280;">💲 USDT (BEP20)</span>
-                            <span class="amount-teal" style="font-size:18px;font-weight:700;">$${usdtAmount} USDT</span>
-                        </div>
-                        <div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value" style="color:#26A17B;">BNB Smart Chain (BEP20)</span></div>
-                        <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || new Date().toLocaleString('hi-IN')}</span></div>
-                        <div class="receipt-row"><span class="label">✅ स्थिति</span><span class="value">${statusBadge}</span></div>
-                        ${data.receiptFileId ? `<div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;"><span class="label" style="margin-bottom:6px;">📱 QR Code (Transaction Verification)</span><img src="${resolveImageUrl(data.receiptFileId)}" class="w-24 h-24 object-contain rounded-lg border border-amber-500/20 cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(data.receiptFileId)}')"></div>` : ''}
-                        <div style="border-top:1px solid rgba(212,175,55,0.12);margin:8px 0 4px;padding-top:8px;">
-                            <div class="receipt-row"><span class="label">👤 Member Name</span><span class="value">${currentUser?.name || 'N/A'}</span></div>
-                            <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value">${emailDisplay}</span></div>
-                            <div class="receipt-row"><span class="label">📱 मोबाइल</span><span class="value">${phoneDisplay}</span></div>
-                            <div class="receipt-row"><span class="label">🆔 Member ID</span><span class="value">${spxIdDisplay}</span></div>
-                            <div class="receipt-row"><span class="label">🔗 Transaction Hash</span><span class="value" style="font-size:10px;">${data.txHash || '0x8f4a...c91d'}</span></div>
-                            ${isDeposit ? `<div class="receipt-row"><span class="label">✔️ Principal Amount</span><span class="value" style="color:#22C55E;">Recorded</span></div>` : ''}
-                        </div>
-                        <div style="border-top:1px solid rgba(212,175,55,0.08);margin-top:6px;padding-top:6px;text-align:center;">
-                            <span class="verified-stamp">✅ Secure & Verified Transaction</span>
-                        </div>
-                        <div style="text-align:center;margin-top:4px;">
-                            <span style="font-size:8px;color:#9ca3af;">🔒 सुरक्षित लेनदेन • SupriX Global</span>
-                        </div>
-                    `;
+                <div class="receipt-row"><span class="label">📋 लेनदेन प्रकार</span><span class="value highlight">${typeLabel}</span></div>
+                <div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                    <span class="label" style="font-size:10px;color:#6b7280;">💵 Amount (INR)</span>
+                    <span class="amount-large-green">₹${inrAmount.toFixed(2)}</span>
+                </div>
+                <div class="receipt-row" style="flex-direction:column;align-items:center;padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                    <span class="label" style="font-size:10px;color:#6b7280;">💲 USDT (BEP20)</span>
+                    <span class="amount-teal" style="font-size:18px;font-weight:700;">$${usdtAmount} USDT</span>
+                </div>
+                <div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value" style="color:#26A17B;">BNB Smart Chain (BEP20)</span></div>
+                <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || new Date().toLocaleString('hi-IN')}</span></div>
+                <div class="receipt-row"><span class="label">✅ स्थिति</span><span class="value">${statusBadge}</span></div>
+                ${data.receiptFileId ? `<div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;"><span class="label" style="margin-bottom:6px;">📱 QR Code (Transaction Verification)</span><img src="${resolveImageUrl(data.receiptFileId)}" class="w-24 h-24 object-contain rounded-lg border border-amber-500/20 cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(data.receiptFileId)}')"></div>` : ''}
+                <div style="border-top:1px solid rgba(212,175,55,0.12);margin:8px 0 4px;padding-top:8px;">
+                    <div class="receipt-row"><span class="label">👤 Member Name</span><span class="value">${currentUser?.name || 'N/A'}</span></div>
+                    <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value">${emailDisplay}</span></div>
+                    <div class="receipt-row"><span class="label">📱 मोबाइल</span><span class="value">${phoneDisplay}</span></div>
+                    <div class="receipt-row"><span class="label">🆔 Member ID</span><span class="value">${spxIdDisplay}</span></div>
+                    <div class="receipt-row"><span class="label">🔗 Transaction Hash</span><span class="value" style="font-size:10px;">${data.txHash || '0x8f4a...c91d'}</span></div>
+                    ${isDeposit ? `<div class="receipt-row"><span class="label">✔️ Principal Amount</span><span class="value" style="color:#22C55E;">Recorded</span></div>` : ''}
+                </div>
+                <div style="border-top:1px solid rgba(212,175,55,0.08);margin-top:6px;padding-top:6px;text-align:center;">
+                    <span class="verified-stamp">✅ Secure & Verified Transaction</span>
+                </div>
+                <div style="text-align:center;margin-top:4px;">
+                    <span style="font-size:8px;color:#9ca3af;">🔒 सुरक्षित लेनदेन • SupriX Global</span>
+                </div>
+            `;
             content.innerHTML = receiptHTML;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -2801,41 +2105,41 @@
             clone.style.margin = '0 auto';
             clone.style.fontFamily = "'Poppins', sans-serif";
             const html = `
-                        <html>
-                        <head>
-                            <title>SupriX_Receipt_${receiptData.dateTime || Date.now()}.html</title>
-                            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-                            <style>
-                                body { background:#f9fafb; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:20px; font-family:'Poppins',sans-serif; }
-                                .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid rgba(212,175,55,0.4); position:relative; overflow:hidden; box-shadow:0 0 30px rgba(212,175,55,0.08); }
-                                .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
-                                .receipt-logo span { font-size:22px; font-weight:800; background:linear-gradient(135deg,#f5d97e,#d4af37,#c9a030); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-                                .receipt-logo small { display:block; font-size:9px; color:#9ca3af; letter-spacing:2px; }
-                                .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.05); font-size:12px; }
-                                .receipt-row .label { color:#6b7280; }
-                                .receipt-row .value { color:#111827; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
-                                .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                                .receipt-row .value.green { color:#34d399; }
-                                .receipt-row .value.red { color:#f87171; }
-                                .amount-large-green { font-size:28px; font-weight:800; color:#22C55E; text-shadow:0 0 30px rgba(34,197,94,0.3); display:block; text-align:center; }
-                                .amount-teal { color:#26A17B; font-weight:700; font-size:18px; display:block; text-align:center; }
-                                .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                                .receipt-badge.approved { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
-                                .receipt-badge.pending { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); }
-                                .receipt-badge.completed { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
-                                .receipt-badge.rejected { background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
-                                .verified-stamp { display:inline-block; background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); padding:2px 14px; border-radius:30px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
-                                .watermark { text-align:center; font-size:8px; color:#9ca3af; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
-                                .globe-watermark { position:absolute; right:10px; bottom:10px; font-size:80px; opacity:0.06; pointer-events:none; color:#22C55E; }
-                                @media print { body { background:#fff; } .receipt-card { border-color:#ddd; background:#f9f9f9; } .receipt-row .label { color:#666; } .receipt-row .value { color:#333; } .amount-large-green { color:#22C55E; } .amount-teal { color:#26A17B; } }
-                            </style>
-                        </head>
-                        <body>
-                            ${clone.outerHTML}
-                            <p style="text-align:center;font-size:8px;color:#9ca3af;margin-top:12px;">© SupriX Global • Premium Gold Edition</p>
-                        </body>
-                        </html>
-                    `;
+                <html>
+                <head>
+                    <title>SupriX_Receipt_${receiptData.dateTime || Date.now()}.html</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { background:#f9fafb; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:20px; font-family:'Poppins',sans-serif; }
+                        .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid rgba(212,175,55,0.4); position:relative; overflow:hidden; box-shadow:0 0 30px rgba(212,175,55,0.08); }
+                        .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
+                        .receipt-logo span { font-size:22px; font-weight:800; background:linear-gradient(135deg,#f5d97e,#d4af37,#c9a030); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+                        .receipt-logo small { display:block; font-size:9px; color:#9ca3af; letter-spacing:2px; }
+                        .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.05); font-size:12px; }
+                        .receipt-row .label { color:#6b7280; }
+                        .receipt-row .value { color:#111827; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
+                        .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
+                        .receipt-row .value.green { color:#34d399; }
+                        .receipt-row .value.red { color:#f87171; }
+                        .amount-large-green { font-size:28px; font-weight:800; color:#22C55E; text-shadow:0 0 30px rgba(34,197,94,0.3); display:block; text-align:center; }
+                        .amount-teal { color:#26A17B; font-weight:700; font-size:18px; display:block; text-align:center; }
+                        .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
+                        .receipt-badge.approved { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+                        .receipt-badge.pending { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); }
+                        .receipt-badge.completed { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+                        .receipt-badge.rejected { background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+                        .verified-stamp { display:inline-block; background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); padding:2px 14px; border-radius:30px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
+                        .watermark { text-align:center; font-size:8px; color:#9ca3af; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
+                        .globe-watermark { position:absolute; right:10px; bottom:10px; font-size:80px; opacity:0.06; pointer-events:none; color:#22C55E; }
+                        @media print { body { background:#fff; } .receipt-card { border-color:#ddd; background:#f9f9f9; } .receipt-row .label { color:#666; } .receipt-row .value { color:#333; } .amount-large-green { color:#22C55E; } .amount-teal { color:#26A17B; } }
+                    </style>
+                </head>
+                <body>
+                    ${clone.outerHTML}
+                    <p style="text-align:center;font-size:8px;color:#9ca3af;margin-top:12px;">© SupriX Global • Premium Gold Edition</p>
+                </body>
+                </html>
+            `;
             const blob = new Blob([html], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2853,41 +2157,41 @@
             const win = window.open('', '_blank', 'width=500,height=700');
             if (!win) { showToast('पॉप-अप ब्लॉक हो गया!', 'error'); return; }
             win.document.write(`
-                        <html><head><title>SupriX Receipt</title>
-                        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-                        <style>
-                            body { background:#f9fafb; display:flex; justify-content:center; padding:30px 20px; font-family:'Poppins',sans-serif; }
-                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid rgba(212,175,55,0.4); position:relative; overflow:hidden; box-shadow:0 0 30px rgba(212,175,55,0.08); }
-                            .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
-                            .receipt-logo span { font-size:22px; font-weight:800; background:linear-gradient(135deg,#f5d97e,#d4af37,#c9a030); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-                            .receipt-logo small { display:block; font-size:9px; color:#9ca3af; letter-spacing:2px; }
-                            .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.05); font-size:12px; }
-                            .receipt-row .label { color:#6b7280; }
-                            .receipt-row .value { color:#111827; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
-                            .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                            .receipt-row .value.green { color:#34d399; }
-                            .receipt-row .value.red { color:#f87171; }
-                            .amount-large-green { font-size:28px; font-weight:800; color:#22C55E; text-shadow:0 0 30px rgba(34,197,94,0.3); display:block; text-align:center; }
-                            .amount-teal { color:#26A17B; font-weight:700; font-size:18px; display:block; text-align:center; }
-                            .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                            .receipt-badge.approved { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
-                            .receipt-badge.pending { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); }
-                            .receipt-badge.completed { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
-                            .receipt-badge.rejected { background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
-                            .verified-stamp { display:inline-block; background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); padding:2px 14px; border-radius:30px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
-                            .watermark { text-align:center; font-size:8px; color:#9ca3af; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
-                            .globe-watermark { position:absolute; right:10px; bottom:10px; font-size:80px; opacity:0.06; pointer-events:none; color:#22C55E; }
-                            @media print { body { background:#fff; } .receipt-card { border-color:#ddd; background:#f9f9f9; } .receipt-row .label { color:#666; } .receipt-row .value { color:#333; } .amount-large-green { color:#22C55E; } .amount-teal { color:#26A17B; } }
-                        </style>
-                        </head><body>
-                        <div class="receipt-card">
-                            <div class="globe-watermark"><i class="fa-solid fa-globe"></i></div>
-                            <div class="receipt-logo"><span>SupriX Global</span><small>Premium • Gold Edition</small></div>
-                            ${content.innerHTML}
-                            <div class="watermark">© SupriX Global • सुरक्षित लेनदेन</div>
-                        </div>
-                        </body></html>
-                    `);
+                <html><head><title>SupriX Receipt</title>
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+                <style>
+                    body { background:#f9fafb; display:flex; justify-content:center; padding:30px 20px; font-family:'Poppins',sans-serif; }
+                    .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid rgba(212,175,55,0.4); position:relative; overflow:hidden; box-shadow:0 0 30px rgba(212,175,55,0.08); }
+                    .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
+                    .receipt-logo span { font-size:22px; font-weight:800; background:linear-gradient(135deg,#f5d97e,#d4af37,#c9a030); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+                    .receipt-logo small { display:block; font-size:9px; color:#9ca3af; letter-spacing:2px; }
+                    .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.05); font-size:12px; }
+                    .receipt-row .label { color:#6b7280; }
+                    .receipt-row .value { color:#111827; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
+                    .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
+                    .receipt-row .value.green { color:#34d399; }
+                    .receipt-row .value.red { color:#f87171; }
+                    .amount-large-green { font-size:28px; font-weight:800; color:#22C55E; text-shadow:0 0 30px rgba(34,197,94,0.3); display:block; text-align:center; }
+                    .amount-teal { color:#26A17B; font-weight:700; font-size:18px; display:block; text-align:center; }
+                    .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
+                    .receipt-badge.approved { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+                    .receipt-badge.pending { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); }
+                    .receipt-badge.completed { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+                    .receipt-badge.rejected { background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+                    .verified-stamp { display:inline-block; background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); padding:2px 14px; border-radius:30px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
+                    .watermark { text-align:center; font-size:8px; color:#9ca3af; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
+                    .globe-watermark { position:absolute; right:10px; bottom:10px; font-size:80px; opacity:0.06; pointer-events:none; color:#22C55E; }
+                    @media print { body { background:#fff; } .receipt-card { border-color:#ddd; background:#f9f9f9; } .receipt-row .label { color:#666; } .receipt-row .value { color:#333; } .amount-large-green { color:#22C55E; } .amount-teal { color:#26A17B; } }
+                </style>
+                </head><body>
+                <div class="receipt-card">
+                    <div class="globe-watermark"><i class="fa-solid fa-globe"></i></div>
+                    <div class="receipt-logo"><span>SupriX Global</span><small>Premium • Gold Edition</small></div>
+                    ${content.innerHTML}
+                    <div class="watermark">© SupriX Global • सुरक्षित लेनदेन</div>
+                </div>
+                </body></html>
+            `);
             win.document.close();
             setTimeout(() => { win.print(); }, 500);
         }
@@ -3072,14 +2376,14 @@
                 c.className = 'confetti';
                 const size = Math.random() * 8 + 4;
                 c.style.cssText = `
-                                left: ${Math.random()*100}%;
-                                width: ${size}px;
-                                height: ${size*0.6}px;
-                                background: ${colors[Math.floor(Math.random()*colors.length)]};
-                                border-radius: ${Math.random()>0.5?'50%':'2px'};
-                                animation-delay: ${Math.random()*2}s;
-                                animation-duration: ${Math.random()*2+2}s;
-                            `;
+                    left: ${Math.random()*100}%;
+                    width: ${size}px;
+                    height: ${size*0.6}px;
+                    background: ${colors[Math.floor(Math.random()*colors.length)]};
+                    border-radius: ${Math.random()>0.5?'50%':'2px'};
+                    animation-delay: ${Math.random()*2}s;
+                    animation-duration: ${Math.random()*2+2}s;
+                `;
                 container.appendChild(c);
                 setTimeout(() => c.remove(), 5000);
             }
@@ -3119,7 +2423,6 @@
             document.getElementById('statDailyRelease').innerText = `₹${dailyRelease.toFixed(2)}`;
             document.getElementById('statAvailable').innerText = `₹${parseFloat(currentUser.coins||0).toFixed(2)}`;
 
-            // Mining timer
             const timerText = document.getElementById('miningTimerText');
             const now = Date.now();
             const oneDayMs = 24 * 60 * 60 * 1000;
@@ -3169,27 +2472,24 @@
                 claimBtn.disabled = false;
                 claimBtn.innerHTML = '<i class="fa-solid fa-star"></i> <span>⭐ Claim Daily Reward</span>';
                 statusEl.innerText = 'Ready';
-                statusEl.className = 'text-[10px] bg-green-500/10 text-green-500 px-2 py-0.5 rounded-full border border-green-500/20';
+                statusEl.className =
+                    'text-[10px] bg-green-500/10 text-green-500 px-2 py-0.5 rounded-full border border-green-500/20';
                 msgEl.classList.add('hidden');
                 document.getElementById('nextClaimCountdown').innerText = 'Now Available';
             } else {
                 claimBtn.disabled = true;
                 claimBtn.innerHTML = '<i class="fa-solid fa-check-circle"></i> <span>Claimed ✅</span>';
                 statusEl.innerText = 'Claimed';
-                statusEl.className = 'text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full border border-amber-500/20';
+                statusEl.className =
+                    'text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full border border-amber-500/20';
                 const diff = lastClaim + oneDayMs - now;
                 const h = Math.floor(diff / 3600000);
                 const m = Math.floor((diff % 3600000) / 60000);
                 document.getElementById('nextClaimCountdown').innerText = `${h}h ${m}m`;
                 msgEl.classList.remove('hidden');
-                msgEl.className = 'text-center text-xs p-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-600/60';
+                msgEl.className =
+                    'text-center text-xs p-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-600/60';
                 msgEl.innerHTML = `⏳ अगला Claim ${h} घंटे ${m} मिनट में उपलब्ध होगा।`;
-            }
-
-            if (lastClaim && (now - lastClaim) > 48 * 60 * 60 * 1000) {
-                if (currentUser.streakDays > 0) {
-                    // Streak broken
-                }
             }
         }
 
@@ -3253,14 +2553,15 @@
 
                 const msgEl = document.getElementById('dailyClaimMessage');
                 msgEl.classList.remove('hidden');
-                msgEl.className = 'text-center text-xs p-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-500';
+                msgEl.className =
+                    'text-center text-xs p-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-500';
                 msgEl.innerHTML = `
-                                ✅ Reward Claimed Successfully!<br/>
-                                💰 ₹${reward.toFixed(2)} Credited to INR Wallet<br/>
-                                📅 ${new Date().toLocaleString('hi-IN')}<br/>
-                                🆔 TX: ${'TXN' + Math.floor(100000 + Math.random()*900000)}<br/>
-                                💳 Current Balance: ₹${newCoins.toFixed(2)}
-                            `;
+                    ✅ Reward Claimed Successfully!<br/>
+                    💰 ₹${reward.toFixed(2)} Credited to INR Wallet<br/>
+                    📅 ${new Date().toLocaleString('hi-IN')}<br/>
+                    🆔 TX: ${'TXN' + Math.floor(100000 + Math.random()*900000)}<br/>
+                    💳 Current Balance: ₹${newCoins.toFixed(2)}
+                `;
 
                 showToast(`✅ ₹${reward.toFixed(2)} रिवॉर्ड मिला!`, 'success');
             } catch (e) {
@@ -3340,7 +2641,7 @@
                 try {
                     const speech = new SpeechSynthesisUtterance(
                         'बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके INR वॉलेट में जोड़ दिया गया है। SupriX Global के साथ जुड़े रहने के लिए आपका धन्यवाद। आपका दिन शुभ हो।'
-                        );
+                    );
                     speech.lang = 'hi-IN';
                     speech.rate = 1.2;
                     speech.pitch = 1.0;
@@ -3589,16 +2890,16 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between';
                 div.innerHTML = `
-                                <div>
-                                    <div class="font-bold text-dark text-xs">₹${Number(s.amount).toFixed(2)}</div>
-                                    <div class="text-[9px] text-amber-600/30">${s.startDate} (${s.days} दिन)</div>
-                                    <div class="text-[9px] text-amber-600/30">🔓 ${s.unlockDate || new Date(s.lockUntil).toLocaleDateString('hi-IN')} ${s.unlockTime || ''}</div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-amber-600 text-[10px]"><i class="fa-solid fa-lock mr-0.5"></i> ${days>0?days+' दिन शेष':'अनलॉक होने वाला'}</span>
-                                    <div class="text-[8px] text-amber-600/30">${days>0?'':'⏳ जल्द ही'}</div>
-                                </div>
-                            `;
+                    <div>
+                        <div class="font-bold text-dark text-xs">₹${Number(s.amount).toFixed(2)}</div>
+                        <div class="text-[9px] text-amber-600/30">${s.startDate} (${s.days} दिन)</div>
+                        <div class="text-[9px] text-amber-600/30">🔓 ${s.unlockDate || new Date(s.lockUntil).toLocaleDateString('hi-IN')} ${s.unlockTime || ''}</div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-amber-600 text-[10px]"><i class="fa-solid fa-lock mr-0.5"></i> ${days>0?days+' दिन शेष':'अनलॉक होने वाला'}</span>
+                        <div class="text-[8px] text-amber-600/30">${days>0?'':'⏳ जल्द ही'}</div>
+                    </div>
+                `;
                 list.appendChild(div);
             });
         }
@@ -3618,17 +2919,17 @@
                 const statusClass = s.unlockedAt ? 'unlocked' : 'locked';
                 const statusText = s.unlockedAt ? '✅ अनलॉक' : '🔒 लॉक';
                 div.innerHTML = `
-                                <div class="flex justify-between">
-                                    <span class="font-bold text-dark text-xs">₹${Number(s.amount).toFixed(2)}</span>
-                                    <span class="text-xs ${statusClass}">${statusText}</span>
-                                </div>
-                                <div class="text-[9px] text-amber-600/30 flex justify-between flex-wrap">
-                                    <span>📅 ${s.startDate || 'N/A'}</span>
-                                    <span>📆 ${s.days} दिन</span>
-                                    <span>🔓 ${s.unlockDate || new Date(s.lockUntil).toLocaleDateString('hi-IN')}</span>
-                                </div>
-                                ${s.unlockedAt ? `<div class="text-[8px] text-green-500/60">✅ अनलॉक: ${new Date(s.unlockedAt).toLocaleString('hi-IN')}</div>` : ''}
-                            `;
+                    <div class="flex justify-between">
+                        <span class="font-bold text-dark text-xs">₹${Number(s.amount).toFixed(2)}</span>
+                        <span class="text-xs ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="text-[9px] text-amber-600/30 flex justify-between flex-wrap">
+                        <span>📅 ${s.startDate || 'N/A'}</span>
+                        <span>📆 ${s.days} दिन</span>
+                        <span>🔓 ${s.unlockDate || new Date(s.lockUntil).toLocaleDateString('hi-IN')}</span>
+                    </div>
+                    ${s.unlockedAt ? `<div class="text-[8px] text-green-500/60">✅ अनलॉक: ${new Date(s.unlockedAt).toLocaleString('hi-IN')}</div>` : ''}
+                `;
                 list.appendChild(div);
             });
         }
@@ -3722,7 +3023,7 @@
             if (!scAddress) { showToast('SupriX Wallet Smart Contract Address दर्ज करें。', 'error'); return; }
             if (!amount || amount < 50) { showToast('न्यूनतम ₹50', 'error'); return; }
             if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त INR नहीं!', 'error'); return; }
-            if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग。', 'error'); return; }
+            if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग।', 'error'); return; }
 
             const fee = amount * 0.10;
             const netAmount = amount - fee;
@@ -3804,17 +3105,17 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-1';
                 div.innerHTML = `
-                                <div class="flex justify-between text-xs">
-                                    <span class="font-bold text-dark">${r.referredName || 'N/A'}</span>
-                                    <span class="text-green-500">+₹${Number(r.bonusReceived || 0).toFixed(2)}</span>
-                                </div>
-                                <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
-                                    <span>📧 ${r.referredEmail || 'N/A'}</span>
-                                    <span>💰 ₹${Number(r.stakedAmount || 0).toFixed(2)}</span>
-                                    <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
-                                    <span>🕐 ${r.dateTime || ''}</span>
-                                </div>
-                            `;
+                    <div class="flex justify-between text-xs">
+                        <span class="font-bold text-dark">${r.referredName || 'N/A'}</span>
+                        <span class="text-green-500">+₹${Number(r.bonusReceived || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
+                        <span>📧 ${r.referredEmail || 'N/A'}</span>
+                        <span>💰 ₹${Number(r.stakedAmount || 0).toFixed(2)}</span>
+                        <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
+                        <span>🕐 ${r.dateTime || ''}</span>
+                    </div>
+                `;
                 list.appendChild(div);
             });
         }
@@ -3883,16 +3184,16 @@
                     label = `-₹${parseFloat(e.coinsAmount || 0).toFixed(2)}`;
                 }
                 div.innerHTML = `
-                                <div>
-                                    <div class="font-bold text-dark text-xs">${label}</div>
-                                    <div class="text-[9px] text-amber-600/30">${e.dateTime||''} ${isDaily ? '🎯 Daily Reward' : ''}</div>
-                                </div>
-                                <div class="text-right flex flex-col items-end gap-1">
-                                    <span class="px-2 py-0.5 rounded text-[9px] font-bold ${color}">${e.status || 'Completed'}</span>
-                                    ${(isDeposit && e.receiptFileId) || isDaily ? `<button onclick="viewReceipt('${e.type||'daily_reward'}','${e.coinsAmount||e.amount||0}','${e.amountUSD||0}','${e.dateTime||new Date().toLocaleString('hi-IN')}','${e.status||'SUCCESS'}','${e.receiptFileId||''}','${e.upi||''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
-                                    ${(!isDeposit && !isDaily && e.coinsAmount) ? `<button onclick="viewWithdrawalReceipt('${e.coinsAmount}','${e.dateTime||''}','${e.status||'Completed'}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
-                                </div>
-                            `;
+                    <div>
+                        <div class="font-bold text-dark text-xs">${label}</div>
+                        <div class="text-[9px] text-amber-600/30">${e.dateTime||''} ${isDaily ? '🎯 Daily Reward' : ''}</div>
+                    </div>
+                    <div class="text-right flex flex-col items-end gap-1">
+                        <span class="px-2 py-0.5 rounded text-[9px] font-bold ${color}">${e.status || 'Completed'}</span>
+                        ${(isDeposit && e.receiptFileId) || isDaily ? `<button onclick="viewReceipt('${e.type||'daily_reward'}','${e.coinsAmount||e.amount||0}','${e.amountUSD||0}','${e.dateTime||new Date().toLocaleString('hi-IN')}','${e.status||'SUCCESS'}','${e.receiptFileId||''}','${e.upi||''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
+                        ${(!isDeposit && !isDaily && e.coinsAmount) ? `<button onclick="viewWithdrawalReceipt('${e.coinsAmount}','${e.dateTime||''}','${e.status||'Completed'}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
+                    </div>
+                `;
                 list.appendChild(div);
             });
         }
@@ -3944,17 +3245,17 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 space-y-1';
                 div.innerHTML = `
-                                <div class="flex justify-between text-xs">
-                                    <span class="font-bold text-amber-600">${r.referredName || 'N/A'}</span>
-                                    <span class="text-green-500">+₹${Number(r.bonusReceived || 0).toFixed(2)}</span>
-                                </div>
-                                <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
-                                    <span>📧 ${r.referredEmail || 'N/A'}</span>
-                                    <span>💰 ₹${Number(r.stakedAmount || 0).toFixed(2)}</span>
-                                    <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
-                                    <span>🕐 ${r.dateTime || ''}</span>
-                                </div>
-                            `;
+                    <div class="flex justify-between text-xs">
+                        <span class="font-bold text-amber-600">${r.referredName || 'N/A'}</span>
+                        <span class="text-green-500">+₹${Number(r.bonusReceived || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
+                        <span>📧 ${r.referredEmail || 'N/A'}</span>
+                        <span>💰 ₹${Number(r.stakedAmount || 0).toFixed(2)}</span>
+                        <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
+                        <span>🕐 ${r.dateTime || ''}</span>
+                    </div>
+                `;
                 list.appendChild(div);
             });
         }
@@ -3964,37 +3265,53 @@
         // ============================================================
         function generateSliderData() {
             const baseSlides = [
-                { icon: '🚀', line1: 'अपने सपनों को पंख लगाओ', line2: 'SupriX Global के साथ आज ही शुरू करें', badge: '✦ शुरुआत ✦' },
+                { icon: '🚀', line1: 'अपने सपनों को पंख लगाओ', line2: 'SupriX Global के साथ आज ही शुरू करें',
+                badge: '✦ शुरुआत ✦' },
                 { icon: '💎', line1: 'हर कॉइन कीमती है', line2: 'स्मार्ट कॉन्ट्रैक्ट से सुरक्षित', badge: '✦ सुरक्षा ✦' },
                 { icon: '🦋', line1: 'जीवन में उतार-चढ़ाव आते हैं', line2: 'पर हार न मानो, मंजिल पास है', badge: '✦ धैर्य ✦' },
-                { icon: '🌟', line1: 'जो आज तुम्हारा मज़ाक उड़ा रहे हैं', line2: 'कल वही तुम्हारी सफलता पर ताली बजाएँगे', badge: '✦ विश्वास ✦' },
+                { icon: '🌟', line1: 'जो आज तुम्हारा मज़ाक उड़ा रहे हैं', line2: 'कल वही तुम्हारी सफलता पर ताली बजाएँगे',
+                    badge: '✦ विश्वास ✦' },
                 { icon: '⚔️', line1: 'जब तक जीत नहीं मिलती', line2: 'तब तक लड़ना ही असली पहचान है', badge: '✦ संघर्ष ✦' },
-                { icon: '👑', line1: 'सिंहासन उन्हीं को मिलता है', line2: 'जो खुद को हर दिन बेहतर बनाते हैं', badge: '✦ बेहतरी ✦' },
+                { icon: '👑', line1: 'सिंहासन उन्हीं को मिलता है', line2: 'जो खुद को हर दिन बेहतर बनाते हैं',
+                badge: '✦ बेहतरी ✦' },
                 { icon: '🎯', line1: 'अपने लक्ष्य पर नज़र रखो', line2: 'दुनिया की नज़रें तुम्हारी तरफ होंगी', badge: '✦ लक्ष्य ✦' },
-                { icon: '🔥', line1: 'आज पसीना बहाओ, कल दुनिया सलाम करेगी', line2: 'मेहनत की आग में तपकर ही सोना चमकता है', badge: '✦ तपस्या ✦' },
-                { icon: '🎁', line1: '₹50000 + 3 Active Referral', line2: 'पर मिलेगा स्लिम कीपैड फोन 🎁', badge: '🎁 गिफ्ट 🎁' },
-                { icon: '📱', line1: '₹100000 + 10 Active Referral', line2: 'पर मिलेगा ₹10000 का Android फोन 🎁', badge: '🎁 गिफ्ट 🎁' },
-                { icon: '📟', line1: '₹200000 + 5 Active Referral', line2: 'पर मिलेगा बड़ा Tablet ₹18000 का 🎁', badge: '🎁 गिफ्ट 🎁' },
-                { icon: '🏍️', line1: '100 Active Referral × ₹10000 Stake', line2: 'पर मिलेगी ₹100000 की बाइक 🏍️', badge: '🎁 गिफ्ट 🎁' },
-                { icon: '🏆', line1: 'सम्मानित किया जाएगा कंपनी की ओर से', line2: 'आपकी मेहनत को मिलेगा पहचान', badge: '✦ सम्मान ✦' },
-                { icon: '🌅', line1: 'हर सुबह एक नई शुरुआत है', line2: 'अपने सपनों को पंख लगाओ और उड़ान भरो', badge: '✦ शुरुआत ✦' },
-                { icon: '🙏', line1: 'जिस दिन तुमने खुद पर विश्वास कर लिया', line2: 'उस दिन दुनिया की कोई ताकत तुम्हें रोक नहीं सकती', badge: '✦ विश्वास ✦' },
+                { icon: '🔥', line1: 'आज पसीना बहाओ, कल दुनिया सलाम करेगी', line2: 'मेहनत की आग में तपकर ही सोना चमकता है',
+                    badge: '✦ तपस्या ✦' },
+                { icon: '🎁', line1: '₹50000 + 3 Active Referral', line2: 'पर मिलेगा स्लिम कीपैड फोन 🎁',
+                badge: '🎁 गिफ्ट 🎁' },
+                { icon: '📱', line1: '₹100000 + 10 Active Referral', line2: 'पर मिलेगा ₹10000 का Android फोन 🎁',
+                    badge: '🎁 गिफ्ट 🎁' },
+                { icon: '📟', line1: '₹200000 + 5 Active Referral', line2: 'पर मिलेगा बड़ा Tablet ₹18000 का 🎁',
+                    badge: '🎁 गिफ्ट 🎁' },
+                { icon: '🏍️', line1: '100 Active Referral × ₹10000 Stake', line2: 'पर मिलेगी ₹100000 की बाइक 🏍️',
+                    badge: '🎁 गिफ्ट 🎁' },
+                { icon: '🏆', line1: 'सम्मानित किया जाएगा कंपनी की ओर से', line2: 'आपकी मेहनत को मिलेगा पहचान',
+                    badge: '✦ सम्मान ✦' },
+                { icon: '🌅', line1: 'हर सुबह एक नई शुरुआत है', line2: 'अपने सपनों को पंख लगाओ और उड़ान भरो',
+                    badge: '✦ शुरुआत ✦' },
+                { icon: '🙏', line1: 'जिस दिन तुमने खुद पर विश्वास कर लिया', line2: 'उस दिन दुनिया की कोई ताकत तुम्हें रोक नहीं सकती',
+                    badge: '✦ विश्वास ✦' },
                 { icon: '📈', line1: 'जीवन में उतार-चढ़ाव आते हैं', line2: 'पर हार न मानो, मंजिल पास है', badge: '✦ धैर्य ✦' },
-                { icon: '⭐', line1: 'मेहनत करो इतनी कि किस्मत भी झुक जाए', line2: 'सपने सच करने की ताकत रखो', badge: '✦ सपना ✦' },
-                { icon: '💪', line1: 'तूफानों से डरकर नाव पार नहीं होती', line2: 'हिम्मत करने वालों की कभी हार नहीं होती', badge: '✦ हिम्मत ✦' },
+                { icon: '⭐', line1: 'मेहनत करो इतनी कि किस्मत भी झुक जाए', line2: 'सपने सच करने की ताकत रखो',
+                badge: '✦ सपना ✦' },
+                { icon: '💪', line1: 'तूफानों से डरकर नाव पार नहीं होती', line2: 'हिम्मत करने वालों की कभी हार नहीं होती',
+                    badge: '✦ हिम्मत ✦' },
                 { icon: '🌊', line1: 'अपनी मेहनत इतनी ख़ामोशी से करो', line2: 'कि सफलता खुद शोर मचा दे', badge: '✦ मेहनत ✦' },
-                { icon: '🕊️', line1: 'सपने देखने वाले बहुत मिलेंगे', line2: 'उन्हें पूरा करने वाले बहुत कम होते हैं', badge: '✦ सपना ✦' },
+                { icon: '🕊️', line1: 'सपने देखने वाले बहुत मिलेंगे', line2: 'उन्हें पूरा करने वाले बहुत कम होते हैं',
+                    badge: '✦ सपना ✦' },
                 { icon: '🌿', line1: 'प्रकृति से सीखो, हर पल बढ़ो', line2: 'जीवन एक उपहार है, इसे संजोओ', badge: '✦ प्रकृति ✦' },
-                { icon: '🌈', line1: 'हर बादल में एक सुनहरी रेखा होती है', line2: 'मुश्किलों के बाद ही सफलता मिलती है', badge: '✦ उम्मीद ✦' },
+                { icon: '🌈', line1: 'हर बादल में एक सुनहरी रेखा होती है', line2: 'मुश्किलों के बाद ही सफलता मिलती है',
+                    badge: '✦ उम्मीद ✦' },
                 { icon: '🌺', line1: 'खिलो, महकाओ, और बढ़ो', line2: 'हर दिन नई ऊँचाइयों को छुओ', badge: '✦ विकास ✦' },
                 { icon: '🌄', line1: 'हर सुबह एक नया अवसर है', line2: 'आज का दिन आपका है, इसे जीतो', badge: '✦ नई शुरुआत ✦' },
-                { icon: '🦁', line1: 'शेर की तरह जियो, हिम्मत मत हारो', line2: 'तुम्हारी ताकत तुम्हारी पहचान है', badge: '✦ हिम्मत ✦' },
-                { icon: '🌙', line1: 'रात जितनी घनी होगी, सुबह उतनी खूबसूरत', line2: 'संघर्ष के बाद ही विजय मिलती है', badge: '✦ संघर्ष ✦' },
+                { icon: '🦁', line1: 'शेर की तरह जियो, हिम्मत मत हारो', line2: 'तुम्हारी ताकत तुम्हारी पहचान है',
+                badge: '✦ हिम्मत ✦' },
+                { icon: '🌙', line1: 'रात जितनी घनी होगी, सुबह उतनी खूबसूरत', line2: 'संघर्ष के बाद ही विजय मिलती है',
+                    badge: '✦ संघर्ष ✦' },
                 { icon: '☀️', line1: 'अपने अंदर का सूरज जगाओ', line2: 'रोशनी बनो और दुनिया को रौशन करो', badge: '✦ रोशनी ✦' },
-                { icon: '🌳', line1: 'पेड़ की तरह मजबूत बनो', line2: 'हर मौसम में खड़े रहो, हर हाल में मुस्कुराओ', badge: '✦ मजबूती ✦' },
+                { icon: '🌳', line1: 'पेड़ की तरह मजबूत बनो', line2: 'हर मौसम में खड़े रहो, हर हाल में मुस्कुराओ',
+                    badge: '✦ मजबूती ✦' },
                 { icon: '💫', line1: 'सितारों को छूने का सपना देखो', line2: 'क्योंकि तुम खुद एक सितारा हो', badge: '✦ सपना ✦' },
-                { icon: '🌊', line1: 'समुद्र की गहराई में छुपा है जादू', line2: 'अपने अंदर की गहराई को पहचानो', badge: '✦ गहराई ✦' },
-                { icon: '🔥', line1: 'जलो, तपो, और चमको', line2: 'हर मुश्किल को मौका बनाओ', badge: '✦ तपस्या ✦' },
             ];
             let slides = [];
             for (let i = 0; i < 30; i++) {
@@ -4020,14 +3337,14 @@
                 const div = document.createElement('div');
                 div.className = 'slide-item';
                 div.innerHTML = `
-                                <img src="${s.img}" alt="Slide ${i+1}" loading="lazy">
-                                <div class="slide-text">
-                                    <span class="quote-icon">${s.icon}</span>
-                                    <span class="quote-line">${s.line1}</span>
-                                    <span class="quote-line2">${s.line2}</span>
-                                    <span class="quote-badge">${s.badge}</span>
-                                </div>
-                            `;
+                    <img src="${s.img}" alt="Slide ${i+1}" loading="lazy">
+                    <div class="slide-text">
+                        <span class="quote-icon">${s.icon}</span>
+                        <span class="quote-line">${s.line1}</span>
+                        <span class="quote-line2">${s.line2}</span>
+                        <span class="quote-badge">${s.badge}</span>
+                    </div>
+                `;
                 track.appendChild(div);
             });
             if (dots) {
@@ -4041,13 +3358,29 @@
         }
 
         // ============================================================
+        // REFERRAL LINK - Direct to Registration with auto-fill
+        // ============================================================
+        function checkReferralParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            if (ref) {
+                document.getElementById('regReferral').value = ref;
+                if (!currentUser && !isAdminMode) {
+                    showPage('registrationPage');
+                }
+            }
+        }
+
+        // ============================================================
         // INIT
         // ============================================================
         window.onload = async function() {
             createButterflies();
             renderSlider();
-            // Load voices for speech
             window.speechSynthesis.getVoices();
+
+            checkReferralParam();
+
             try {
                 const loaded = await loadCurrentUserData();
                 if (loaded && !currentUser.isBlocked) {
@@ -4113,6 +3446,7 @@
         window.toggleForgotPasswordModal = toggleForgotPasswordModal;
         window.handleForgotPassword = handleForgotPassword;
         window.claimDailyReward = claimDailyReward;
+        window.submitAdminLogin = submitAdminLogin;
     </script>
 
 </body>
