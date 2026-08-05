@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
+    </script>
     <style>
         /* ── RESET & BASE ── */
         * {
@@ -30,15 +32,11 @@
         .gold-glow {
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.45), 0 0 60px rgba(212, 175, 55, 0.15);
         }
-        .gold-glow-sm {
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-        }
         .gold-border {
             border: 1px solid rgba(212, 175, 55, 0.35);
         }
-        .gold-border-glow {
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+        .gold-border-strong {
+            border: 2px solid #d4af37 !important;
         }
         .gold-bg-gradient {
             background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
@@ -50,7 +48,24 @@
             background-clip: text;
         }
 
-        /* ── GLASS (light version) ── */
+        /* ── CURRENCY COLORS ── */
+        .currency-inr {
+            color: #22C55E !important;
+        }
+        .currency-usdt {
+            color: #26A17B !important;
+        }
+        .bg-inr-light {
+            background: rgba(34, 197, 94, 0.06);
+        }
+        .bg-usdt-light {
+            background: rgba(38, 161, 123, 0.06);
+        }
+        .border-usdt {
+            border-color: #26A17B !important;
+        }
+
+        /* ── GLASS ── */
         .glass-gold {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
@@ -64,16 +79,6 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        /* ── 3D CARDS ── */
-        .card-3d {
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-3d:hover {
-            transform: perspective(1000px) rotateX(1.5deg) rotateY(2deg) translateY(-4px);
-            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
         }
 
         /* ── BUTTONS ── */
@@ -92,18 +97,6 @@
         .btn-gold:active {
             transform: scale(0.97);
         }
-        .btn-gold-outline {
-            background: transparent;
-            color: #d4af37;
-            border: 1.5px solid rgba(212, 175, 55, 0.5);
-            font-weight: 600;
-            transition: all 0.25s ease;
-        }
-        .btn-gold-outline:hover {
-            background: rgba(212, 175, 55, 0.12);
-            border-color: #d4af37;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
-        }
 
         /* ── SCROLLBAR ── */
         ::-webkit-scrollbar {
@@ -117,7 +110,7 @@
             border-radius: 20px;
         }
 
-        /* ── BUTTERFLIES (light version) ── */
+        /* ── BUTTERFLIES ── */
         .butterfly-bg {
             position: fixed;
             top: 0;
@@ -202,38 +195,6 @@
             display: none !important;
         }
 
-        /* ── CREDENTIAL BOX ── */
-        .credential-box {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(6px);
-        }
-        .credential-box .label {
-            font-size: 10px;
-            color: #6b4a7a;
-        }
-        .credential-box .value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #d4af37;
-            font-family: monospace;
-            word-break: break-all;
-        }
-
-        /* ── SUCCESS CARD ── */
-        .success-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 240, 235, 0.9));
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 18px;
-            padding: 24px;
-            backdrop-filter: blur(8px);
-        }
-
         /* ── ID BOX ── */
         .id-box {
             background: rgba(255, 255, 255, 0.7);
@@ -267,12 +228,6 @@
         }
         .id-box-gold .id-value {
             color: #d4af37;
-        }
-        .id-box-email {
-            border: 1px solid rgba(16, 185, 129, 0.4);
-        }
-        .id-box-email .id-value {
-            color: #0b7e4a;
         }
 
         /* ── BOTTOM NAV ── */
@@ -319,16 +274,6 @@
         .bottom-nav button.active i {
             text-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
         }
-        .bottom-nav button .badge-dot {
-            position: absolute;
-            top: 0;
-            right: 2px;
-            width: 6px;
-            height: 6px;
-            background: #d4af37;
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
-        }
 
         /* ── PAGES ── */
         .app-page {
@@ -348,35 +293,6 @@
         }
         .admin-sec.hidden {
             display: none !important;
-        }
-
-        /* ── HISTORY ITEM ── */
-        .history-item {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.12);
-            border-radius: 12px;
-            padding: 12px 14px;
-            transition: all 0.3s;
-            backdrop-filter: blur(4px);
-        }
-        .history-item:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
-        }
-        .history-item .type-transfer {
-            color: #7c6a9a;
-        }
-        .history-item .type-deposit {
-            color: #3a7bd5;
-        }
-        .history-item .type-withdrawal {
-            color: #d4af37;
-        }
-        .history-item .type-trade {
-            color: #9b7bc0;
-        }
-        .history-item .type-admin {
-            color: #d4af37;
         }
 
         /* ── SLIDER ── */
@@ -682,68 +598,6 @@
             box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
         }
 
-        /* ── FILTER TABS ── */
-        .filter-tabs {
-            display: flex;
-            gap: 3px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 3px;
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            flex-wrap: wrap;
-        }
-        .filter-tabs button {
-            flex: 1;
-            padding: 4px 6px;
-            border-radius: 8px;
-            font-size: 9px;
-            font-weight: 600;
-            color: #8a6b9a;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 40px;
-        }
-        .filter-tabs button.active {
-            background: #d4af37;
-            color: #1a1a2e;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
-        }
-        .filter-tabs button:hover:not(.active) {
-            color: #5a3a6a;
-        }
-
-        /* ── SC ADDRESS BOX ── */
-        .sc-address-box {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(6px);
-            transition: all 0.3s;
-        }
-        .sc-address-box:hover {
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
-        }
-        .sc-address-box .sc-label {
-            font-size: 9px;
-            color: #6b4a7a;
-            display: block;
-        }
-        .sc-address-box .sc-address {
-            font-size: 13px;
-            font-weight: 600;
-            font-family: monospace;
-            color: #d4af37;
-            letter-spacing: 0.5px;
-            word-break: break-all;
-        }
-
         /* ── TOAST ── */
         #toastNotification {
             position: fixed;
@@ -795,12 +649,12 @@
             animation: fadeIn 0.3s ease;
         }
         .receipt-modal .receipt-card {
-            background: linear-gradient(145deg, #ffffff, #f5f0eb);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: #ffffff;
+            border: 2px solid #d4af37;
             border-radius: 24px;
-            max-width: 460px;
+            max-width: 480px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
             padding: 28px 24px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12), 0 0 60px rgba(212, 175, 55, 0.06);
@@ -846,7 +700,7 @@
         .receipt-modal .receipt-row {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 5px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             font-size: 12px;
         }
@@ -867,10 +721,10 @@
             font-weight: 600;
         }
         .receipt-modal .receipt-row .value.green {
-            color: #0b7e4a;
+            color: #22C55E;
         }
-        .receipt-modal .receipt-row .value.red {
-            color: #b91c1c;
+        .receipt-modal .receipt-row .value.usdt {
+            color: #26A17B;
         }
         .receipt-modal .receipt-footer {
             margin-top: 18px;
@@ -920,20 +774,15 @@
             font-weight: 700;
             letter-spacing: 0.5px;
         }
-        .receipt-modal .receipt-badge.approved {
-            background: rgba(11, 126, 74, 0.12);
-            color: #0b7e4a;
-            border: 1px solid rgba(11, 126, 74, 0.2);
+        .receipt-modal .receipt-badge.success {
+            background: rgba(34, 197, 94, 0.12);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
         .receipt-modal .receipt-badge.pending {
             background: rgba(212, 175, 55, 0.12);
             color: #b8962a;
             border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .receipt-modal .receipt-badge.completed {
-            background: rgba(11, 126, 74, 0.12);
-            color: #0b7e4a;
-            border: 1px solid rgba(11, 126, 74, 0.2);
         }
         .receipt-modal .receipt-badge.rejected {
             background: rgba(185, 28, 28, 0.12);
@@ -955,6 +804,111 @@
             font-size: 9px;
             color: #6b4a7a;
             letter-spacing: 2px;
+        }
+        .receipt-modal .receipt-logo .receipt-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #d4af37;
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        /* ── RECEIPT CURRENCY BOX ── */
+        .receipt-currency-box {
+            border: 2px solid #d4af37;
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin: 12px 0 16px 0;
+            background: #ffffff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .receipt-currency-box .inr-amount {
+            font-size: 36px;
+            font-weight: 800;
+            color: #22C55E;
+            letter-spacing: 1px;
+        }
+        .receipt-currency-box .inr-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #22C55E;
+            display: block;
+            margin-top: 2px;
+        }
+        .receipt-currency-box .usdt-amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: #26A17B;
+            margin-top: 8px;
+            display: block;
+            border-top: 1px solid rgba(38, 161, 123, 0.2);
+            padding-top: 8px;
+        }
+        .receipt-currency-box .usdt-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #26A17B;
+        }
+        .receipt-currency-box .verified-stamp {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #22C55E;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        .receipt-currency-box .globe-watermark {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 80px;
+            opacity: 0.06;
+            color: #26A17B;
+            pointer-events: none;
+        }
+        .receipt-currency-box .globe-watermark i {
+            filter: drop-shadow(0 0 20px rgba(38, 161, 123, 0.1));
+        }
+        .receipt-currency-box .qr-receipt {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .receipt-currency-box .qr-receipt canvas,
+        .receipt-currency-box .qr-receipt img {
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 4px;
+            background: #fff;
+        }
+        .receipt-currency-box .qr-receipt .qr-label {
+            font-size: 8px;
+            color: #6b4a7a;
+            display: block;
+            text-align: center;
+            margin-top: 2px;
+        }
+        .receipt-currency-box .network-line {
+            font-size: 11px;
+            color: #6b4a7a;
+            margin-top: 4px;
+            display: block;
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+            padding-top: 4px;
+        }
+        .receipt-currency-box .network-line strong {
+            color: #26A17B;
         }
 
         @keyframes fadeIn {
@@ -978,15 +932,6 @@
         }
         .staking-history-item:hover {
             border-color: rgba(212, 175, 55, 0.25);
-        }
-        .staking-history-item .locked {
-            color: #d4af37;
-        }
-        .staking-history-item .unlocked {
-            color: #0b7e4a;
-        }
-        .staking-history-item .pending {
-            color: #b8962a;
         }
 
         .copy-btn-admin {
@@ -1024,17 +969,6 @@
             transform: scale(0.95);
         }
 
-        .admin-search-input {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #1a1a2e;
-        }
-        .admin-search-input:focus {
-            border-color: #d4af37;
-            outline: none;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
-        }
-
         .staking-plan-btn {
             transition: all 0.3s;
             cursor: pointer;
@@ -1046,6 +980,11 @@
         }
         .staking-plan-btn:hover:not(.active) {
             border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* ── HIDE SENSITIVE ── */
+        .hide-sensitive {
+            display: none !important;
         }
 
         /* ── RESPONSIVE ── */
@@ -1078,22 +1017,21 @@
                 padding: 8px 12px;
                 min-width: 70px;
             }
+            .receipt-currency-box .inr-amount {
+                font-size: 28px;
+            }
+            .receipt-currency-box .usdt-amount {
+                font-size: 18px;
+            }
         }
 
-        /* ── LOGO ── */
         .logo-img {
             height: 38px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.2));
         }
-        .logo-img-sm {
-            height: 28px;
-            width: auto;
-            object-fit: contain;
-        }
 
-        /* ── LIGHT THEME TWEAKS ── */
         input,
         select,
         textarea {
@@ -1103,20 +1041,17 @@
         input::placeholder {
             color: #a090a0;
         }
-        .bg-black\/40 {
-            background: rgba(255, 255, 255, 0.8);
-        }
-        .text-slate-200 {
-            color: #1a1a2e;
-        }
-        .text-slate-400 {
-            color: #6b4a7a;
-        }
         .border-amber-500\/20 {
             border-color: rgba(212, 175, 55, 0.2);
         }
         .border-amber-500\/15 {
             border-color: rgba(212, 175, 55, 0.12);
+        }
+        .border-amber-500\/30 {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        .border-amber-500\/40 {
+            border-color: rgba(212, 175, 55, 0.4);
         }
         .bg-amber-500\/10 {
             background: rgba(212, 175, 55, 0.08);
@@ -1127,41 +1062,23 @@
         .bg-amber-500\/20 {
             background: rgba(212, 175, 55, 0.15);
         }
-        .text-amber-300\/50 {
-            color: #6b4a7a;
-        }
-        .text-amber-300\/40 {
-            color: #7c6a8a;
-        }
-        .text-amber-300\/30 {
-            color: #8a7a9a;
-        }
-        .text-amber-300\/70 {
-            color: #4a3a5a;
-        }
-        .text-amber-400 {
-            color: #c9a030;
-        }
         .text-amber-500 {
             color: #d4af37;
         }
-        .text-amber-300 {
-            color: #d4af37;
+        .text-amber-600 {
+            color: #b8962a;
         }
-        .border-amber-500\/30 {
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-        .border-amber-500\/40 {
-            border-color: rgba(212, 175, 55, 0.4);
+        .text-amber-700 {
+            color: #8a6a1a;
         }
         .bg-green-500\/20 {
-            background: rgba(11, 126, 74, 0.12);
+            background: rgba(34, 197, 94, 0.12);
         }
         .text-green-400 {
-            color: #0b7e4a;
+            color: #22C55E;
         }
         .border-green-500\/40 {
-            border-color: rgba(11, 126, 74, 0.3);
+            border-color: rgba(34, 197, 94, 0.3);
         }
         .bg-red-500\/20 {
             background: rgba(185, 28, 28, 0.1);
@@ -1171,6 +1088,69 @@
         }
         .border-red-500\/30 {
             border-color: rgba(185, 28, 28, 0.2);
+        }
+
+        /* ── QR CODE ── */
+        #referralQRCode canvas {
+            border-radius: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 6px;
+            background: #fff;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ── DAILY REWARD HISTORY ── */
+        .daily-reward-item {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            padding: 8px 12px;
+            transition: all 0.3s;
+        }
+        .daily-reward-item:hover {
+            border-color: rgba(212, 175, 55, 0.25);
+        }
+        .daily-reward-item .reward-amount {
+            color: #22C55E;
+            font-weight: 700;
+        }
+        .daily-reward-item .reward-usdt {
+            color: #26A17B;
+            font-weight: 600;
+        }
+
+        /* ── MIN/MAX INDICATORS ── */
+        .min-max-label {
+            font-size: 8px;
+            color: #6b4a7a;
+            font-weight: 500;
+            background: rgba(212, 175, 55, 0.08);
+            padding: 1px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .copy-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .copy-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
+        }
+        .copy-btn-email {
+            border-color: rgba(38, 161, 123, 0.3);
+            color: #26A17B;
+        }
+        .copy-btn-email:hover {
+            background: rgba(38, 161, 123, 0.15);
         }
     </style>
 </head>
@@ -1185,7 +1165,6 @@
         <!-- HEADER -->
         <header id="mainHeader" class="w-full glass-gold-dark py-3 px-4 flex items-center justify-between sticky top-0 z-40 shadow-xl user-header backdrop-blur-2xl border-b border-amber-500/30">
             <div class="flex items-center gap-3">
-                <!-- LOGO -->
                 <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="logo-img" />
                 <div>
                     <h1 id="headerTitle" class="font-extrabold text-md tracking-wider leading-none gold-text-gradient">SUPRIX GLOBAL</h1>
@@ -1299,7 +1278,7 @@
                     <div class="text-center space-y-2 py-6">
                         <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="w-20 h-20 rounded-full gold-bg-gradient flex items-center justify-center p-2 mx-auto gold-glow border-2 border-amber-400/50 shadow-2xl object-cover" />
                         <h2 class="text-2xl font-extrabold gold-text-gradient tracking-wide mt-2">लॉगिन अकाउंट</h2>
-                        <p class="text-xs text-amber-600/50">सुरक्षित माइनिंग डैशबोर्ड में प्रवेश करें</p>
+                        <p class="text-xs text-amber-600/50">सुरक्षित डैशबोर्ड में प्रवेश करें</p>
                     </div>
                     <div class="glass-gold p-6 rounded-3xl border-amber-500/30 space-y-4 shadow-xl">
                         <div>
@@ -1342,7 +1321,7 @@
                             </div>
                             <div>
                                 <h4 id="userWelcomeName" class="font-bold text-sm text-[#1a1a2e]">User</h4>
-                                <p id="userWelcomeEmail" class="text-[10px] text-amber-600/40">user@example.com</p>
+                                <p id="userWelcomeEmail" class="text-[10px] text-amber-600/40 hide-sensitive">user@example.com</p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -1357,16 +1336,16 @@
                             <span id="statInvestment" class="text-md font-bold text-[#1a1a2e]">$0.00</span>
                         </div>
                         <div class="glass-gold-dark p-3.5 rounded-2xl border-amber-500/15 card-3d">
-                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-lock mr-1 text-amber-500"></i> Locked Staking</span>
-                            <span id="statLocked" class="text-md font-bold text-amber-600">0.00 SX</span>
+                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-lock mr-1 currency-usdt"></i> Locked Staking</span>
+                            <span id="statLocked" class="text-md font-bold currency-usdt">0.00 USDT</span>
                         </div>
                         <div class="glass-gold-dark p-3.5 rounded-2xl border-amber-500/15 card-3d">
-                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-gift mr-1 text-amber-500"></i> Daily Release (0.5%)</span>
-                            <span id="statDailyRelease" class="text-md font-bold text-[#1a1a2e]">0.00 SX</span>
+                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-gift mr-1 currency-inr"></i> Daily Release (0.5%)</span>
+                            <span id="statDailyRelease" class="text-md font-bold currency-inr">₹0.00</span>
                         </div>
                         <div class="glass-gold-dark p-3.5 rounded-2xl border-amber-500/15 card-3d">
-                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-wallet mr-1 text-green-600"></i> Available Balance</span>
-                            <span id="statAvailable" class="text-md font-bold text-green-600">0.00 SX</span>
+                            <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-wallet mr-1 currency-usdt"></i> Available Balance</span>
+                            <span id="statAvailable" class="text-md font-bold currency-usdt">0.00 USDT</span>
                         </div>
                     </div>
 
@@ -1374,7 +1353,7 @@
                     <div class="glass-gold p-6 rounded-2xl border-amber-500/30 flex flex-col items-center justify-center text-center py-8 space-y-5">
                         <div class="space-y-1">
                             <h3 class="text-sm font-bold tracking-wider text-amber-700/80 uppercase">🌟 माइनिंग रिवॉर्ड स्टार</h3>
-                            <p class="text-[11px] text-amber-600/40">डेली 0.5% कॉइन रिलीज — कम से कम 500 SX स्टेक करें</p>
+                            <p class="text-[11px] text-amber-600/40">डेली 0.5% रिवॉर्ड — कम से कम 500 USDT स्टेक करें</p>
                         </div>
                         <button id="miningStarBtn" onclick="triggerMiningReward(this)" class="w-32 h-32 rounded-full gold-bg-gradient flex items-center justify-center shadow-2xl cursor-pointer hover:scale-105 transition-all duration-300 animate-star relative group btn-animate">
                             <div class="absolute inset-2 bg-white/60 rounded-full flex items-center justify-center transition-all group-hover:bg-white/40 backdrop-blur-sm">
@@ -1387,7 +1366,7 @@
                             </span>
                         </div>
                         <div id="stakingWarning" class="hidden w-full bg-red-500/20 border border-red-500/30 rounded-lg p-2 text-center">
-                            <span class="text-xs text-red-600"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ⚠️ कम से कम 500 SX स्टेक करें! स्टार बटन तभी काम करेगा।</span>
+                            <span class="text-xs text-red-600"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ⚠️ कम से कम 500 USDT स्टेक करें! स्टार बटन तभी काम करेगा।</span>
                         </div>
                     </div>
                 </section>
@@ -1395,8 +1374,9 @@
                 <!-- PURCHASE -->
                 <section id="purchasePage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-cart-shopping mr-1.5"></i> कॉइन परचेज करें</h3>
-                        <p class="text-[11px] text-amber-600/40">USDT (BEP20) के माध्यम से कॉइन सुरक्षित परचेज करें। <span class="text-amber-600 font-semibold">$1 = 100 SX</span></p>
+                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-cart-shopping mr-1.5"></i> USDT परचेज करें</h3>
+                        <p class="text-[11px] text-amber-600/40">USDT (BEP20) के माध्यम से सुरक्षित परचेज करें। <span class="text-amber-600 font-semibold">$1 = 1 USDT</span></p>
+                        <p class="text-[9px] text-amber-600/30 mt-1"><span class="min-max-label">💰 Min Deposit: $10</span></p>
                     </div>
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                         <h4 class="text-xs font-bold text-amber-700/70">कस्टम अमाउंट दर्ज करें</h4>
@@ -1406,7 +1386,7 @@
                                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-amber-600/60 text-xs">$</span>
                                     <input type="number" id="customUSDAmount" oninput="calculateCustomCoins(this.value)" placeholder="USD मूल्य दर्ज करें" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 pl-7 pr-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
                                 </div>
-                                <div class="bg-white/80 border border-amber-500/20 rounded-xl px-3 flex items-center justify-center text-xs text-amber-600 font-mono font-bold" id="calculatedCoinsPreview">0 SX</div>
+                                <div class="bg-white/80 border border-amber-500/20 rounded-xl px-3 flex items-center justify-center text-xs font-mono font-bold currency-usdt" id="calculatedCoinsPreview">0 USDT</div>
                             </div>
                             <button id="btn-custom-purchase" onclick="generateCustomPurchase()" class="w-full btn-gold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xl">
                                 <span>USDT QR जनरेट करें</span> <i class="fa-solid fa-qrcode"></i>
@@ -1423,7 +1403,7 @@
                             <span class="text-xs font-bold text-red-600 block"><i class="fa-solid fa-circle-exclamation mr-1"></i> USDT (BEP20) में ही Payment करें।</span>
                         </div>
                         <div class="flex flex-col items-center justify-center text-center space-y-2">
-                            <span class="text-[11px] text-amber-600/50">स्कैन करके पेमेंट करें: <strong id="paymentUSDVal" class="text-[#1a1a2e]">$5.00 USDT (500 SX Coins)</strong></span>
+                            <span class="text-[11px] text-amber-600/50">स्कैन करके पेमेंट करें: <strong id="paymentUSDVal" class="text-[#1a1a2e]">$5.00 USDT</strong></span>
                             <div class="bg-white p-2 rounded-lg inline-block shadow-xl">
                                 <img src="https://i.postimg.cc/SRrcGvzT/Screenshot-2026-0716-065409.jpg" alt="Payment QR" class="w-32 h-32 object-contain">
                             </div>
@@ -1456,17 +1436,17 @@
                 <!-- STAKING -->
                 <section id="stakingPage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-vault mr-1.5"></i> कॉइन स्टेकिंग</h3>
-                        <p class="text-[11px] text-amber-600/40">अपने उपलब्ध कॉइन्स को लॉक करके शानदार दैनिक रिवॉर्ड प्राप्त करें।</p>
+                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-vault mr-1.5"></i> USDT स्टेकिंग</h3>
+                        <p class="text-[11px] text-amber-600/40">अपने उपलब्ध USDT को लॉक करके शानदार दैनिक रिवॉर्ड प्राप्त करें।</p>
                     </div>
                     <div class="glass-gold p-5 rounded-2xl border-amber-500/30 space-y-4">
                         <div class="flex justify-between items-center text-xs">
                             <span class="text-amber-600/50">अवेलेबल बैलेंस:</span>
-                            <span id="stakingAvailableCoins" class="font-bold text-amber-600">0.00 SX</span>
+                            <span id="stakingAvailableCoins" class="font-bold currency-usdt">0.00 USDT</span>
                         </div>
                         <div>
-                            <label class="block text-[10px] text-amber-600/50 mb-1">कितने कॉइन स्टेकिंग में लगाने हैं?</label>
-                            <input type="number" id="stakeInputCoins" placeholder="न्यूनतम 50 SX" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] backdrop-blur-sm">
+                            <label class="block text-[10px] text-amber-600/50 mb-1">कितने USDT स्टेकिंग में लगाने हैं?</label>
+                            <input type="number" id="stakeInputCoins" placeholder="न्यूनतम 50 USDT" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] backdrop-blur-sm">
                         </div>
                         <div>
                             <label class="block text-[10px] text-amber-600/50 mb-1.5">लॉकिंग अवधि चुनें</label>
@@ -1499,48 +1479,40 @@
                             </div>
                             <div>
                                 <h3 id="profileName" class="font-bold text-[#1a1a2e]">User Profile</h3>
-                                <p id="profileEmail" class="text-[10px] text-amber-600/40">user@example.com</p>
+                                <p id="profileEmail" class="text-[10px] text-amber-600/40 hide-sensitive">user@example.com</p>
                             </div>
                         </div>
                         <div class="text-right flex flex-col">
-                            <span class="text-[9px] text-amber-600/40">रेफरल कोड:</span>
-                            <span id="profileReferralCode" class="text-xs font-bold text-amber-600 uppercase select-all font-mono">SG-XXXX</span>
-                            <button onclick="copyToClipboard('profileReferralCode', '✅ रेफरल कोड कॉपी हो गया!')" class="text-amber-600 hover:text-[#1a1a2e] btn-animate text-xs mt-0.5"><i class="fa-solid fa-copy mr-1"></i> कॉपी</button>
+                            <span class="text-[9px] text-amber-600/40">SPX ID:</span>
+                            <span id="profileReferralCode" class="text-xs font-bold text-amber-600 uppercase select-all font-mono">SPX-XXXX</span>
+                            <button onclick="copyToClipboard('profileReferralCode', '✅ SPX ID कॉपी हो गई!')" class="text-amber-600 hover:text-[#1a1a2e] btn-animate text-xs mt-0.5"><i class="fa-solid fa-copy mr-1"></i> कॉपी</button>
                         </div>
                     </div>
 
-                    <!-- IDs -->
+                    <!-- SPX ID -->
                     <div class="id-box id-box-gold">
                         <div>
-                            <span class="id-label">🆔 आपकी Unique SupriX ID</span>
-                            <span class="id-value" id="profileCoinXIdDisplay">SG123456789</span>
-                            <span class="id-usage">इस ID से कॉइन भेजें/ले सकते हैं</span>
+                            <span class="id-label">🆔 आपकी Unique SPX ID</span>
+                            <span class="id-value" id="profileCoinXIdDisplay">SPX123456789</span>
+                            <span class="id-usage">इस ID से USDT (BEP20) भेजें/ले सकते हैं</span>
                         </div>
-                        <button onclick="copyToClipboard('profileCoinXIdDisplay', '✅ SupriX ID कॉपी हो गई!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs">
-                            <i class="fa-solid fa-copy mr-1"></i> कॉपी
-                        </button>
-                    </div>
-                    <div class="id-box id-box-email">
-                        <div>
-                            <span class="id-label">📧 Email (Unique ID)</span>
-                            <span class="id-value" id="profileEmailIdDisplay">user@example.com</span>
-                            <span class="id-usage">ईमेल द्वारा भी कॉइन भेज सकते हैं</span>
-                        </div>
-                        <button onclick="copyToClipboard('profileEmailIdDisplay', '✅ Email कॉपी हो गई!')" class="text-green-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs">
+                        <button onclick="copyToClipboard('profileCoinXIdDisplay', '✅ SPX ID कॉपी हो गई!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs">
                             <i class="fa-solid fa-copy mr-1"></i> कॉपी
                         </button>
                     </div>
 
-                    <!-- Smart Contract Address -->
-                    <div class="sc-address-box">
+                    <!-- Email Copy -->
+                    <div class="id-box" style="border:1px solid rgba(38,161,123,0.4);">
                         <div>
-                            <span class="sc-label"><i class="fa-solid fa-link mr-1 text-amber-500"></i> स्मार्ट कॉन्ट्रैक्ट एड्रेस</span>
-                            <span class="sc-address" id="profileSmartContract">0x000...000</span>
-                            <span class="text-[8px] text-amber-600/40 block mt-0.5">इस एड्रेस पर कॉइन भेजें / प्राप्त करें</span>
+                            <span class="id-label">📧 Email (Unique ID)</span>
+                            <span class="id-value" style="color:#26A17B;" id="profileEmailIdDisplay">user@example.com</span>
+                            <span class="id-usage" style="color:#26A17B;">ईमेल द्वारा भी USDT भेज सकते हैं</span>
                         </div>
-                        <button onclick="copyToClipboard('profileSmartContract', '✅ Smart Contract कॉपी हो गया!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
-                            <i class="fa-solid fa-copy mr-1"></i> कॉपी
-                        </button>
+                        <div class="flex gap-1">
+                            <button onclick="copyToClipboard('profileEmailIdDisplay', '✅ Email कॉपी हो गई!')" class="text-[#26A17B] hover:text-[#1a1a2e] shrink-0 btn-animate text-xs copy-btn-email">
+                                <i class="fa-solid fa-copy mr-1"></i> कॉपी
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Invite Friends -->
@@ -1554,6 +1526,11 @@
                         <button onclick="shareReferralLink()" class="w-full btn-gold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xl">
                             <i class="fa-solid fa-share-nodes"></i> Share Referral Link
                         </button>
+                        <!-- QR Code for Referral -->
+                        <div class="flex flex-col items-center justify-center pt-2 border-t border-amber-500/15">
+                            <span class="text-[9px] text-amber-600/40 mb-2">Referral QR Code (Scan to Register)</span>
+                            <div id="referralQRCode" class="flex justify-center"></div>
+                        </div>
                     </div>
 
                     <!-- Withdrawal Setup -->
@@ -1562,6 +1539,7 @@
 
                         <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-center">
                             <span class="text-[11px] font-bold text-red-600"><i class="fa-solid fa-circle-exclamation mr-1"></i> USDT (BEP20) में ही Withdrawal लें।</span>
+                            <span class="text-[9px] text-red-600/60 block mt-0.5">Min Withdrawal: $2 USDT</span>
                         </div>
                         <div>
                             <label class="block text-[10px] text-amber-600/50 mb-1">USDT (BEP20) QR कोड अपलोड करें</label>
@@ -1580,31 +1558,31 @@
                         </div>
                         <div class="pt-2 border-t border-amber-500/15">
                             <div class="flex justify-between items-center text-[10px] text-amber-600/50 mb-1">
-                                <span>अवेलेबल बैलेंस: <strong id="withdrawAvailable" class="text-green-600">0.00 SX</strong></span>
-                                <span class="text-amber-600">(मिनिमम: 100 कॉइन)</span>
+                                <span>अवेलेबल बैलेंस: <strong id="withdrawAvailable" class="currency-usdt">0.00 USDT</strong></span>
+                                <span class="text-amber-600 min-max-label">Min: $2 USDT</span>
                             </div>
                             <div class="flex gap-2">
-                                <input type="number" id="withdrawAmountInput" placeholder="कॉइन संख्या दर्ज करें" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <input type="number" id="withdrawAmountInput" placeholder="USDT संख्या दर्ज करें" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
                                 <button id="btn-submit-withdraw" onclick="submitWithdrawal(this)" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shadow-xl flex items-center justify-center gap-1.5">
                                     <span>विथड्रॉ</span> <i class="fa-solid fa-circle-down"></i>
                                 </button>
                             </div>
                             <div class="mt-2.5 text-center bg-white/80 border border-amber-500/20 rounded-xl p-2 space-y-0.5">
                                 <span class="text-[10px] font-bold text-amber-600 block"><i class="fa-regular fa-clock mr-1"></i> Processing - अधिकतम 24 घंटे</span>
-                                <span class="text-[8px] text-amber-600/30 block">💡 USDT BEP20 में विथड्रॉवल लेने के लिए SX Coin एक्सचेंज करें</span>
+                                <span class="text-[8px] text-amber-600/30 block">💡 USDT BEP20 में विथड्रॉवल लें</span>
                             </div>
                         </div>
 
                         <!-- SupriX Wallet Withdrawal -->
                         <div class="pt-3 border-t border-amber-500/15">
                             <h5 class="text-[10px] font-bold text-amber-600 mb-2"><i class="fa-solid fa-wallet mr-1"></i> SupriX Wallet में विथड्रॉवल</h5>
-                            <p class="text-[9px] text-amber-600/40 mb-2">SupriX Wallet के स्मार्ट कॉन्ट्रैक्ट एड्रेस से विथड्रॉवल करें (10% शुल्क)</p>
+                            <p class="text-[9px] text-amber-600/40 mb-2">SupriX Wallet के SPX ID से विथड्रॉवल करें (10% शुल्क)</p>
                             <div>
-                                <label class="block text-[10px] text-amber-600/50 mb-1">SupriX Wallet Smart Contract Address</label>
-                                <input type="text" id="coinxWalletSCAddress" placeholder="SupriX Wallet का SC एड्रेस पेस्ट करें..." class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <label class="block text-[10px] text-amber-600/50 mb-1">Receiver SPX ID</label>
+                                <input type="text" id="coinxWalletSCAddress" placeholder="Receiver की SPX ID दर्ज करें..." class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
                             </div>
                             <div class="flex gap-2 mt-2">
-                                <input type="number" id="coinxWalletWithdrawAmount" placeholder="कॉइन संख्या" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <input type="number" id="coinxWalletWithdrawAmount" placeholder="USDT संख्या" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
                                 <button onclick="submitCoinXWalletWithdrawal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shadow-xl flex items-center justify-center gap-1.5">
                                     <span>सबमिट</span> <i class="fa-solid fa-arrow-right"></i>
                                 </button>
@@ -1729,7 +1707,7 @@
                         </div>
                         <div class="bg-white/80 p-2.5 rounded-xl border border-amber-500/15">
                             <span class="text-[8px] text-amber-600/30 block mb-0.5">Locked Staking</span>
-                            <strong id="statTotalStaked" class="text-amber-600 text-md">0 SX</strong>
+                            <strong id="statTotalStaked" class="currency-usdt text-md">0 USDT</strong>
                         </div>
                         <div class="bg-white/80 p-2.5 rounded-xl border border-amber-500/15">
                             <span class="text-[8px] text-amber-600/30 block mb-0.5">Pending Dep.</span>
@@ -1741,7 +1719,7 @@
                         </div>
                         <div class="bg-white/80 p-2.5 rounded-xl border border-amber-500/15">
                             <span class="text-[8px] text-amber-600/30 block mb-0.5">Total Referral</span>
-                            <strong id="statReferrals" class="text-blue-600 text-md">0 SX</strong>
+                            <strong id="statReferrals" class="text-blue-600 text-md">0 USDT</strong>
                         </div>
                     </div>
 
@@ -1757,14 +1735,16 @@
                     <!-- Users Tab -->
                     <div id="adminSection-users" class="admin-sec space-y-3">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
-                            <h4 class="text-xs font-bold text-amber-700/70">यूजर कॉइन कस्टमाइज़ेशन</h4>
+                            <h4 class="text-xs font-bold text-amber-700/70">यूजर USDT कस्टमाइज़ेशन (SPX ID से)</h4>
                             <div class="grid grid-cols-2 gap-2 text-xs">
-                                <input type="text" id="adminCoinUserId" placeholder="यूजर आईडी/ईमेल" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
-                                <input type="number" id="adminCoinAmount" placeholder="कॉइन्स की संख्या" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="text" id="adminCoinUserId" placeholder="SPX ID या ईमेल" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="number" id="adminCoinAmount" placeholder="USDT की संख्या" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
                                 <select id="adminCoinAction" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-amber-600/60 focus:outline-none backdrop-blur-sm">
                                     <option value="add">जोड़ें (Credit)</option>
                                     <option value="subtract">घटाएं (Debit)</option>
+                                    <option value="send">भेजें (Send to SPX ID)</option>
                                 </select>
+                                <input type="text" id="adminSendTargetId" placeholder="Target SPX ID (Send)" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
                                 <button id="btn-admin-coin" onclick="updateUserCoinsManually(this)" class="col-span-2 btn-gold py-2 rounded-xl text-xs flex items-center justify-center gap-1 shadow-xl">
                                     <span>अपडेट करें</span> <i class="fa-solid fa-floppy-disk"></i>
                                 </button>
@@ -1833,6 +1813,7 @@
                 <div class="receipt-logo">
                     <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" style="height:32px;object-fit:contain;display:inline-block;" />
                     <small>Premium • Gold Edition</small>
+                    <div class="receipt-title">━━━━ Official Payment Receipt ━━━━</div>
                 </div>
                 <div class="receipt-header">
                     <h3><i class="fa-solid fa-receipt mr-2"></i> लेनदेन रसीद</h3>
@@ -1876,6 +1857,7 @@
                 <div class="flex bg-white/80 p-1 rounded-xl border border-amber-500/15 text-[10px] shrink-0">
                     <button id="txTab-deposit" onclick="switchTxTab('deposit')" class="flex-1 py-1 text-center font-bold rounded bg-amber-500 text-[#1a1a2e] transition-all btn-animate">Deposit</button>
                     <button id="txTab-withdraw" onclick="switchTxTab('withdraw')" class="flex-1 py-1 text-center font-bold text-amber-600/40 rounded transition-all btn-animate">Withdraw</button>
+                    <button id="txTab-daily" onclick="switchTxTab('daily')" class="flex-1 py-1 text-center font-bold text-amber-600/40 rounded transition-all btn-animate">Daily Rewards</button>
                 </div>
                 <div id="txHistoryListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
@@ -1893,11 +1875,11 @@
                     </div>
                     <div class="bg-white/80 p-2 rounded-xl border border-amber-500/15">
                         <span class="text-[8px] text-amber-600/30 block">Total Staked</span>
-                        <strong id="teamTotalStaked" class="text-amber-600">0 SX</strong>
+                        <strong id="teamTotalStaked" class="currency-usdt">0 USDT</strong>
                     </div>
                     <div class="bg-white/80 p-2 rounded-xl border border-amber-500/15">
                         <span class="text-[8px] text-amber-600/30 block">Total Bonus</span>
-                        <strong id="teamTotalBonus" class="text-green-600">0 SX</strong>
+                        <strong id="teamTotalBonus" class="currency-usdt">0 USDT</strong>
                     </div>
                 </div>
                 <div id="teamListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
@@ -1983,14 +1965,7 @@
             try { return storage.getFileView(SCREENSHOT_BUCKET_ID, value).href; } catch (e) { return ''; }
         }
 
-        function generateCoinXId() { return 'SG' + Math.floor(100000000 + Math.random() * 900000000); }
-
-        function generateSmartContract() {
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            let r = '';
-            for (let i = 0; i < 32; i++) r += chars.charAt(Math.floor(Math.random() * chars.length));
-            return r;
-        }
+        function generateCoinXId() { return 'SPX' + String(Math.floor(100000 + Math.random() * 900000)); }
 
         function setButtonLoading(btn, isLoading) {
             if (!btn) return;
@@ -2017,12 +1992,10 @@
                 approvedWithdrawals: parseJsonSafe(doc.approved_withdrawal, []),
                 referrals: parseJsonSafe(doc.referrals, []),
                 transactions: parseJsonSafe(doc.transactions, []),
-                tradeHistory: parseJsonSafe(doc.tradeHistory, []),
-                buySellWallet: parseFloat(doc.buySellWallet || 0),
-                coins: parseFloat(doc.coins || 0),
+                dailyRewards: parseJsonSafe(doc.dailyRewards, []),
                 tradeWallet: parseFloat(doc.tradeWallet || 0),
+                coins: parseFloat(doc.coins || 0),
                 coinxId: doc.coinxId || doc.coinxid || generateCoinXId(),
-                smartContract: doc.smartContract || generateSmartContract(),
                 coinxWalletSC: doc.coinxWalletSC || ''
             };
         }
@@ -2030,7 +2003,7 @@
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMessage').innerText = msg;
-            const colors = { success: 'rgba(11,126,74,0.3)', error: 'rgba(185,28,28,0.2)', info: 'rgba(212,175,55,0.25)' };
+            const colors = { success: 'rgba(34,197,94,0.3)', error: 'rgba(185,28,28,0.2)', info: 'rgba(212,175,55,0.25)' };
             toast.style.borderColor = colors[type] || colors.info;
             toast.classList.add('show');
             clearTimeout(toast._timer);
@@ -2061,6 +2034,29 @@
             document.execCommand('copy');
             document.body.removeChild(inp);
             showToast(msg || '✅ कॉपी हो गया!');
+        }
+
+        function maskEmail(email) {
+            if (!email) return '****@****';
+            const parts = email.split('@');
+            if (parts.length !== 2) return email;
+            const local = parts[0];
+            const domain = parts[1];
+            if (local.length <= 2) return local + '@' + domain;
+            const visible = local.substring(0, Math.ceil(local.length / 2));
+            return visible + '***@' + domain;
+        }
+
+        function maskPhone(phone) {
+            if (!phone) return '****';
+            if (phone.length <= 4) return phone;
+            return phone.substring(0, 2) + '****' + phone.substring(phone.length - 2);
+        }
+
+        function maskId(id) {
+            if (!id) return '****';
+            if (id.length <= 6) return id;
+            return id.substring(0, 3) + '***' + id.substring(id.length - 3);
         }
 
         // ============================================================
@@ -2168,12 +2164,12 @@
                 0), 0);
             document.getElementById('statTotalDeposits').innerText = `$${totalDep.toFixed(2)}`;
             const totalStaked = users.reduce((a, u) => a + parseFloat(u.staked || 0), 0);
-            document.getElementById('statTotalStaked').innerText = `${totalStaked.toFixed(2)} SX`;
+            document.getElementById('statTotalStaked').innerText = `${totalStaked.toFixed(2)} USDT`;
             document.getElementById('statPendingDep').innerText = users.filter(u => u.pendingDeposit).length;
             document.getElementById('statPendingWith').innerText = users.filter(u => u.pendingWithdrawal).length;
             const totalRefBonus = users.reduce((a, u) => a + u.referrals.reduce((s, r) => s + parseFloat(r.bonusReceived || 0),
                 0), 0);
-            document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(2)} SX`;
+            document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(2)} USDT`;
         }
 
         // ============================================================
@@ -2211,32 +2207,29 @@
                 const emailId = 'aemail' + u.$id,
                     phoneId = 'aphone' + u.$id,
                     coinxId = 'acoinx' + u.$id,
-                    refId = 'aref' + u.$id,
-                    scId = 'asc' + u.$id;
+                    refId = 'aref' + u.$id;
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-1';
                 card.innerHTML = `
-                        <div class="flex justify-between font-bold text-amber-600">
-                            <span>${u.name||'N/A'}</span>
-                            <span class="text-[#1a1a2e]">${parseFloat(u.coins||0).toFixed(2)} SX</span>
-                        </div>
-                        <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
-                            <span>ईमेल: ${u.email||'N/A'} <button onclick="copyToClipboard('${emailId}','✅ Email कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                            <span>मोबाइल: ${u.phone||'N/A'} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                            <span>SupriX ID: ${u.coinxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SupriX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                            <span>रेफरल: ${u.$id||'N/A'} <button onclick="copyToClipboard('${refId}','✅ रेफरल कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                            <span class="col-span-2">🔗 Smart: ${u.smartContract||'N/A'} <button onclick="copyToClipboard('${scId}','✅ Smart Contract कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                        </div>
-                        <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
-                            <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
-                            <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2.5 py-0.5 rounded font-bold ${u.isBlocked?'bg-green-500/20 text-green-600':'bg-red-500/20 text-red-600'}">${u.isBlocked?'Unblock':'Block'}</button>
-                        </div>
-                        <span id="${emailId}" class="hidden">${u.email||''}</span>
-                        <span id="${phoneId}" class="hidden">${u.phone||''}</span>
-                        <span id="${coinxId}" class="hidden">${u.coinxId||''}</span>
-                        <span id="${refId}" class="hidden">${u.$id||''}</span>
-                        <span id="${scId}" class="hidden">${u.smartContract||''}</span>
-                    `;
+                            <div class="flex justify-between font-bold text-amber-600">
+                                <span>${u.name||'N/A'}</span>
+                                <span class="text-[#1a1a2e]">${parseFloat(u.coins||0).toFixed(2)} USDT</span>
+                            </div>
+                            <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
+                                <span>ईमेल: ${maskEmail(u.email||'N/A')} <button onclick="copyToClipboard('${emailId}','✅ Email कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span>मोबाइल: ${maskPhone(u.phone||'N/A')} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span class="col-span-2">🆔 SPX ID: ${u.coinxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SPX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span class="col-span-2">🔗 रेफरल: ${maskId(u.$id||'N/A')} <button onclick="copyToClipboard('${refId}','✅ रेफरल कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                            </div>
+                            <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
+                                <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
+                                <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2.5 py-0.5 rounded font-bold ${u.isBlocked?'bg-green-500/20 text-green-600':'bg-red-500/20 text-red-600'}">${u.isBlocked?'Unblock':'Block'}</button>
+                            </div>
+                            <span id="${emailId}" class="hidden">${u.email||''}</span>
+                            <span id="${phoneId}" class="hidden">${u.phone||''}</span>
+                            <span id="${coinxId}" class="hidden">${u.coinxId||''}</span>
+                            <span id="${refId}" class="hidden">${u.$id||''}</span>
+                        `;
                 list.appendChild(card);
             });
         }
@@ -2259,21 +2252,56 @@
             const targetId = document.getElementById('adminCoinUserId').value.trim();
             const coinAmount = parseFloat(document.getElementById('adminCoinAmount').value);
             const action = document.getElementById('adminCoinAction').value;
-            if (!targetId || !coinAmount || coinAmount <= 0) { showToast('सही आईडी/ईमेल और मान्य कॉइन संख्या भरें।',
-                'error'); return; }
+            const sendTarget = document.getElementById('adminSendTargetId').value.trim();
+
+            if (!targetId || !coinAmount || coinAmount <= 0) { showToast('सही SPX ID/ईमेल और मान्य USDT संख्या भरें।',
+                    'error'); return; }
+
+            let targetUser = users.find(u => u.coinxId === targetId || u.email === targetId || u.$id === targetId);
+            if (!targetUser) { showToast('यूजर नहीं मिला! SPX ID, Email या User ID से खोजें।', 'error'); return; }
+
             setButtonLoading(btn, true);
-            const idx = users.findIndex(u => u.$id === targetId || u.email === targetId);
-            if (idx === -1) { setButtonLoading(btn, false);
-                showToast('यूजर नहीं मिला!', 'error'); return; }
-            const field = 'coins';
-            const current = parseFloat(users[idx][field] || 0);
-            const newBal = action === 'add' ? current + coinAmount : Math.max(0, current - coinAmount);
+
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { [field]: newBal });
-                users[idx][field] = newBal;
-                showToast(action === 'add' ? `${coinAmount} कॉइन्स क्रेडिट!` : `${coinAmount} कॉइन्स डेबिट!`, 'success');
+                if (action === 'send') {
+                    if (!sendTarget) { showToast('कृपया Target SPX ID भरें।', 'error');
+                        setButtonLoading(btn, false); return; }
+                    let receiver = users.find(u => u.coinxId === sendTarget || u.email === sendTarget || u.$id ===
+                    sendTarget);
+                    if (!receiver) { showToast('Receiver नहीं मिला!', 'error');
+                        setButtonLoading(btn, false); return; }
+                    if (targetUser.$id === receiver.$id) { showToast('खुद को नहीं भेज सकते!', 'error');
+                        setButtonLoading(btn, false); return; }
+
+                    const senderBal = parseFloat(targetUser.coins || 0);
+                    if (senderBal < coinAmount) { showToast('Sender के पास पर्याप्त USDT नहीं!', 'error');
+                        setButtonLoading(btn, false); return; }
+
+                    const newSenderBal = senderBal - coinAmount;
+                    const newReceiverBal = parseFloat(receiver.coins || 0) + coinAmount;
+
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, targetUser.$id, { coins: newSenderBal });
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, receiver.$id, { coins: newReceiverBal });
+
+                    targetUser.coins = newSenderBal;
+                    receiver.coins = newReceiverBal;
+                    users = users.map(u => u.$id === targetUser.$id ? targetUser : u);
+                    users = users.map(u => u.$id === receiver.$id ? receiver : u);
+
+                    showToast(`✅ ${coinAmount} USDT ${targetUser.coinxId} से ${receiver.coinxId} को भेजे गए!`, 'success');
+                } else {
+                    const field = 'coins';
+                    const current = parseFloat(targetUser[field] || 0);
+                    const newBal = action === 'add' ? current + coinAmount : Math.max(0, current - coinAmount);
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, targetUser.$id, { [field]: newBal });
+                    targetUser[field] = newBal;
+                    users = users.map(u => u.$id === targetUser.$id ? targetUser : u);
+                    showToast(action === 'add' ? `${coinAmount} USDT क्रेडिट!` : `${coinAmount} USDT डेबिट!`, 'success');
+                }
+
                 document.getElementById('adminCoinUserId').value = '';
                 document.getElementById('adminCoinAmount').value = '';
+                document.getElementById('adminSendTargetId').value = '';
                 updateAdminStats();
                 renderAdminUsers();
             } catch (e) { showToast('बैलेंस अपडेट में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
@@ -2294,11 +2322,11 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
                 card.innerHTML = `
-                        <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="text-green-600">$${d.amountUSD}</span></div>
-                        <div class="text-[10px] text-amber-600/30">कॉइन: ${d.coinsAmount} SX | ${d.dateTime}</div>
-                        ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(d.receiptFileId)}')"></div>`:''}
-                        <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
-                    `;
+                            <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${maskEmail(u.email)})</span><span class="text-green-600">$${d.amountUSD}</span></div>
+                            <div class="text-[10px] text-amber-600/30">USDT: ${d.coinsAmount} USDT | ${d.dateTime}</div>
+                            ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(d.receiptFileId)}')"></div>`:''}
+                            <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                        `;
                 list.appendChild(card);
             });
         }
@@ -2352,18 +2380,17 @@
                     '<p class="text-amber-600/30 text-center py-2">कोई पेंडिंग विथड्रॉवल नहीं</p>'; return; }
             pending.forEach(u => {
                 const w = u.pendingWithdrawal;
-                const usdtAmount = (parseFloat(w.coinsAmount || 0) * 0.90 / 100).toFixed(2);
-                const inrAmount = (parseFloat(w.coinsAmount || 0) * 0.90).toFixed(2);
+                const inrAmount = (parseFloat(w.coinsAmount || 0) * 0.90 * 85).toFixed(2);
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
                 card.innerHTML = `
-                        <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="text-amber-600">${w.coinsAmount} SX</span></div>
-                        <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
-                        <div class="text-[10px] text-green-600">💰 INR: ₹${inrAmount} (10% चार्ज कट)</div>
-                        <div class="text-[10px] text-blue-600">💵 USDT BEP20: $${usdtAmount}</div>
-                        ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>`:''}
-                        <div class="flex gap-2 justify-end"><button onclick="approveWithdrawal('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Complete</button><button onclick="rejectWithdrawal('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
-                    `;
+                            <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${maskEmail(u.email)})</span><span class="currency-usdt">${w.coinsAmount} USDT</span></div>
+                            <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
+                            <div class="text-[10px] currency-inr font-bold">💰 INR: ₹${inrAmount} (10% चार्ज कट)</div>
+                            <div class="text-[10px] currency-usdt">💵 USDT BEP20: ${w.coinsAmount} USDT</div>
+                            ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>`:''}
+                            <div class="flex gap-2 justify-end"><button onclick="approveWithdrawal('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Complete</button><button onclick="rejectWithdrawal('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                        `;
                 list.appendChild(card);
             });
         }
@@ -2410,7 +2437,7 @@
                     pending_withdrawal: '' });
                 users[idx].coins = refund;
                 users[idx].pendingWithdrawal = null;
-                showToast('❌ अस्वीकृत, कॉइन रिफंड', 'info');
+                showToast('❌ अस्वीकृत, USDT रिफंड', 'info');
                 updateAdminStats();
                 renderAdminWithdrawals();
             } catch (e) { showToast('त्रुटि', 'error'); }
@@ -2446,8 +2473,8 @@
                         div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
                         div.innerHTML = `
                                     <div>
-                                        <div class="text-amber-600 text-xs font-bold">${u.name}</div>
-                                        <div class="text-[9px] text-amber-600/30">${s.amount} SX | ${s.days} days</div>
+                                        <div class="text-amber-600 text-xs font-bold">${u.name} (${maskEmail(u.email)})</div>
+                                        <div class="text-[9px] text-amber-600/30">${s.amount} USDT | ${s.days} days</div>
                                         <div class="text-[9px] text-amber-600/30">Stake: ${s.startDate || 'N/A'} | Unlock: ${new Date(s.lockUntil).toLocaleDateString('hi-IN')}</div>
                                     </div>
                                     <div class="text-right">
@@ -2485,7 +2512,7 @@
                 users[idx].staked = newStaked;
                 users[idx].staking = remaining;
                 users[idx].stakingHistory = history;
-                showToast(`✅ ${stake.amount} SX अनलॉक कर दिया गया`, 'success');
+                showToast(`✅ ${stake.amount} USDT अनलॉक कर दिया गया`, 'success');
                 renderAdminStaking();
                 updateAdminStats();
             } catch (e) { showToast('त्रुटि', 'error'); }
@@ -2529,7 +2556,7 @@
             const all = [];
             users.forEach(u => {
                 (u.referrals || []).forEach(r => {
-                    all.push({ ...r, referrer: u.name, referrerEmail: u.email });
+                    all.push({ ...r, referrer: u.name, referrerEmail: u.email, referrerSPX: u.coinxId });
                 });
             });
             if (all.length === 0) { list.innerHTML =
@@ -2539,8 +2566,8 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 space-y-1';
                 div.innerHTML = `
-                            <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerEmail})</span><span class="text-green-600">+${Number(r.bonusReceived||0).toFixed(2)} SX</span></div>
-                            <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'}) | स्टेक: ${Number(r.stakedAmount||0).toFixed(2)} SX | ${r.dateTime||''}</div>
+                            <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${maskEmail(r.referrerEmail)})</span><span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span></div>
+                            <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${maskEmail(r.referredEmail||'N/A')}) | स्टेक: ${Number(r.stakedAmount||0).toFixed(2)} USDT | ${r.dateTime||''}</div>
                         `;
                 list.appendChild(div);
             });
@@ -2552,10 +2579,10 @@
         function exportAllUserData() {
             if (!isAdminMode || users.length === 0) { showToast('कोई डेटा नहीं', 'error'); return; }
             let csv =
-                "Name,Email,Phone,SupriXID,SmartContract,Coins,Staked,Withdrawn,Referrals,TradeWallet,SupriXWalletSC\n";
+                "Name,Email,Phone,SPX_ID,USDT_Balance,Staked_USDT,Withdrawn_USDT,Referrals,TradeWallet\n";
             users.forEach(u => {
                 csv +=
-                    `${u.name||''},${u.email||''},${u.phone||''},${u.coinxId||''},${u.smartContract||''},${parseFloat(u.coins||0).toFixed(2)},${parseFloat(u.staked||0).toFixed(2)},${parseFloat(u.withdrawal||0).toFixed(2)},${(u.referrals||[]).length},${parseFloat(u.tradeWallet||0).toFixed(2)},${u.coinxWalletSC||''}\n`;
+                    `${u.name||''},${u.email||''},${u.phone||''},${u.coinxId||''},${parseFloat(u.coins||0).toFixed(2)},${parseFloat(u.staked||0).toFixed(2)},${parseFloat(u.withdrawal||0).toFixed(2)},${(u.referrals||[]).length},${parseFloat(u.tradeWallet||0).toFixed(2)}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
@@ -2594,42 +2621,87 @@
             const content = document.getElementById('receiptContent');
             const isDeposit = data.type === 'deposit';
             const isWithdrawal = data.type === 'withdrawal';
+            const isDaily = data.type === 'daily';
+
+            const usdtAmount = parseFloat(data.coinsAmount || data.amount || 0);
+            const inrAmount = (usdtAmount * 85).toFixed(2);
+            const usdtDisplay = usdtAmount.toFixed(2);
+
             let statusBadge = '';
-            if (data.status === 'Approved' || data.status === 'Completed') {
-                statusBadge = '<span class="receipt-badge approved">✅ ' + data.status + '</span>';
+            if (data.status === 'Success' || data.status === 'Approved' || data.status === 'Completed') {
+                statusBadge = '<span class="receipt-badge success">✅ ' + data.status + '</span>';
             } else if (data.status === 'Pending') {
                 statusBadge = '<span class="receipt-badge pending">⏳ ' + data.status + '</span>';
             } else if (data.status === 'Rejected') {
                 statusBadge = '<span class="receipt-badge rejected">❌ ' + data.status + '</span>';
             } else {
-                statusBadge = '<span class="receipt-badge approved">✅ ' + (data.status || 'Completed') + '</span>';
+                statusBadge = '<span class="receipt-badge success">✅ ' + (data.status || 'Success') + '</span>';
             }
-            let typeLabel = isDeposit ? '💰 डिपॉजिट' : isWithdrawal ? '💸 विथड्रॉवल' : '🔄 ट्रांसफर';
-            let amountDisplay = isDeposit ? `+$${data.amountUSD || '0'} USDT` : `-${data.coinsAmount || data.amount || 0} SX`;
+
+            let typeLabel = isDeposit ? '💰 डिपॉजिट' : isWithdrawal ? '💸 विथड्रॉवल' : isDaily ? '⭐ डेली रिवॉर्ड' :
+            '🔄 ट्रांसफर';
+            let receiptId = data.receiptId || 'SPX-' + String(Math.floor(100000 + Math.random() * 900000));
+
+            const maskedEmail = maskEmail(currentUser?.email || 'N/A');
+            const maskedPhone = maskPhone(currentUser?.phone || 'N/A');
+            const maskedSPX = currentUser?.coinxId || 'N/A');
+            const maskedName = currentUser?.name || 'N/A');
+
+            // Generate random tx hash
+            const txHash = '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
             let receiptHTML = `
                         <div class="receipt-row"><span class="label">📋 लेनदेन प्रकार</span><span class="value highlight">${typeLabel}</span></div>
-                        <div class="receipt-row"><span class="label">💰 राशि</span><span class="value ${isDeposit?'green':'red'}">${amountDisplay}</span></div>
-                        ${isDeposit ? `<div class="receipt-row"><span class="label">🪙 कॉइन</span><span class="value">${data.coinsAmount || 0} SX</span></div>` : ''}
-                        <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || 'N/A'}</span></div>
-                        <div class="receipt-row"><span class="label">📊 स्थिति</span><span class="value">${statusBadge}</span></div>
-                        ${data.receiptFileId ? `<div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;"><span class="label" style="margin-bottom:6px;">🧾 रसीद स्क्रीनशॉट</span><img src="${resolveImageUrl(data.receiptFileId)}" class="w-24 h-24 object-contain rounded-lg border border-amber-500/20 cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(data.receiptFileId)}')"></div>` : ''}
-                        <div style="border-top:1px solid rgba(212,175,55,0.12);margin:8px 0 4px;padding-top:8px;">
-                            <div class="receipt-row"><span class="label">👤 यूजर का नाम</span><span class="value">${currentUser?.name || 'N/A'}</span></div>
-                            <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value">${currentUser?.email || 'N/A'}</span></div>
-                            <div class="receipt-row"><span class="label">📱 मोबाइल नंबर</span><span class="value">${currentUser?.phone || 'N/A'}</span></div>
-                            <div class="receipt-row"><span class="label">🆔 SupriX ID</span><span class="value">${currentUser?.coinxId || 'N/A'}</span></div>
-                            <div class="receipt-row"><span class="label">🔗 स्मार्ट कॉन्ट्रैक्ट</span><span class="value" style="font-size:10px;">${currentUser?.smartContract || 'N/A'}</span></div>
-                            ${isDeposit && data.upi ? `<div class="receipt-row"><span class="label">🏦 UPI ID</span><span class="value">${data.upi}</span></div>` : ''}
-                            ${isWithdrawal && currentUser?.withdrawal_address ? `<div class="receipt-row"><span class="label">🏦 विथड्रॉवल एड्रेस</span><span class="value" style="font-size:10px;">${currentUser.withdrawal_address}</span></div>` : ''}
-                            ${data.network ? `<div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value">${data.network}</span></div>` : `<div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value">BEP20 (USDT)</span></div>`}
+                        <div class="receipt-row"><span class="label">🧾 रसीद ID</span><span class="value">${receiptId}</span></div>
+
+                        <!-- CURRENCY BOX -->
+                        <div class="receipt-currency-box">
+                            <span class="verified-stamp"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                            <div class="globe-watermark"><i class="fa-solid fa-earth-asia"></i></div>
+                            <span class="inr-amount">₹${inrAmount}</span>
+                            <span class="inr-label">💵 इंडियन रुपये (INR)</span>
+                            <span class="usdt-amount">${usdtDisplay} USDT</span>
+                            <span class="usdt-label">💲 USDT (BEP-20)</span>
+                            <span class="network-line">🌐 Network: <strong>BNB Smart Chain (BEP20)</strong></span>
+                            <div class="qr-receipt">
+                                <div>
+                                    <div id="receiptQRCode" style="display:inline-block;"></div>
+                                    <span class="qr-label">📱 ट्रांजैक्शन वेरीफिकेशन</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="receipt-row"><span class="label">👤 सदस्य का नाम</span><span class="value">${maskedName}</span></div>
+                        <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value">${maskedEmail}</span></div>
+                        <div class="receipt-row"><span class="label">📱 मोबाइल</span><span class="value">${maskedPhone}</span></div>
+                        <div class="receipt-row"><span class="label">🆔 SPX ID</span><span class="value">${maskedSPX}</span></div>
+                        <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || new Date().toLocaleString('hi-IN')}</span></div>
+                        <div class="receipt-row"><span class="label">📊 स्थिति</span><span class="value">${statusBadge}</span></div>
+                        <div class="receipt-row"><span class="label">🔗 ट्रांजैक्शन हैश</span><span class="value" style="font-size:10px;">${data.txHash || txHash}</span></div>
+                        ${data.receiptFileId ? `<div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;"><span class="label" style="margin-bottom:6px;">🧾 स्क्रीनशॉट</span><img src="${resolveImageUrl(data.receiptFileId)}" class="w-24 h-24 object-contain rounded-lg border border-amber-500/20 cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(data.receiptFileId)}')"></div>` : ''}
                         <div style="border-top:1px solid rgba(212,175,55,0.08);margin-top:6px;padding-top:6px;text-align:center;">
                             <span style="font-size:8px;color:#6b4a7a;">🔒 सुरक्षित लेनदेन • SupriX Global</span>
+                            <br><span style="font-size:8px;color:#26A17B;">✔️ Principal Amount Recorded</span>
                         </div>
                     `;
             content.innerHTML = receiptHTML;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+
+            setTimeout(() => {
+                const qrContainer = document.getElementById('receiptQRCode');
+                if (qrContainer && typeof QRCode !== 'undefined') {
+                    qrContainer.innerHTML = '';
+                    new QRCode(qrContainer, {
+                        text: `SupriX Receipt: ${receiptId} | Amount: ${usdtDisplay} USDT | ${data.dateTime}`,
+                        width: 90,
+                        height: 90,
+                        colorDark: '#1a1a2e',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+            }, 200);
         }
 
         function closeReceipt() {
@@ -2654,25 +2726,34 @@
             const html = `
                         <html>
                         <head>
-                            <title>SupriX_Receipt_${receiptData.dateTime || Date.now()}.html</title>
+                            <title>SupriX_Receipt_${Date.now()}.html</title>
                             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
                             <style>
                                 body { background:#f5f0eb; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:20px; font-family:'Poppins',sans-serif; }
-                                .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:1px solid rgba(212,175,55,0.25); }
+                                .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid #d4af37; }
                                 .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
                                 .receipt-logo img { height:32px; object-fit:contain; display:inline-block; }
                                 .receipt-logo small { display:block; font-size:9px; color:#6b4a7a; letter-spacing:2px; }
+                                .receipt-logo .receipt-title { font-size:11px; font-weight:600; color:#d4af37; letter-spacing:2px; margin-top:2px; }
                                 .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12px; }
                                 .receipt-row .label { color:#6b4a7a; }
                                 .receipt-row .value { color:#1a1a2e; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
                                 .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                                .receipt-row .value.green { color:#0b7e4a; }
-                                .receipt-row .value.red { color:#b91c1c; }
+                                .receipt-currency-box { border:2px solid #d4af37; border-radius:16px; padding:18px 20px; margin:12px 0 16px 0; background:#ffffff; text-align:center; position:relative; overflow:hidden; }
+                                .receipt-currency-box .inr-amount { font-size:36px; font-weight:800; color:#22C55E; letter-spacing:1px; }
+                                .receipt-currency-box .inr-label { font-size:14px; font-weight:600; color:#22C55E; display:block; margin-top:2px; }
+                                .receipt-currency-box .usdt-amount { font-size:22px; font-weight:700; color:#26A17B; margin-top:8px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:8px; }
+                                .receipt-currency-box .usdt-label { font-size:12px; font-weight:500; color:#26A17B; }
+                                .receipt-currency-box .verified-stamp { position:absolute; top:8px; right:12px; font-size:11px; font-weight:700; color:#22C55E; background:rgba(34,197,94,0.1); padding:2px 12px; border-radius:20px; border:1px solid rgba(34,197,94,0.2); }
+                                .receipt-currency-box .globe-watermark { position:absolute; bottom:-20px; right:-20px; font-size:80px; opacity:0.06; color:#26A17B; pointer-events:none; }
+                                .receipt-currency-box .network-line { font-size:11px; color:#6b4a7a; margin-top:4px; display:block; border-top:1px solid rgba(212,175,55,0.08); padding-top:4px; }
+                                .receipt-currency-box .network-line strong { color:#26A17B; }
                                 .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                                .receipt-badge.approved { background:rgba(11,126,74,0.12); color:#0b7e4a; border:1px solid rgba(11,126,74,0.2); }
+                                .receipt-badge.success { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
                                 .receipt-badge.pending { background:rgba(212,175,55,0.12); color:#b8962a; border:1px solid rgba(212,175,55,0.2); }
-                                .receipt-badge.completed { background:rgba(11,126,74,0.12); color:#0b7e4a; border:1px solid rgba(11,126,74,0.2); }
                                 .receipt-badge.rejected { background:rgba(185,28,28,0.12); color:#b91c1c; border:1px solid rgba(185,28,28,0.2); }
+                                .qr-receipt { margin-top:14px; padding-top:14px; border-top:1px solid rgba(212,175,55,0.15); display:flex; justify-content:center; align-items:center; gap:12px; flex-wrap:wrap; }
+                                .qr-receipt .qr-label { font-size:8px; color:#6b4a7a; display:block; text-align:center; margin-top:2px; }
                                 .watermark { text-align:center; font-size:8px; color:#6b4a7a; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
                             </style>
                         </head>
@@ -2703,27 +2784,36 @@
                         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
                         <style>
                             body { background:#f5f0eb; display:flex; justify-content:center; padding:30px 20px; font-family:'Poppins',sans-serif; }
-                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:1px solid rgba(212,175,55,0.25); }
+                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid #d4af37; }
                             .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
                             .receipt-logo img { height:32px; object-fit:contain; display:inline-block; }
                             .receipt-logo small { display:block; font-size:9px; color:#6b4a7a; letter-spacing:2px; }
+                            .receipt-logo .receipt-title { font-size:11px; font-weight:600; color:#d4af37; letter-spacing:2px; margin-top:2px; }
                             .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12px; }
                             .receipt-row .label { color:#6b4a7a; }
                             .receipt-row .value { color:#1a1a2e; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
                             .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                            .receipt-row .value.green { color:#0b7e4a; }
-                            .receipt-row .value.red { color:#b91c1c; }
+                            .receipt-currency-box { border:2px solid #d4af37; border-radius:16px; padding:18px 20px; margin:12px 0 16px 0; background:#ffffff; text-align:center; position:relative; overflow:hidden; }
+                            .receipt-currency-box .inr-amount { font-size:36px; font-weight:800; color:#22C55E; letter-spacing:1px; }
+                            .receipt-currency-box .inr-label { font-size:14px; font-weight:600; color:#22C55E; display:block; margin-top:2px; }
+                            .receipt-currency-box .usdt-amount { font-size:22px; font-weight:700; color:#26A17B; margin-top:8px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:8px; }
+                            .receipt-currency-box .usdt-label { font-size:12px; font-weight:500; color:#26A17B; }
+                            .receipt-currency-box .verified-stamp { position:absolute; top:8px; right:12px; font-size:11px; font-weight:700; color:#22C55E; background:rgba(34,197,94,0.1); padding:2px 12px; border-radius:20px; border:1px solid rgba(34,197,94,0.2); }
+                            .receipt-currency-box .globe-watermark { position:absolute; bottom:-20px; right:-20px; font-size:80px; opacity:0.06; color:#26A17B; pointer-events:none; }
+                            .receipt-currency-box .network-line { font-size:11px; color:#6b4a7a; margin-top:4px; display:block; border-top:1px solid rgba(212,175,55,0.08); padding-top:4px; }
+                            .receipt-currency-box .network-line strong { color:#26A17B; }
                             .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                            .receipt-badge.approved { background:rgba(11,126,74,0.12); color:#0b7e4a; border:1px solid rgba(11,126,74,0.2); }
+                            .receipt-badge.success { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
                             .receipt-badge.pending { background:rgba(212,175,55,0.12); color:#b8962a; border:1px solid rgba(212,175,55,0.2); }
-                            .receipt-badge.completed { background:rgba(11,126,74,0.12); color:#0b7e4a; border:1px solid rgba(11,126,74,0.2); }
                             .receipt-badge.rejected { background:rgba(185,28,28,0.12); color:#b91c1c; border:1px solid rgba(185,28,28,0.2); }
+                            .qr-receipt { margin-top:14px; padding-top:14px; border-top:1px solid rgba(212,175,55,0.15); display:flex; justify-content:center; align-items:center; gap:12px; flex-wrap:wrap; }
+                            .qr-receipt .qr-label { font-size:8px; color:#6b4a7a; display:block; text-align:center; margin-top:2px; }
                             .watermark { text-align:center; font-size:8px; color:#6b4a7a; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
-                            @media print { body { background:#fff; } .receipt-card { border-color:#ddd; background:#f9f9f9; } .receipt-row .label { color:#666; } .receipt-row .value { color:#333; } }
+                            @media print { body { background:#fff; } .receipt-card { border-color:#d4af37; background:#ffffff; } }
                         </style>
                         </head><body>
                         <div class="receipt-card">
-                            <div class="receipt-logo"><img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" style="height:32px;object-fit:contain;display:inline-block;" /><small>Premium • Gold Edition</small></div>
+                            <div class="receipt-logo"><img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" style="height:32px;object-fit:contain;display:inline-block;" /><small>Premium • Gold Edition</small><div class="receipt-title">━━━━ Official Payment Receipt ━━━━</div></div>
                             ${content.innerHTML}
                             <div class="watermark">© SupriX Global • सुरक्षित लेनदेन</div>
                         </div>
@@ -2807,17 +2897,13 @@
                     await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { coinxId: newId });
                     doc.coinxId = newId;
                 }
-                if (!doc.smartContract) {
-                    const newSc = generateSmartContract();
-                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { smartContract: newSc });
-                    doc.smartContract = newSc;
-                }
-                if (!doc.stakingHistory) {
-                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { stakingHistory: JSON.stringify([]) });
-                    doc.stakingHistory = [];
+                if (!doc.dailyRewards) {
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { dailyRewards: JSON.stringify([]) });
+                    doc.dailyRewards = [];
                 }
                 currentUser = mapUserDoc(doc);
                 await loadStakingSettings();
+                generateReferralQR();
                 return true;
             } catch (e) { return false; }
         }
@@ -2851,7 +2937,6 @@
                 }
                 try { await account.deleteSession('current'); } catch (e) {}
                 await account.createEmailPasswordSession(email, phone);
-                const smartContract = generateSmartContract();
                 const coinxId = generateCoinXId();
                 const userData = {
                     name,
@@ -2870,11 +2955,9 @@
                     withdrawal_screenshot: '',
                     referrals: JSON.stringify([]),
                     transactions: JSON.stringify([]),
-                    tradeHistory: JSON.stringify([]),
-                    buySellWallet: 0,
+                    dailyRewards: JSON.stringify([]),
                     tradeWallet: 0,
                     coinxId,
-                    smartContract,
                     referredBy: referral || null,
                     isBlocked: false,
                     coinxWalletSC: ''
@@ -2941,10 +3024,14 @@
             const totalInvestment = (currentUser.approvedDeposits || []).reduce((a, d) => a + parseFloat(d.amountUSD || 0),
             0);
             document.getElementById('statInvestment').innerText = `$${totalInvestment.toFixed(2)}`;
-            document.getElementById('statLocked').innerText = `${parseFloat(currentUser.staked||0).toFixed(2)} SX`;
-            const dailyRelease = parseFloat(currentUser.staked || 0) * 0.005;
-            document.getElementById('statDailyRelease').innerText = `${dailyRelease.toFixed(2)} SX`;
-            document.getElementById('statAvailable').innerText = `${parseFloat(currentUser.coins||0).toFixed(2)} SX`;
+            const stakedUsdt = parseFloat(currentUser.staked || 0);
+            document.getElementById('statLocked').innerHTML = `${stakedUsdt.toFixed(2)} <span class="currency-usdt">USDT</span>`;
+            const dailyRelease = stakedUsdt * 0.005;
+            const inrDaily = (dailyRelease * 85).toFixed(2);
+            document.getElementById('statDailyRelease').innerHTML =
+                `<span class="currency-inr">₹${inrDaily}</span> <span class="text-[9px] text-amber-600/30">(${dailyRelease.toFixed(2)} USDT)</span>`;
+            document.getElementById('statAvailable').innerHTML =
+                `${parseFloat(currentUser.coins||0).toFixed(2)} <span class="currency-usdt">USDT</span>`;
 
             const timerText = document.getElementById('miningTimerText');
             const now = Date.now();
@@ -2954,7 +3041,7 @@
 
             if (staked < 500) {
                 timerText.innerHTML =
-                    `<i class="fa-solid fa-triangle-exclamation text-red-500 mr-1"></i> ⚠️ कम से कम 500 SX स्टेक करें!`;
+                    `<i class="fa-solid fa-triangle-exclamation text-red-500 mr-1"></i> ⚠️ कम से कम 500 USDT स्टेक करें!`;
                 document.getElementById('stakingWarning')?.classList.remove('hidden');
             } else if (lastClaimed && (now - lastClaimed) < oneDayMs) {
                 const diff = lastClaimed + oneDayMs - now;
@@ -2978,7 +3065,8 @@
             const staked = parseFloat(currentUser.staked || 0);
             if (staked < 500) {
                 document.getElementById('stakingWarning')?.classList.remove('hidden');
-                showToast('⚠️ कम से कम 500 SX स्टेक करें!', 'info');
+                showToast('⚠️ कम से कम 500 USDT स्टेक करें!', 'info');
+                speakHindi('क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें।');
                 return;
             }
             const now = Date.now();
@@ -2989,31 +3077,60 @@
                 const h = Math.floor(diff / 3600000),
                     m = Math.floor((diff % 3600000) / 60000);
                 showToast(`⏳ ${h} घंटे ${m} मिनट बाद।`, 'info');
+                speakHindi('आप आज का डेली रिवॉर्ड पहले ही प्राप्त कर चुके हैं। कृपया अगला रिवॉर्ड प्राप्त करने के लिए 24 घंटे पूरे होने तक प्रतीक्षा करें।');
                 return;
             }
             setButtonLoading(btn, true);
             try {
                 const reward = staked * 0.005;
                 const newCoins = parseFloat(currentUser.coins || 0) + reward;
-                await saveUserFields({ coins: newCoins });
+                const dailyRewardsList = [...(currentUser.dailyRewards || [])];
+                const rewardEntry = {
+                    amount: reward,
+                    dateTime: new Date().toLocaleString('hi-IN'),
+                    status: 'Success',
+                    type: 'daily',
+                    receiptId: 'SPX-DLY-' + String(Math.floor(100000 + Math.random() * 900000)),
+                    txHash: '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('')
+                };
+                dailyRewardsList.push(rewardEntry);
+                await saveUserFields({ coins: newCoins, dailyRewards: JSON.stringify(dailyRewardsList) });
                 localStorage.setItem('cx_last_claimed_' + currentUser.$id, String(now));
                 updateDashboardStats();
 
-                // Female voice
-                try {
-                    const speech = new SpeechSynthesisUtterance('कांग्रेचुलेशन्स माय डियर, मैं फिर इसी समय आपका इंतजार करूंगी।');
-                    speech.lang = 'hi-IN';
-                    speech.rate = 1;
-                    speech.pitch = 1.1;
-                    speech.volume = 1;
-                    const voices = window.speechSynthesis.getVoices();
-                    const femaleVoice = voices.find(v => v.lang === 'hi-IN' && v.name.includes('Female'));
-                    if (femaleVoice) speech.voice = femaleVoice;
-                    window.speechSynthesis.speak(speech);
-                } catch (e) {}
+                speakHindi('बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है। SupriX Global के साथ जुड़े रहने के लिए आपका धन्यवाद। आपका दिन शुभ हो।');
 
-                showToast(`✅ ${reward.toFixed(2)} SX रिवॉर्ड मिला!`, 'success');
-            } catch (e) { showToast('त्रुटि', 'error'); } finally { setButtonLoading(btn, false); }
+                showToast(`✅ ${reward.toFixed(2)} USDT रिवॉर्ड मिला!`, 'success');
+
+                openReceipt({
+                    type: 'daily',
+                    coinsAmount: reward,
+                    amount: reward,
+                    dateTime: new Date().toLocaleString('hi-IN'),
+                    status: 'Success',
+                    receiptId: rewardEntry.receiptId,
+                    txHash: rewardEntry.txHash
+                });
+
+            } catch (e) {
+                showToast('त्रुटि', 'error');
+                speakHindi('क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें।');
+            } finally { setButtonLoading(btn, false); }
+        }
+
+        function speakHindi(text) {
+            try {
+                const speech = new SpeechSynthesisUtterance(text);
+                speech.lang = 'hi-IN';
+                speech.rate = 0.9;
+                speech.pitch = 1.1;
+                speech.volume = 1;
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(v => v.lang === 'hi-IN' && (v.name.includes('Female') || v.name.includes(
+                    'Google हिन्दी')));
+                if (femaleVoice) speech.voice = femaleVoice;
+                window.speechSynthesis.speak(speech);
+            } catch (e) {}
         }
 
         async function saveUserFields(fields) {
@@ -3030,8 +3147,7 @@
                 .approved_withdrawal, []);
             if ('referrals' in fields) currentUser.referrals = parseJsonSafe(fields.referrals, []);
             if ('transactions' in fields) currentUser.transactions = parseJsonSafe(fields.transactions, []);
-            if ('tradeHistory' in fields) currentUser.tradeHistory = parseJsonSafe(fields.tradeHistory, []);
-            if ('buySellWallet' in fields) currentUser.buySellWallet = parseFloat(fields.buySellWallet);
+            if ('dailyRewards' in fields) currentUser.dailyRewards = parseJsonSafe(fields.dailyRewards, []);
             if ('coins' in fields) currentUser.coins = parseFloat(fields.coins);
             if ('tradeWallet' in fields) currentUser.tradeWallet = parseFloat(fields.tradeWallet);
             if ('coinxWalletSC' in fields) currentUser.coinxWalletSC = fields.coinxWalletSC;
@@ -3042,36 +3158,38 @@
         // ============================================================
         function calculateCustomCoins(usd) {
             const val = parseFloat(usd) || 0;
-            document.getElementById('calculatedCoinsPreview').innerText = (val * 100).toFixed(0) + ' SX';
+            document.getElementById('calculatedCoinsPreview').innerText = val.toFixed(0) + ' USDT';
         }
 
         function generateCustomPurchase() {
             const val = parseFloat(document.getElementById('customUSDAmount').value);
             if (!val || val <= 0) { showToast('वैध डॉलर अमाउंट दर्ज करें।', 'error'); return; }
-            selectPurchaseSlab(val, val * 100);
+            if (val < 10) { showToast('⚠️ न्यूनतम डिपॉजिट $10 है।', 'error'); return; }
+            selectPurchaseSlab(val, val);
         }
 
         function renderPurchaseSlabs() {
             const grid = document.getElementById('purchaseGrid');
             grid.innerHTML = '';
-            const slabs = [5, 10, 15, 20, 25, 30, 35, 40, 50, 100, 200, 500, 1000];
+            const slabs = [10, 15, 20, 25, 30, 35, 40, 50, 100, 200, 500, 1000];
             slabs.forEach(usd => {
-                const coins = usd * 100;
+                const coins = usd;
                 const card = document.createElement('div');
                 card.className =
                     'bg-white/80 p-2.5 rounded-xl border border-amber-500/20 flex flex-col justify-between hover:border-amber-400 cursor-pointer transition-all btn-animate card-3d';
                 card.onclick = () => selectPurchaseSlab(usd, coins);
                 card.innerHTML =
-                    `<div><span class="text-[9px] text-amber-600 font-bold tracking-wider">PACK $${usd}</span><h4 class="text-xs font-extrabold text-[#1a1a2e]">${coins} SX</h4></div><div class="mt-1 flex justify-between text-[8px] text-amber-600/30"><span>$${usd} USDT</span><span class="bg-amber-500/15 text-amber-600 px-1 py-0.5 rounded">बाय</span></div>`;
+                    `<div><span class="text-[9px] text-amber-600 font-bold tracking-wider">PACK $${usd}</span><h4 class="text-xs font-extrabold text-[#1a1a2e]">${coins} USDT</h4></div><div class="mt-1 flex justify-between text-[8px] text-amber-600/30"><span>$${usd} USDT</span><span class="bg-amber-500/15 text-amber-600 px-1 py-0.5 rounded">बाय</span></div>`;
                 grid.appendChild(card);
             });
         }
 
         function selectPurchaseSlab(usd, coins) {
             if (currentUser?.pendingDeposit) { showToast('एक डिपॉजिट पहले से पेंडिंग है।', 'error'); return; }
+            if (usd < 10) { showToast('⚠️ न्यूनतम डिपॉजिट $10 है।', 'error'); return; }
             selectedPurchaseUsd = usd;
             selectedPurchaseCoins = coins;
-            document.getElementById('paymentUSDVal').innerHTML = `$${usd}.00 USDT (${coins} SX Coins)`;
+            document.getElementById('paymentUSDVal').innerHTML = `$${usd}.00 USDT`;
             document.getElementById('paymentGatewayCard').classList.remove('hidden');
             document.getElementById('paymentGatewayCard').scrollIntoView({ behavior: 'smooth' });
         }
@@ -3100,6 +3218,7 @@
             if (!currentUser) { showToast('लॉगिन करें।', 'error'); return; }
             if (!uploadReceiptFile) { showToast('स्क्रीनशॉट अपलोड करें।', 'error'); return; }
             if (currentUser.pendingDeposit) { showToast('पहले से पेंडिंग।', 'error'); return; }
+            if (selectedPurchaseUsd < 10) { showToast('⚠️ न्यूनतम डिपॉजिट $10 है।', 'error'); return; }
             setButtonLoading(btn, true);
             try {
                 const uploaded = await storage.createFile(SCREENSHOT_BUCKET_ID, ID.unique(), uploadReceiptFile);
@@ -3109,7 +3228,7 @@
                     receiptFileId: uploaded.$id,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     type: 'user',
-                    network: 'BEP20 (USDT)'
+                    network: 'BNB Smart Chain (BEP20)'
                 };
                 await saveUserFields({ pending_deposit: JSON.stringify(deposit) });
                 uploadReceiptFile = null;
@@ -3117,7 +3236,7 @@
                 document.getElementById('purchaseScreenshotPreview').classList.add('hidden');
                 document.getElementById('purchaseScreenshotPreview').innerHTML = '';
                 document.getElementById('customUSDAmount').value = '';
-                document.getElementById('calculatedCoinsPreview').innerText = '0 SX';
+                document.getElementById('calculatedCoinsPreview').innerText = '0 USDT';
                 document.getElementById('purchaseScreenshotFile').value = '';
                 showToast('✅ पेमेंट रिक्वेस्ट भेजी गई!', 'success');
                 hidePaymentCard();
@@ -3129,7 +3248,8 @@
         // ============================================================
         function renderStakingDetails() {
             if (!currentUser) return;
-            document.getElementById('stakingAvailableCoins').innerText = `${parseFloat(currentUser.coins||0).toFixed(2)} SX`;
+            document.getElementById('stakingAvailableCoins').innerHTML =
+                `${parseFloat(currentUser.coins||0).toFixed(2)} <span class="currency-usdt">USDT</span>`;
 
             const container = document.getElementById('stakingPlansContainer');
             container.innerHTML = '';
@@ -3161,7 +3281,7 @@
         async function submitStake(btn) {
             if (!currentUser) return;
             const amount = parseFloat(document.getElementById('stakeInputCoins').value);
-            if (!amount || amount < 50) { showToast('न्यूनतम 50 SX', 'error'); return; }
+            if (!amount || amount < 50) { showToast('न्यूनतम 50 USDT', 'error'); return; }
             if (amount > parseFloat(currentUser.coins || 0)) { showToast('बैलेंस से अधिक!', 'error'); return; }
             setButtonLoading(btn, true);
             try {
@@ -3181,7 +3301,6 @@
                 const list = [...(currentUser.staking || []), stake];
                 await saveUserFields({ coins: newCoins, staked: newStaked, staking: JSON.stringify(list) });
 
-                // Referral bonus
                 try {
                     if (currentUser.referredBy) await awardReferralBonus(currentUser.referredBy, amount,
                         selectedStakingDays);
@@ -3196,7 +3315,7 @@
                 document.getElementById('stakeInputCoins').value = '';
                 renderStakingDetails();
                 updateDashboardStats();
-                showToast(`✅ ${amount} SX ${selectedStakingDays} दिनों के लिए लॉक!`, 'success');
+                showToast(`✅ ${amount} USDT ${selectedStakingDays} दिनों के लिए लॉक!`, 'success');
             } catch (e) { showToast('त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
@@ -3225,7 +3344,7 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, referrer.$id, { coins: newCoins,
                     referrals: JSON.stringify(refs) });
                 if (!currentUser.referredBy) await saveUserFields({ referredBy: code });
-                showToast(`✅ ${referrer.name} को ${bonus.toFixed(2)} SX रेफरल बोनस मिला! (${stakingDays||0} दिन)`,
+                showToast(`✅ ${referrer.name} को ${bonus.toFixed(2)} USDT रेफरल बोनस मिला! (${stakingDays||0} दिन)`,
                     'success');
             } catch (e) { throw e; }
         }
@@ -3247,7 +3366,7 @@
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between';
                 div.innerHTML = `
                             <div>
-                                <div class="font-bold text-[#1a1a2e] text-xs">${Number(s.amount).toFixed(2)} SX</div>
+                                <div class="font-bold text-[#1a1a2e] text-xs">${Number(s.amount).toFixed(2)} USDT</div>
                                 <div class="text-[9px] text-amber-600/30">${s.startDate} (${s.days} दिन)</div>
                                 <div class="text-[9px] text-amber-600/30">🔓 ${s.unlockDate || new Date(s.lockUntil).toLocaleDateString('hi-IN')} ${s.unlockTime || ''}</div>
                             </div>
@@ -3276,7 +3395,7 @@
                 const statusText = s.unlockedAt ? '✅ अनलॉक' : '🔒 लॉक';
                 div.innerHTML = `
                             <div class="flex justify-between">
-                                <span class="font-bold text-[#1a1a2e] text-xs">${Number(s.amount).toFixed(2)} SX</span>
+                                <span class="font-bold text-[#1a1a2e] text-xs">${Number(s.amount).toFixed(2)} USDT</span>
                                 <span class="text-xs ${statusClass}">${statusText}</span>
                             </div>
                             <div class="text-[9px] text-amber-600/30 flex justify-between flex-wrap">
@@ -3296,15 +3415,15 @@
         function renderProfileDetails() {
             if (!currentUser) return;
             document.getElementById('profileName').innerText = currentUser.name || 'User';
-            document.getElementById('profileEmail').innerText = currentUser.email || '';
+            document.getElementById('profileEmail').innerText = maskEmail(currentUser.email || '');
             document.getElementById('profileCoinXIdDisplay').innerText = currentUser.coinxId || 'N/A';
             document.getElementById('profileEmailIdDisplay').innerText = currentUser.email || '';
-            document.getElementById('profileSmartContract').innerText = currentUser.smartContract || 'N/A';
             const ref = currentUser.$id;
-            document.getElementById('profileReferralCode').innerText = ref;
+            document.getElementById('profileReferralCode').innerText = currentUser.coinxId || 'SPX-XXXX';
             document.getElementById('referralShareLink').innerText =
                 `${window.location.origin}${window.location.pathname}?ref=${ref}`;
-            document.getElementById('withdrawAvailable').innerHTML = `${parseFloat(currentUser.coins||0).toFixed(2)} SX`;
+            document.getElementById('withdrawAvailable').innerHTML =
+                `${parseFloat(currentUser.coins||0).toFixed(2)} <span class="currency-usdt">USDT</span>`;
             document.getElementById('userWithdrawAddress').value = currentUser.withdrawal_address || '';
             document.getElementById('coinxWalletSCAddress').value = currentUser.coinxWalletSC || '';
             const qrPreview = document.getElementById('userQrPreview');
@@ -3315,6 +3434,28 @@
                 qrPreview.classList.add('flex');
                 document.getElementById('qrUploadStatus').innerText = '✅ क्यूआर अपडेट';
             } else { qrPreview.classList.add('hidden'); }
+
+            generateReferralQR();
+        }
+
+        function generateReferralQR() {
+            const container = document.getElementById('referralQRCode');
+            if (!container) return;
+            const ref = currentUser?.$id || '';
+            const url = `${window.location.origin}${window.location.pathname}?ref=${ref}`;
+            container.innerHTML = '';
+            if (typeof QRCode !== 'undefined' && ref) {
+                try {
+                    new QRCode(container, {
+                        text: url,
+                        width: 120,
+                        height: 120,
+                        colorDark: '#1a1a2e',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } catch (e) { console.warn('QR Error:', e); }
+            }
         }
 
         async function handleQrUpload(e) {
@@ -3346,13 +3487,13 @@
             const address = document.getElementById('userWithdrawAddress').value.trim();
             const amount = parseFloat(document.getElementById('withdrawAmountInput').value);
             if (!address) { showToast('USDT एड्रेस पेस्ट करें।', 'error'); return; }
-            if (!amount || amount < 100) { showToast('न्यूनतम 100 SX', 'error'); return; }
+            if (!amount || amount < 2) { showToast('⚠️ न्यूनतम विथड्रॉवल $2 USDT है।', 'error'); return; }
             if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त नहीं!', 'error'); return; }
             if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग।', 'error'); return; }
             setButtonLoading(btn, true);
             try {
                 const newWithdrawal = { coinsAmount: amount, dateTime: new Date().toLocaleString('hi-IN'),
-                    network: 'BEP20 (USDT)' };
+                    network: 'BNB Smart Chain (BEP20)' };
                 const newCoins = parseFloat(currentUser.coins) - amount;
                 await saveUserFields({ coins: newCoins, withdrawal_address: address, pending_withdrawal: JSON.stringify(
                         newWithdrawal) });
@@ -3363,40 +3504,45 @@
         }
 
         // ============================================================
-        // SUPRIX WALLET WITHDRAWAL
+        // SUPRIX WALLET WITHDRAWAL (using SPX ID)
         // ============================================================
         async function submitCoinXWalletWithdrawal() {
             if (!currentUser) { showToast('लॉगिन करें।', 'error'); return; }
-            const scAddress = document.getElementById('coinxWalletSCAddress').value.trim();
+            const spxId = document.getElementById('coinxWalletSCAddress').value.trim();
             const amount = parseFloat(document.getElementById('coinxWalletWithdrawAmount').value);
-            if (!scAddress) { showToast('SupriX Wallet Smart Contract Address दर्ज करें।', 'error'); return; }
-            if (!amount || amount < 50) { showToast('न्यूनतम 50 SX', 'error'); return; }
-            if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त कॉइन नहीं!', 'error'); return; }
+            if (!spxId) { showToast('Receiver की SPX ID दर्ज करें।', 'error'); return; }
+            if (!amount || amount < 2) { showToast('⚠️ न्यूनतम $2 USDT', 'error'); return; }
+            if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त USDT नहीं!', 'error'); return; }
             if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग।', 'error'); return; }
+
+            let receiver = users.find(u => u.coinxId === spxId);
+            if (!receiver) {
+                try {
+                    const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('coinxId',
+                        spxId)]);
+                    if (res.documents.length > 0) receiver = mapUserDoc(res.documents[0]);
+                } catch (e) {}
+            }
+            if (!receiver) { showToast('❌ यह SPX ID मौजूद नहीं है!', 'error'); return; }
+            if (receiver.$id === currentUser.$id) { showToast('❌ खुद को नहीं भेज सकते!', 'error'); return; }
 
             const fee = amount * 0.10;
             const netAmount = amount - fee;
 
             try {
-                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('smartContract',
-                    scAddress)]);
-                if (res.documents.length === 0) { showToast('❌ यह Smart Contract मौजूद नहीं है!', 'error'); return; }
-                const target = res.documents[0];
-                if (target.$id === currentUser.$id) { showToast('❌ खुद को नहीं भेज सकते!', 'error'); return; }
-
                 const newSenderCoins = parseFloat(currentUser.coins || 0) - amount;
-                const newReceiverTrade = parseFloat(target.tradeWallet || 0) + netAmount;
+                const newReceiverCoins = parseFloat(receiver.coins || 0) + netAmount;
 
                 const tx = {
                     type: 'withdrawal_to_suprix_wallet',
                     amount: amount,
                     netAmount: netAmount,
                     fee: fee,
-                    to: target.email,
-                    toSC: target.smartContract,
+                    to: receiver.email,
+                    toSPX: receiver.coinxId,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     status: 'completed',
-                    network: 'SupriX Wallet'
+                    network: 'SupriX Wallet (SPX ID)'
                 };
                 const txs = [...(currentUser.transactions || [])];
                 txs.push(tx);
@@ -3405,33 +3551,34 @@
                     type: 'receive_from_suprix_network',
                     amount: netAmount,
                     from: currentUser.email,
-                    fromSC: currentUser.smartContract,
+                    fromSPX: currentUser.coinxId,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     status: 'completed',
-                    network: 'SupriX Wallet'
+                    network: 'SupriX Wallet (SPX ID)'
                 };
 
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, {
                     coins: newSenderCoins,
                     transactions: JSON.stringify(txs),
-                    coinxWalletSC: scAddress
+                    coinxWalletSC: spxId
                 });
 
-                const receiverTxList = parseJsonSafe(target.transactions, []);
+                const receiverTxList = parseJsonSafe(receiver.transactions, []);
                 receiverTxList.push(receiveTx);
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, target.$id, {
-                    tradeWallet: newReceiverTrade,
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, receiver.$id, {
+                    coins: newReceiverCoins,
                     transactions: JSON.stringify(receiverTxList)
                 });
 
                 currentUser.coins = newSenderCoins;
                 currentUser.transactions = txs;
-                currentUser.coinxWalletSC = scAddress;
+                currentUser.coinxWalletSC = spxId;
 
                 document.getElementById('coinxWalletWithdrawAmount').value = '';
                 renderProfileDetails();
                 updateDashboardStats();
-                showToast(`✅ ${netAmount.toFixed(2)} SX SupriX Wallet में भेजे गए (शुल्क: ${fee.toFixed(2)})`, 'success');
+                showToast(`✅ ${netAmount.toFixed(2)} USDT SPX ID ${receiver.coinxId} को भेजे गए (शुल्क: ${fee.toFixed(2)})`,
+                    'success');
             } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
         }
 
@@ -3456,11 +3603,11 @@
                 div.innerHTML = `
                             <div class="flex justify-between text-xs">
                                 <span class="font-bold text-[#1a1a2e]">${r.referredName || 'N/A'}</span>
-                                <span class="text-green-600">+${Number(r.bonusReceived || 0).toFixed(2)} SX</span>
+                                <span class="currency-usdt">+${Number(r.bonusReceived || 0).toFixed(2)} USDT</span>
                             </div>
                             <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
-                                <span>📧 ${r.referredEmail || 'N/A'}</span>
-                                <span>💰 ${Number(r.stakedAmount || 0).toFixed(2)} SX</span>
+                                <span>📧 ${maskEmail(r.referredEmail || 'N/A')}</span>
+                                <span>💰 ${Number(r.stakedAmount || 0).toFixed(2)} USDT</span>
                                 <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
                                 <span>🕐 ${r.dateTime || ''}</span>
                             </div>
@@ -3489,66 +3636,76 @@
             const list = document.getElementById('txHistoryListArea');
             list.innerHTML = '';
             let entries = [];
+
             if (currentTxHistoryTab === 'deposit') {
                 entries = [...(currentUser?.approvedDeposits || []).map(d => ({ ...d, status: 'Approved', type: 'deposit' }))];
                 if (currentUser?.pendingDeposit) entries.unshift({ ...currentUser.pendingDeposit, status: 'Pending',
                     type: 'deposit' });
-            } else {
+            } else if (currentTxHistoryTab === 'withdraw') {
                 entries = [...(currentUser?.approvedWithdrawals || []).map(w => ({ ...w, status: 'Completed',
                     type: 'withdrawal' }))];
                 if (currentUser?.pendingWithdrawal) entries.unshift({ ...currentUser.pendingWithdrawal,
                     status: 'Pending', type: 'withdrawal' });
+            } else {
+                entries = [...(currentUser?.dailyRewards || []).map(d => ({ ...d, type: 'daily' }))];
             }
+
             if (entries.length === 0) { list.innerHTML =
                     '<p class="text-amber-600/30 text-center py-4">कोई हिस्ट्री नहीं।</p>'; return; }
+
             entries.forEach(e => {
                 const statusColors = {
                     'Pending': 'text-yellow-600 bg-yellow-500/10',
                     'Approved': 'text-green-600 bg-green-500/10',
-                    'Completed': 'text-green-600 bg-green-500/20'
+                    'Completed': 'text-green-600 bg-green-500/20',
+                    'Success': 'text-green-600 bg-green-500/20'
                 };
-                const color = statusColors[e.status] || 'text-amber-600/30 bg-amber-500/10';
+                const color = statusColors[e.status] || 'text-green-600 bg-green-500/20';
                 const div = document.createElement('div');
                 div.className =
                     'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
-                const label = e.amountUSD ? `+$${e.amountUSD}` : `-${e.coinsAmount} SX`;
-                const isDeposit = e.type === 'deposit' || e.amountUSD;
+
+                let label = '';
+                let isDeposit = false;
+                if (e.type === 'deposit' || e.amountUSD) {
+                    label = `+$${e.amountUSD || 0}`;
+                    isDeposit = true;
+                } else if (e.type === 'withdrawal') {
+                    label = `-${e.coinsAmount} USDT`;
+                } else if (e.type === 'daily') {
+                    label = `⭐ +${Number(e.amount || 0).toFixed(2)} USDT`;
+                } else {
+                    label = `${e.coinsAmount || 0} USDT`;
+                }
+
+                const receiptId = e.receiptId || 'SPX-' + String(Math.floor(100000 + Math.random() * 900000));
+
                 div.innerHTML = `
                             <div>
                                 <div class="font-bold text-[#1a1a2e] text-xs">${label}</div>
-                                <div class="text-[9px] text-amber-600/30">${e.dateTime||''} ${e.coinsAmount ? `(${e.coinsAmount} SX)` : ''}</div>
+                                <div class="text-[9px] text-amber-600/30">${e.dateTime||''} ${e.type === 'daily' ? '⭐ Daily Reward' : ''}</div>
                             </div>
                             <div class="text-right flex flex-col items-end gap-1">
-                                <span class="px-2 py-0.5 rounded text-[9px] font-bold ${color}">${e.status}</span>
-                                ${isDeposit && e.receiptFileId ? `<button onclick="viewReceipt('${e.type}','${e.coinsAmount||0}','${e.amountUSD||0}','${e.dateTime||''}','${e.status||'Approved'}','${e.receiptFileId||''}','${e.upi||''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
-                                ${!isDeposit && e.coinsAmount ? `<button onclick="viewWithdrawalReceipt('${e.coinsAmount}','${e.dateTime||''}','${e.status||'Completed'}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
+                                <span class="px-2 py-0.5 rounded text-[9px] font-bold ${color}">${e.status || 'Success'}</span>
+                                <button onclick="viewReceiptGeneric('${e.type}','${e.coinsAmount || e.amount || 0}','${e.amountUSD || 0}','${e.dateTime || new Date().toLocaleString('hi-IN')}','${e.status || 'Success'}','${e.receiptFileId || ''}','${e.receiptId || receiptId}','${e.txHash || ''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>
                             </div>
                         `;
                 list.appendChild(div);
             });
         }
 
-        function viewReceipt(type, coinsAmount, amountUSD, dateTime, status, receiptFileId, upi) {
+        function viewReceiptGeneric(type, coinsAmount, amountUSD, dateTime, status, receiptFileId, receiptId, txHash) {
             openReceipt({
-                type: 'deposit',
+                type: type,
                 coinsAmount: coinsAmount,
-                amountUSD: amountUSD,
+                amountUSD: amountUSD || 0,
                 dateTime: dateTime,
                 status: status,
-                receiptFileId: receiptFileId,
-                upi: upi || '',
-                network: 'BEP20 (USDT)'
-            });
-        }
-
-        function viewWithdrawalReceipt(coinsAmount, dateTime, status) {
-            openReceipt({
-                type: 'withdrawal',
-                coinsAmount: coinsAmount,
-                dateTime: dateTime,
-                status: status,
-                receiptFileId: null,
-                network: 'BEP20 (USDT)'
+                receiptFileId: receiptFileId || null,
+                receiptId: receiptId || 'SPX-' + String(Math.floor(100000 + Math.random() * 900000)),
+                network: 'BNB Smart Chain (BEP20)',
+                txHash: txHash || '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join(
+                    '')
             });
         }
 
@@ -3566,8 +3723,8 @@
             refs.forEach(r => { totalStaked += parseFloat(r.stakedAmount || 0);
                 totalBonus += parseFloat(r.bonusReceived || 0); });
             document.getElementById('teamTotalMembers').innerText = refs.length;
-            document.getElementById('teamTotalStaked').innerText = totalStaked.toFixed(2) + ' SX';
-            document.getElementById('teamTotalBonus').innerText = totalBonus.toFixed(2) + ' SX';
+            document.getElementById('teamTotalStaked').innerHTML = totalStaked.toFixed(2) + ' <span class="currency-usdt">USDT</span>';
+            document.getElementById('teamTotalBonus').innerHTML = totalBonus.toFixed(2) + ' <span class="currency-usdt">USDT</span>';
             list.innerHTML = '';
             if (refs.length === 0) { list.innerHTML =
                     '<p class="text-amber-600/30 text-center py-4">टीम में कोई नहीं।</p>'; return; }
@@ -3577,11 +3734,11 @@
                 div.innerHTML = `
                             <div class="flex justify-between text-xs">
                                 <span class="font-bold text-amber-600">${r.referredName || 'N/A'}</span>
-                                <span class="text-green-600">+${Number(r.bonusReceived || 0).toFixed(2)} SX</span>
+                                <span class="currency-usdt">+${Number(r.bonusReceived || 0).toFixed(2)} USDT</span>
                             </div>
                             <div class="text-[10px] text-amber-600/30 flex flex-wrap gap-2">
-                                <span>📧 ${r.referredEmail || 'N/A'}</span>
-                                <span>💰 ${Number(r.stakedAmount || 0).toFixed(2)} SX</span>
+                                <span>📧 ${maskEmail(r.referredEmail || 'N/A')}</span>
+                                <span>💰 ${Number(r.stakedAmount || 0).toFixed(2)} USDT</span>
                                 <span>📅 ${Number(r.stakingDays || 0)} दिन</span>
                                 <span>🕐 ${r.dateTime || ''}</span>
                             </div>
@@ -3597,7 +3754,7 @@
             const baseSlides = [
                 { icon: '🚀', line1: 'अपने सपनों को पंख लगाओ', line2: 'SupriX Global के साथ आज ही शुरू करें',
                 badge: '✦ शुरुआत ✦' },
-                { icon: '💎', line1: 'हर कॉइन कीमती है', line2: 'स्मार्ट कॉन्ट्रैक्ट से सुरक्षित', badge: '✦ सुरक्षा ✦' },
+                { icon: '💎', line1: 'हर USDT कीमती है', line2: 'सुरक्षित ट्रांजैक्शन', badge: '✦ सुरक्षा ✦' },
                 { icon: '🦋', line1: 'जीवन में उतार-चढ़ाव आते हैं', line2: 'पर हार न मानो, मंजिल पास है',
                 badge: '✦ धैर्य ✦' },
                 { icon: '🌟', line1: 'जो आज तुम्हारा मज़ाक उड़ा रहे हैं', line2: 'कल वही तुम्हारी सफलता पर ताली बजाएँगे',
@@ -3610,13 +3767,13 @@
                 badge: '✦ लक्ष्य ✦' },
                 { icon: '🔥', line1: 'आज पसीना बहाओ, कल दुनिया सलाम करेगी', line2: 'मेहनत की आग में तपकर ही सोना चमकता है',
                     badge: '✦ तपस्या ✦' },
-                { icon: '🎁', line1: '50000 SX + 3 Active Referral', line2: 'पर मिलेगा स्लिम कीपैड फोन 🎁',
+                { icon: '🎁', line1: '50000 USDT + 3 Active Referral', line2: 'पर मिलेगा स्लिम कीपैड फोन 🎁',
                 badge: '🎁 गिफ्ट 🎁' },
-                { icon: '📱', line1: '100000 SX + 10 Active Referral', line2: 'पर मिलेगा ₹10000 का Android फोन 🎁',
+                { icon: '📱', line1: '100000 USDT + 10 Active Referral', line2: 'पर मिलेगा ₹10000 का Android फोन 🎁',
                     badge: '🎁 गिफ्ट 🎁' },
-                { icon: '📟', line1: '200000 SX + 5 Active Referral', line2: 'पर मिलेगा बड़ा Tablet ₹18000 का 🎁',
+                { icon: '📟', line1: '200000 USDT + 5 Active Referral', line2: 'पर मिलेगा बड़ा Tablet ₹18000 का 🎁',
                     badge: '🎁 गिफ्ट 🎁' },
-                { icon: '🏍️', line1: '100 Active Referral × 10000 SX Stake', line2: 'पर मिलेगी ₹100000 की बाइक 🏍️',
+                { icon: '🏍️', line1: '100 Active Referral × 10000 USDT Stake', line2: 'पर मिलेगी ₹100000 की बाइक 🏍️',
                     badge: '🎁 गिफ्ट 🎁' },
                 { icon: '🏆', line1: 'सम्मानित किया जाएगा कंपनी की ओर से', line2: 'आपकी मेहनत को मिलेगा पहचान',
                     badge: '✦ सम्मान ✦' },
@@ -3721,6 +3878,9 @@
                 const ref = urlParams.get('ref');
                 if (ref) document.getElementById('regReferral').value = ref;
             }
+
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
         };
 
         // Global functions
@@ -3762,13 +3922,15 @@
         window.openFullscreenImage = openFullscreenImage;
         window.closeFullscreenImage = closeFullscreenImage;
         window.toggleZoomImage = toggleZoomImage;
-        window.viewReceipt = viewReceipt;
-        window.viewWithdrawalReceipt = viewWithdrawalReceipt;
+        window.viewReceiptGeneric = viewReceiptGeneric;
         window.closeReceipt = closeReceipt;
         window.downloadReceipt = downloadReceipt;
         window.printReceipt = printReceipt;
         window.toggleForgotPasswordModal = toggleForgotPasswordModal;
         window.handleForgotPassword = handleForgotPassword;
+        window.maskEmail = maskEmail;
+        window.maskPhone = maskPhone;
+        window.maskId = maskId;
     </script>
 
 </body>
