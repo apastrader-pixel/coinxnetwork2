@@ -11,7 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
+    </script>
     <style>
+        /* ── RESET & BASE ── */
         * {
             margin: 0;
             padding: 0;
@@ -25,8 +28,19 @@
             color: #1a1a2e;
         }
 
+        /* ── GOLD & 3D ── */
         .gold-glow {
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.45), 0 0 60px rgba(212, 175, 55, 0.15);
+        }
+        .gold-glow-sm {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+        .gold-border-glow {
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
         }
         .gold-bg-gradient {
             background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
@@ -38,6 +52,7 @@
             background-clip: text;
         }
 
+        /* ── GLASS ── */
         .glass-gold {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
@@ -53,6 +68,17 @@
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.05);
         }
 
+        /* ── 3D CARDS ── */
+        .card-3d {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-3d:hover {
+            transform: perspective(1000px) rotateX(1.5deg) rotateY(2deg) translateY(-4px);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+        }
+
+        /* ── BUTTONS ── */
         .btn-gold {
             background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
             color: #1a1a2e;
@@ -68,11 +94,165 @@
         .btn-gold:active {
             transform: scale(0.97);
         }
-
-        .hidden {
-            display: none !important;
+        .btn-gold-outline {
+            background: transparent;
+            color: #d4af37;
+            border: 1.5px solid rgba(212, 175, 55, 0.5);
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .btn-gold-outline:hover {
+            background: rgba(212, 175, 55, 0.12);
+            border-color: #d4af37;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
         }
 
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ede8e0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 20px;
+        }
+
+        /* ── BUTTERFLIES ── */
+        .butterfly-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .butterfly-bg .bfly {
+            position: absolute;
+            font-size: 22px;
+            opacity: 0.2;
+            animation: floatButterfly linear infinite;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2));
+            will-change: transform;
+        }
+        @keyframes floatButterfly {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(0.8);
+                opacity: 0.08;
+            }
+            25% {
+                transform: translate(80px, -120px) rotate(12deg) scale(1.1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-60px, -220px) rotate(-8deg) scale(0.9);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translate(100px, -340px) rotate(15deg) scale(1.2);
+                opacity: 0.25;
+            }
+            100% {
+                transform: translate(-20px, -480px) rotate(-5deg) scale(0.7);
+                opacity: 0.06;
+            }
+        }
+
+        /* ── CONFETTI ── */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 999;
+            animation: confetti-fall linear forwards;
+        }
+
+        /* ── BADGES ── */
+        .admin-badge {
+            background: linear-gradient(135deg, #d4af37, #c9a030);
+            color: #1a1a2e;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* ── CREDENTIAL BOX ── */
+        .credential-box {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(6px);
+        }
+        .credential-box .label {
+            font-size: 10px;
+            color: #6b4a7a;
+        }
+        .credential-box .value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #d4af37;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        /* ── SUCCESS CARD ── */
+        .success-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 240, 235, 0.9));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 18px;
+            padding: 24px;
+            backdrop-filter: blur(8px);
+        }
+
+        /* ── ID BOX ── */
+        .id-box {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .id-box .id-label {
+            font-size: 9px;
+            color: #6b4a7a;
+            display: block;
+        }
+        .id-box .id-value {
+            font-size: 13px;
+            font-weight: 700;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .id-box .id-usage {
+            font-size: 8px;
+            color: #d4af37;
+            display: block;
+            margin-top: 2px;
+        }
         .id-box-gold {
             border: 1px solid rgba(212, 175, 55, 0.4);
         }
@@ -80,6 +260,7 @@
             color: #d4af37;
         }
 
+        /* ── BOTTOM NAV ── */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -124,58 +305,41 @@
             text-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
         }
 
-        .admin-badge {
-            background: linear-gradient(135deg, #d4af37, #c9a030);
-            color: #1a1a2e;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        /* ── PAGES ── */
+        .app-page {
+            display: block;
+        }
+        .app-page.hidden {
+            display: none !important;
+        }
+        .admin-page {
+            display: block;
+        }
+        .admin-page.hidden {
+            display: none !important;
+        }
+        .admin-sec {
+            display: block;
+        }
+        .admin-sec.hidden {
+            display: none !important;
         }
 
-        .butterfly-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+        /* ── HISTORY ITEM ── */
+        .history-item {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            border-radius: 12px;
+            padding: 12px 14px;
+            transition: all 0.3s;
+            backdrop-filter: blur(4px);
         }
-        .butterfly-bg .bfly {
-            position: absolute;
-            font-size: 22px;
-            opacity: 0.2;
-            animation: floatButterfly linear infinite;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2));
-            will-change: transform;
-        }
-        @keyframes floatButterfly {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(0.8);
-                opacity: 0.08;
-            }
-            25% {
-                transform: translate(80px, -120px) rotate(12deg) scale(1.1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translate(-60px, -220px) rotate(-8deg) scale(0.9);
-                opacity: 0.4;
-            }
-            75% {
-                transform: translate(100px, -340px) rotate(15deg) scale(1.2);
-                opacity: 0.25;
-            }
-            100% {
-                transform: translate(-20px, -480px) rotate(-5deg) scale(0.7);
-                opacity: 0.06;
-            }
+        .history-item:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
         }
 
+        /* ── SLIDER ── */
         .slider-container {
             position: relative;
             width: 100%;
@@ -478,113 +642,36 @@
             box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
         }
 
-        .card-3d {
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-3d:hover {
-            transform: perspective(1000px) rotateX(1.5deg) rotateY(2deg) translateY(-4px);
-            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
-        }
-
-        @keyframes starPulse {
-            0%,
-            100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
-            }
-            50% {
-                transform: scale(1.08);
-                filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.9));
-            }
-        }
-        .animate-star {
-            animation: starPulse 2.5s infinite ease-in-out;
-        }
-        .btn-animate {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-animate:active {
-            transform: scale(0.95);
-        }
-
-        .currency-inr {
-            color: #22C55E !important;
-        }
-        .currency-usdt {
-            color: #26A17B !important;
-        }
-        .border-gold-strong {
-            border: 2px solid #d4af37 !important;
-        }
-        .bg-inr-light {
-            background: rgba(34, 197, 94, 0.06);
-        }
-
-        .hide-sensitive {
-            display: none !important;
-        }
-
-        .sc-address-hidden {
-            display: none !important;
-        }
-
-        .referral-qr-container {
+        /* ── FILTER TABS ── */
+        .filter-tabs {
             display: flex;
-            justify-content: center;
-            padding: 8px 0;
-        }
-        .referral-qr-container img {
+            gap: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 3px;
             border-radius: 12px;
-            border: 2px solid #d4af37;
-            padding: 6px;
-            background: #fff;
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            flex-wrap: wrap;
         }
-
-        .email-copy-btn {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            padding: 1px 10px;
-            border-radius: 4px;
+        .filter-tabs button {
+            flex: 1;
+            padding: 4px 6px;
+            border-radius: 8px;
             font-size: 9px;
+            font-weight: 600;
+            color: #8a6b9a;
+            background: transparent;
+            border: none;
             cursor: pointer;
             transition: all 0.3s;
+            min-width: 40px;
         }
-        .email-copy-btn:hover {
-            background: rgba(212, 175, 55, 0.2);
-        }
-
-        .copy-btn-admin {
-            background: rgba(212, 175, 55, 0.12);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .copy-btn-admin:hover {
-            background: rgba(212, 175, 55, 0.25);
+        .filter-tabs button.active {
+            background: #d4af37;
+            color: #1a1a2e;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
         }
 
-        .admin-transfer-box {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 14px;
-            padding: 14px 16px;
-            backdrop-filter: blur(6px);
-        }
-        .admin-transfer-box .transfer-label {
-            font-size: 9px;
-            color: #6b4a7a;
-            display: block;
-        }
-
+        /* ── TOAST ── */
         #toastNotification {
             position: fixed;
             top: 20px;
@@ -621,11 +708,12 @@
             font-size: 14px;
         }
 
+        /* ── RECEIPT MODAL ── */
         .receipt-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(14px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -634,15 +722,15 @@
             animation: fadeIn 0.3s ease;
         }
         .receipt-modal .receipt-card {
-            background: #ffffff;
-            border: 2px solid #d4af37;
+            background: linear-gradient(145deg, #ffffff, #f5f0eb);
+            border: 3px solid #d4af37;
             border-radius: 24px;
-            max-width: 460px;
+            max-width: 480px;
             width: 100%;
-            max-height: 92vh;
+            max-height: 90vh;
             overflow-y: auto;
-            padding: 28px 24px 20px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(212, 175, 55, 0.08);
+            padding: 28px 24px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12), 0 0 60px rgba(212, 175, 55, 0.15);
             position: relative;
         }
         .receipt-modal .receipt-card::-webkit-scrollbar {
@@ -656,19 +744,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #d4af37;
-            padding-bottom: 12px;
-            margin-bottom: 14px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 14px;
+            margin-bottom: 16px;
         }
         .receipt-modal .receipt-header h3 {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             color: #d4af37;
-            letter-spacing: 0.5px;
         }
         .receipt-modal .receipt-close {
             background: rgba(212, 175, 55, 0.12);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: none;
             color: #6b4a7a;
             width: 34px;
             height: 34px;
@@ -708,165 +795,21 @@
         }
         .receipt-modal .receipt-row .value.green {
             color: #22C55E;
-        }
-        .receipt-modal .receipt-row .value.teal {
-            color: #26A17B;
-        }
-
-        .receipt-currency-box {
-            border: 2px solid #d4af37;
-            border-radius: 16px;
-            padding: 18px 18px 14px;
-            margin: 10px 0 16px 0;
-            background: rgba(34, 197, 94, 0.05);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .receipt-currency-box .inr-amount {
-            font-size: 30px;
-            font-weight: 800;
-            color: #22C55E;
-            letter-spacing: 1px;
-        }
-        .receipt-currency-box .inr-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #22C55E;
-            display: block;
-            margin-top: 2px;
-        }
-        .receipt-currency-box .usdt-amount {
-            font-size: 20px;
             font-weight: 700;
-            color: #26A17B;
-            margin-top: 8px;
-            display: block;
-            border-top: 1px solid rgba(38, 161, 123, 0.2);
-            padding-top: 8px;
-        }
-        .receipt-currency-box .usdt-label {
-            font-size: 12px;
-            font-weight: 500;
-            color: #26A17B;
-        }
-        .receipt-currency-box .globe-overlay {
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 80px;
-            opacity: 0.06;
-            color: #26A17B;
-            pointer-events: none;
-            animation: globeSpin 20s linear infinite;
-        }
-        @keyframes globeSpin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        .receipt-currency-box .green-particles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .receipt-currency-box .green-particles span {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #22C55E;
-            border-radius: 50%;
-            opacity: 0.15;
-            animation: floatParticle 6s infinite ease-in-out;
-        }
-        @keyframes floatParticle {
-            0%,
-            100% {
-                transform: translate(0, 0);
-                opacity: 0.05;
-            }
-            50% {
-                transform: translate(30px, -30px);
-                opacity: 0.25;
-            }
-        }
-
-        .receipt-modal .receipt-verified {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 30px;
-            padding: 4px 16px;
-            margin: 8px auto 4px;
-            width: fit-content;
-            font-size: 11px;
-            font-weight: 600;
-            color: #22C55E;
-        }
-        .receipt-modal .receipt-verified i {
             font-size: 14px;
         }
-        .receipt-modal .receipt-verified.gold {
-            border-color: #d4af37;
-            color: #d4af37;
-            background: rgba(212, 175, 55, 0.08);
+        .receipt-modal .receipt-row .value.usdt {
+            color: #26A17B;
+            font-weight: 700;
+            font-size: 14px;
         }
-        .receipt-modal .receipt-qr {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0 6px;
-        }
-        .receipt-modal .receipt-qr img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            border-radius: 8px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 4px;
-            background: #fff;
-        }
-        .receipt-modal .receipt-badge.success {
-            background: rgba(34, 197, 94, 0.15);
-            color: #22C55E;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-        .receipt-modal .receipt-badge.pending {
-            background: rgba(212, 175, 55, 0.12);
-            color: #b8962a;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .receipt-modal .receipt-badge.rejected {
-            background: rgba(185, 28, 28, 0.12);
+        .receipt-modal .receipt-row .value.red {
             color: #b91c1c;
-            border: 1px solid rgba(185, 28, 28, 0.2);
-        }
-        .receipt-modal .receipt-logo {
-            text-align: center;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-        }
-        .receipt-modal .receipt-logo img {
-            height: 32px;
-            object-fit: contain;
-        }
-        .receipt-modal .receipt-logo small {
-            display: block;
-            font-size: 9px;
-            color: #6b4a7a;
-            letter-spacing: 2px;
         }
         .receipt-modal .receipt-footer {
             margin-top: 18px;
             padding-top: 14px;
-            border-top: 2px solid #d4af37;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -903,43 +846,126 @@
         .receipt-modal .receipt-footer .btn-print:hover {
             background: rgba(0, 0, 0, 0.08);
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .admin-sec {
-            display: block;
-        }
-        .admin-sec.hidden {
-            display: none !important;
-        }
-
-        .logo-img {
-            height: 38px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.2));
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #ede8e0;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d4af37;
+        .receipt-modal .receipt-badge {
+            display: inline-block;
+            padding: 2px 14px;
             border-radius: 20px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .receipt-modal .receipt-badge.approved {
+            background: rgba(34, 197, 94, 0.12);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        .receipt-modal .receipt-badge.pending {
+            background: rgba(212, 175, 55, 0.12);
+            color: #b8962a;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .receipt-modal .receipt-badge.completed {
+            background: rgba(34, 197, 94, 0.12);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        .receipt-modal .receipt-badge.rejected {
+            background: rgba(185, 28, 28, 0.12);
+            color: #b91c1c;
+            border: 1px solid rgba(185, 28, 28, 0.2);
+        }
+        .receipt-modal .receipt-logo {
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .receipt-modal .receipt-logo img {
+            height: 32px;
+            object-fit: contain;
+        }
+        .receipt-modal .receipt-logo small {
+            display: block;
+            font-size: 9px;
+            color: #6b4a7a;
+            letter-spacing: 2px;
         }
 
+        /* ── RECEIPT CURRENCY BOX ── */
+        .receipt-currency-box {
+            border: 3px solid #d4af37;
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin: 10px 0 16px 0;
+            background: rgba(34, 197, 94, 0.06);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .receipt-currency-box .inr-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: #22C55E;
+            letter-spacing: 1px;
+        }
+        .receipt-currency-box .inr-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #22C55E;
+            display: block;
+            margin-top: 2px;
+        }
+        .receipt-currency-box .usdt-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #26A17B;
+            margin-top: 6px;
+            display: block;
+            border-top: 1px solid rgba(38, 161, 123, 0.2);
+            padding-top: 6px;
+        }
+        .receipt-currency-box .usdt-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #26A17B;
+        }
+        .receipt-currency-box .globe-bg {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 80px;
+            opacity: 0.06;
+            pointer-events: none;
+            color: #26A17B;
+        }
+        .receipt-currency-box .verified-stamp {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            font-size: 10px;
+            color: #22C55E;
+            font-weight: 700;
+            opacity: 0.2;
+            transform: rotate(-12deg);
+        }
+
+        /* ── RECEIPT QR ── */
+        .receipt-qr-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .receipt-qr-box canvas {
+            max-width: 100px;
+            height: auto;
+        }
+
+        /* ── STAKING ── */
         .staking-history-item {
             background: rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(212, 175, 55, 0.1);
@@ -950,26 +976,73 @@
         .staking-history-item:hover {
             border-color: rgba(212, 175, 55, 0.25);
         }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 999;
-            animation: confetti-fall linear forwards;
+        .staking-history-item .locked {
+            color: #d4af37;
         }
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
+        .staking-history-item .unlocked {
+            color: #0b7e4a;
+        }
+
+        .copy-btn-admin {
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-btn-admin:hover {
+            background: rgba(212, 175, 55, 0.25);
+        }
+
+        @keyframes starPulse {
+            0%,
             100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+            }
+            50% {
+                transform: scale(1.08);
+                filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.9));
             }
         }
+        .animate-star {
+            animation: starPulse 2.5s infinite ease-in-out;
+        }
+        .btn-animate {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-animate:active {
+            transform: scale(0.95);
+        }
 
+        .admin-search-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #1a1a2e;
+        }
+        .admin-search-input:focus {
+            border-color: #d4af37;
+            outline: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .staking-plan-btn {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .staking-plan-btn.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+            color: #d4af37;
+        }
+        .staking-plan-btn:hover:not(.active) {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* ── RESPONSIVE ── */
         @media (max-width: 440px) {
             .bottom-nav button i {
                 font-size: 17px;
@@ -1003,10 +1076,19 @@
                 font-size: 24px;
             }
             .receipt-currency-box .usdt-amount {
-                font-size: 17px;
+                font-size: 16px;
             }
         }
 
+        /* ── LOGO ── */
+        .logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.2));
+        }
+
+        /* ── LIGHT THEME TWEAKS ── */
         input,
         select,
         textarea {
@@ -1016,38 +1098,26 @@
         input::placeholder {
             color: #a090a0;
         }
-        .border-amber-500\/20 {
-            border-color: rgba(212, 175, 55, 0.2);
+        .text-amber-300\/50 {
+            color: #6b4a7a;
         }
-        .border-amber-500\/15 {
-            border-color: rgba(212, 175, 55, 0.12);
+        .text-amber-300\/40 {
+            color: #7c6a8a;
         }
-        .bg-amber-500\/10 {
-            background: rgba(212, 175, 55, 0.08);
+        .text-amber-300\/30 {
+            color: #8a7a9a;
         }
-        .bg-amber-500\/15 {
-            background: rgba(212, 175, 55, 0.12);
+        .text-amber-300\/70 {
+            color: #4a3a5a;
         }
-        .bg-amber-500\/20 {
-            background: rgba(212, 175, 55, 0.15);
+        .text-amber-400 {
+            color: #c9a030;
         }
         .text-amber-500 {
             color: #d4af37;
         }
-        .text-amber-600 {
-            color: #c9a030;
-        }
-        .text-amber-600\/50 {
-            color: rgba(201, 160, 48, 0.5);
-        }
-        .text-amber-600\/40 {
-            color: rgba(201, 160, 48, 0.4);
-        }
-        .text-amber-600\/30 {
-            color: rgba(201, 160, 48, 0.3);
-        }
-        .text-amber-700 {
-            color: #b8962a;
+        .text-amber-300 {
+            color: #d4af37;
         }
         .border-amber-500\/30 {
             border-color: rgba(212, 175, 55, 0.3);
@@ -1055,32 +1125,187 @@
         .border-amber-500\/40 {
             border-color: rgba(212, 175, 55, 0.4);
         }
+        .bg-green-500\/20 {
+            background: rgba(34, 197, 94, 0.12);
+        }
+        .text-green-400 {
+            color: #22C55E;
+        }
+        .border-green-500\/40 {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
         .bg-red-500\/20 {
             background: rgba(185, 28, 28, 0.1);
         }
-        .text-red-600 {
+        .text-red-400 {
             color: #b91c1c;
         }
         .border-red-500\/30 {
             border-color: rgba(185, 28, 28, 0.2);
         }
-        .bg-green-500\/20 {
-            background: rgba(11, 126, 74, 0.12);
+
+        /* ── CURRENCY COLORS ── */
+        .currency-inr {
+            color: #22C55E !important;
         }
-        .text-green-600 {
-            color: #0b7e4a;
+        .currency-usdt {
+            color: #26A17B !important;
         }
-        .border-green-500\/40 {
-            border-color: rgba(11, 126, 74, 0.3);
+        .border-gold-strong {
+            border: 3px solid #d4af37 !important;
+        }
+        .bg-inr-light {
+            background: rgba(34, 197, 94, 0.06);
+        }
+
+        /* ── PARTIAL HIDE ── */
+        .partial-hide {
+            filter: blur(4px);
+            -webkit-filter: blur(4px);
+            transition: filter 0.3s;
+            cursor: default;
+        }
+        .partial-hide:hover {
+            filter: blur(0);
+            -webkit-filter: blur(0);
+        }
+        .partial-hide-email {
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+            transition: filter 0.3s;
+            cursor: default;
+        }
+        .partial-hide-email:hover {
+            filter: blur(0);
+            -webkit-filter: blur(0);
+        }
+
+        /* ── QR REFERRAL ── */
+        .referral-qr-container {
+            display: flex;
+            justify-content: center;
+            padding: 8px 0;
+        }
+        .referral-qr-container canvas {
+            border-radius: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 6px;
+            background: #fff;
+            max-width: 120px;
+            height: auto;
+        }
+
+        /* ── GLOBE WATERMARK ── */
+        .globe-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 120px;
+            opacity: 0.04;
+            pointer-events: none;
+            color: #26A17B;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* ── COPY EMAIL BTN ── */
+        .copy-email-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-email-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        /* ── SPX ID DISPLAY ── */
+        .spx-id-display {
+            font-size: 16px;
+            font-weight: 800;
+            color: #d4af37;
+            letter-spacing: 1px;
+            font-family: monospace;
+            background: rgba(212, 175, 55, 0.08);
+            padding: 4px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: inline-block;
+        }
+
+        /* Voice notification toast */
+        .voice-toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            width: 92%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid #d4af37;
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            z-index: 998;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+            display: none;
+        }
+        .voice-toast.show {
+            display: block;
+        }
+        .voice-toast .voice-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+            color: #d4af37;
+        }
+        .voice-toast .voice-msg {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a2e;
+        }
+        .voice-toast .voice-close {
+            margin-top: 8px;
+            background: rgba(212, 175, 55, 0.15);
+            border: none;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #6b4a7a;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .voice-toast .voice-close:hover {
+            background: rgba(212, 175, 55, 0.25);
         }
     </style>
 </head>
 <body>
 
+    <!-- Butterflies Background -->
     <div class="butterfly-bg" id="butterflyContainer"></div>
 
+    <!-- MAIN CONTAINER -->
     <div id="appContainer" class="w-full max-w-md mx-auto relative z-10">
 
+        <!-- HEADER -->
         <header id="mainHeader" class="w-full glass-gold-dark py-3 px-4 flex items-center justify-between sticky top-0 z-40 shadow-xl user-header backdrop-blur-2xl border-b border-amber-500/30">
             <div class="flex items-center gap-3">
                 <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="logo-img" />
@@ -1097,6 +1322,7 @@
             </div>
         </header>
 
+        <!-- Admin Search Box -->
         <div id="adminSearchBox" class="hidden w-full glass-gold p-3 rounded-xl border-amber-500/20 my-2 px-4">
             <div class="flex gap-2">
                 <input type="text" id="adminSecretInput" placeholder="एडमिन कोड दर्ज करें" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e]">
@@ -1105,10 +1331,13 @@
             <p class="text-[8px] text-amber-600/30 mt-1">सुरक्षित कोड: admin2025</p>
         </div>
 
+        <!-- MAIN CONTENT -->
         <main class="w-full px-4 pt-4 pb-28 flex-1 flex flex-col justify-start z-10">
 
+            <!-- ======================== USER PANEL ======================== -->
             <div id="userPanelContainer">
 
+                <!-- REGISTRATION -->
                 <section id="registrationPage" class="app-page w-full space-y-6">
                     <div class="text-center space-y-2 py-6">
                         <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="w-20 h-20 rounded-full gold-bg-gradient flex items-center justify-center p-2 mx-auto gold-glow border-2 border-amber-400/50 shadow-2xl object-cover" />
@@ -1141,6 +1370,7 @@
                     </div>
                 </section>
 
+                <!-- REG SUCCESS -->
                 <section id="regSuccessPage" class="app-page w-full hidden space-y-6 text-center py-4">
                     <div class="glass-gold p-6 rounded-3xl border-amber-500/40 space-y-6 shadow-xl relative overflow-hidden">
                         <div id="confettiContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
@@ -1153,23 +1383,29 @@
                                 <p class="text-sm text-amber-600 font-semibold">आपका रजिस्ट्रेशन सफलतापूर्वक पूर्ण हुआ!</p>
                                 <p class="text-xs text-amber-600/40">अब आप SupriX Global के सदस्य हैं।</p>
                             </div>
-                            <div class="success-card text-left space-y-4 mt-4 bg-white/90 p-4 rounded-xl border border-amber-500/20">
+                            <div class="success-card text-left space-y-4 mt-4">
                                 <div>
-                                    <div class="text-[10px] text-amber-600/50">📧 आपकी ईमेल आईडी (Login ID)</div>
-                                    <div class="bg-white/80 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between mt-1">
-                                        <span id="successUserId" class="font-mono text-amber-600 font-bold">user@example.com</span>
+                                    <div class="label">📧 आपकी ईमेल आईडी (Login ID)</div>
+                                    <div class="credential-box mt-1">
+                                        <span id="successUserId" class="value">user@example.com</span>
                                         <button onclick="copyToClipboard('successUserId', 'यूजर आईडी कॉपी हो गई!')" class="text-amber-600/60 hover:text-amber-700 transition-all text-xs">
                                             <i class="fa-solid fa-copy"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="text-[10px] text-amber-600/50">🔑 आपका पासवर्ड (Password)</div>
-                                    <div class="bg-white/80 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between mt-1">
-                                        <span id="successPassword" class="font-mono text-amber-600/60 font-bold">XXXXXXXXXX</span>
+                                    <div class="label">🔑 आपका पासवर्ड (Password)</div>
+                                    <div class="credential-box mt-1">
+                                        <span id="successPassword" class="value" style="color:#6b4a7a;">XXXXXXXXXX</span>
                                         <span class="text-[9px] text-amber-600/70 bg-amber-500/10 px-2.5 py-0.5 rounded-full">(आपका मोबाइल नंबर)</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="bg-amber-500/10 border border-amber-500/25 rounded-xl p-3 text-left mt-4">
+                                <p class="text-[10px] text-amber-700/80 flex items-start gap-2">
+                                    <i class="fa-solid fa-circle-info mt-0.5 text-amber-500"></i>
+                                    <span>कृपया अपनी <strong>ईमेल आईडी</strong> और <strong>पासवर्ड</strong> सुरक्षित रखें। यही आपका लॉगिन क्रेडेंशियल है।</span>
+                                </p>
                             </div>
                             <button onclick="showPage('loginPage')" class="w-full btn-gold py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 mt-4 shadow-xl">
                                 <i class="fa-solid fa-right-to-bracket"></i>
@@ -1180,6 +1416,7 @@
                     </div>
                 </section>
 
+                <!-- LOGIN -->
                 <section id="loginPage" class="app-page w-full hidden space-y-6">
                     <div class="text-center space-y-2 py-6">
                         <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="w-20 h-20 rounded-full gold-bg-gradient flex items-center justify-center p-2 mx-auto gold-glow border-2 border-amber-400/50 shadow-2xl object-cover" />
@@ -1210,13 +1447,16 @@
                     </div>
                 </section>
 
+                <!-- DASHBOARD -->
                 <section id="dashboardPage" class="app-page w-full hidden space-y-4">
 
+                    <!-- Slider -->
                     <div class="slider-container">
                         <div class="slider-track" id="sliderTrack"></div>
                         <div class="slider-dots" id="sliderDots"></div>
                     </div>
 
+                    <!-- User Info -->
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600">
@@ -1232,6 +1472,7 @@
                         </div>
                     </div>
 
+                    <!-- Balances -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="glass-gold-dark p-3.5 rounded-2xl border-amber-500/15 card-3d">
                             <span class="text-[10px] text-amber-600/50 block mb-1"><i class="fa-solid fa-dollar-sign mr-1 text-green-600"></i> Total Investment</span>
@@ -1251,10 +1492,11 @@
                         </div>
                     </div>
 
+                    <!-- Mining Star -->
                     <div class="glass-gold p-6 rounded-2xl border-amber-500/30 flex flex-col items-center justify-center text-center py-8 space-y-5">
                         <div class="space-y-1">
                             <h3 class="text-sm font-bold tracking-wider text-amber-700/80 uppercase">🌟 माइनिंग रिवॉर्ड स्टार</h3>
-                            <p class="text-[11px] text-amber-600/40">डेली 0.5% USDT रिलीज — कम से कम 500 USDT स्टेक करें</p>
+                            <p class="text-[11px] text-amber-600/40">डेली 0.5% कॉइन रिलीज — कम से कम 500 USDT स्टेक करें</p>
                         </div>
                         <button id="miningStarBtn" onclick="triggerMiningReward(this)" class="w-32 h-32 rounded-full gold-bg-gradient flex items-center justify-center shadow-2xl cursor-pointer hover:scale-105 transition-all duration-300 animate-star relative group btn-animate">
                             <div class="absolute inset-2 bg-white/60 rounded-full flex items-center justify-center transition-all group-hover:bg-white/40 backdrop-blur-sm">
@@ -1272,11 +1514,12 @@
                     </div>
                 </section>
 
+                <!-- PURCHASE -->
                 <section id="purchasePage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-cart-shopping mr-1.5"></i> USDT परचेज करें</h3>
-                        <p class="text-[11px] text-amber-600/40">USDT (BEP20) के माध्यम से सुरक्षित परचेज करें। <span class="text-amber-600 font-semibold">$1 = 1 USDT</span></p>
-                        <p class="text-[9px] text-amber-600/30 mt-1">⚠️ न्यूनतम डिपॉजिट: <span class="font-bold text-green-600">$10</span></p>
+                        <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-cart-shopping mr-1.5"></i> कॉइन परचेज करें</h3>
+                        <p class="text-[11px] text-amber-600/40">USDT (BEP20) के माध्यम से कॉइन सुरक्षित परचेज करें। <span class="text-amber-600 font-semibold">$1 = 1 USDT</span></p>
+                        <p class="text-[10px] text-green-600 font-semibold mt-1">💰 Minimum Deposit: $10 USDT</p>
                     </div>
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                         <h4 class="text-xs font-bold text-amber-700/70">कस्टम अमाउंट दर्ज करें</h4>
@@ -1284,7 +1527,7 @@
                             <div class="flex gap-2">
                                 <div class="relative flex-1">
                                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-amber-600/60 text-xs">$</span>
-                                    <input type="number" id="customUSDAmount" oninput="calculateCustomCoins(this.value)" placeholder="USD मूल्य दर्ज करें" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 pl-7 pr-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                    <input type="number" id="customUSDAmount" oninput="calculateCustomCoins(this.value)" placeholder="USD मूल्य दर्ज करें (Min $10)" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 pl-7 pr-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm" min="10">
                                 </div>
                                 <div class="bg-white/80 border border-amber-500/20 rounded-xl px-3 flex items-center justify-center text-xs font-mono font-bold currency-usdt" id="calculatedCoinsPreview">0 USDT</div>
                             </div>
@@ -1307,8 +1550,8 @@
                             <div class="bg-white p-2 rounded-lg inline-block shadow-xl">
                                 <img src="https://i.postimg.cc/SRrcGvzT/Screenshot-2026-0716-065409.jpg" alt="Payment QR" class="w-32 h-32 object-contain">
                             </div>
-                            <div class="w-full bg-white/80 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between">
-                                <span class="text-[11px] text-amber-600/60 font-mono break-all" id="cryptoAddressText">0x7be243182b7442D17a13e2C019f0d0174F196817</span>
+                            <div class="crypto-address-box w-full bg-white/80 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between">
+                                <span class="address text-[11px] text-amber-600/60 font-mono break-all" id="cryptoAddressText">0x7be243182b7442D17a13e2C019f0d0174F196817</span>
                                 <button onclick="copyToClipboard('cryptoAddressText', '✅ USDT एड्रेस कॉपी हुआ!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs">
                                     <i class="fa-solid fa-copy mr-1"></i> कॉपी
                                 </button>
@@ -1333,6 +1576,7 @@
                     </div>
                 </section>
 
+                <!-- STAKING -->
                 <section id="stakingPage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
                         <h3 class="text-sm font-bold text-amber-600"><i class="fa-solid fa-vault mr-1.5"></i> USDT स्टेकिंग</h3>
@@ -1344,7 +1588,7 @@
                             <span id="stakingAvailableCoins" class="font-bold currency-usdt">0.00 USDT</span>
                         </div>
                         <div>
-                            <label class="block text-[10px] text-amber-600/50 mb-1">कितने USDT स्टेकिंग में लगाने हैं? (न्यूनतम 50 USDT)</label>
+                            <label class="block text-[10px] text-amber-600/50 mb-1">कितने USDT स्टेकिंग में लगाने हैं?</label>
                             <input type="number" id="stakeInputCoins" placeholder="न्यूनतम 50 USDT" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] backdrop-blur-sm">
                         </div>
                         <div>
@@ -1369,6 +1613,7 @@
                     </div>
                 </section>
 
+                <!-- ======================== PROFILE ======================== -->
                 <section id="profilePage" class="app-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 flex items-center justify-between">
                         <div class="flex items-center gap-3">
@@ -1377,35 +1622,30 @@
                             </div>
                             <div>
                                 <h3 id="profileName" class="font-bold text-[#1a1a2e]">User Profile</h3>
-                                <p id="profileEmail" class="text-[10px] text-amber-600/40 hide-sensitive">user@example.com</p>
+                                <p id="profileEmail" class="text-[10px] text-amber-600/40 partial-hide-email">user@example.com</p>
+                                <button onclick="copyToClipboard('profileEmail', '✅ Email कॉपी हो गई!')" class="copy-email-btn text-[8px] mt-0.5"><i class="fa-solid fa-copy mr-1"></i> Email कॉपी</button>
                             </div>
                         </div>
-                        <div class="text-right flex flex-col">
+                        <div class="text-right flex flex-col items-end">
                             <span class="text-[9px] text-amber-600/40">रेफरल कोड:</span>
                             <span id="profileReferralCode" class="text-xs font-bold text-amber-600 uppercase select-all font-mono">SPX-XXXX</span>
                             <button onclick="copyToClipboard('profileReferralCode', '✅ रेफरल कोड कॉपी हो गया!')" class="text-amber-600 hover:text-[#1a1a2e] btn-animate text-xs mt-0.5"><i class="fa-solid fa-copy mr-1"></i> कॉपी</button>
                         </div>
                     </div>
 
-                    <div class="id-box id-box-gold bg-white/80 rounded-xl p-4 border flex items-center justify-between">
+                    <!-- SPX ID Display -->
+                    <div class="id-box id-box-gold">
                         <div>
-                            <span class="text-[9px] text-amber-600/50 block">🆔 आपकी Unique SPX ID</span>
-                            <span class="id-value font-bold text-amber-600 text-md font-mono" id="profileCoinXIdDisplay">SPX123456789</span>
-                            <span class="text-[8px] text-amber-600/30 block mt-0.5">इस ID से USDT (BEP20) लेन-देन करें</span>
+                            <span class="id-label">🆔 आपकी Unique SPX ID</span>
+                            <span class="id-value spx-id-display" id="profileCoinXIdDisplay">SPX123456789</span>
+                            <span class="id-usage">इस ID से USDT (BEP20) भेजें/ले सकते हैं</span>
                         </div>
                         <button onclick="copyToClipboard('profileCoinXIdDisplay', '✅ SPX ID कॉपी हो गई!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0 btn-animate text-xs bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
                             <i class="fa-solid fa-copy mr-1"></i> कॉपी
                         </button>
                     </div>
 
-                    <div class="glass-gold p-3 rounded-xl border-amber-500/30 flex items-center justify-between">
-                        <span class="text-[10px] text-amber-600/50"><i class="fa-regular fa-envelope mr-1.5 text-amber-500"></i> ईमेल आईडी</span>
-                        <div class="flex items-center gap-2">
-                            <span id="profileEmailDisplay" class="text-xs font-mono text-amber-600/40">user@example.com</span>
-                            <button onclick="copyToClipboard('profileEmailDisplay', '✅ ईमेल कॉपी हो गई!')" class="email-copy-btn"><i class="fa-regular fa-copy mr-0.5"></i> कॉपी</button>
-                        </div>
-                    </div>
-
+                    <!-- Invite Friends -->
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                         <h4 class="text-xs font-bold text-amber-600"><i class="fa-solid fa-share-nodes mr-1.5"></i> Invite Friends & Earn 2%</h4>
                         <p class="text-[10px] text-amber-600/40">जब आपके द्वारा आमंत्रित सदस्य स्टेक करेंगे, आपको 2% बोनस तुरंत मिलेगा!</p>
@@ -1413,17 +1653,20 @@
                             <span id="referralShareLink" class="text-amber-600/40 truncate mr-2 select-all font-mono">https://suprixglobal.online/?ref=</span>
                             <button onclick="copyToClipboard('referralShareLink', '✅ रेफरल लिंक कॉपी हो गया!')" class="text-amber-600 hover:text-[#1a1a2e] shrink-0"><i class="fa-solid fa-copy"></i></button>
                         </div>
+                        <!-- Referral QR Code -->
                         <div class="referral-qr-container" id="referralQrContainer"></div>
                         <button onclick="shareReferralLink()" class="w-full btn-gold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xl">
                             <i class="fa-solid fa-share-nodes"></i> Share Referral Link
                         </button>
                     </div>
 
+                    <!-- Withdrawal Setup -->
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                         <h4 class="text-xs font-bold text-amber-600 border-b border-amber-500/15 pb-1.5"><i class="fa-solid fa-money-bill-transfer mr-1"></i> विथड्रॉवल सेटअप</h4>
-                        <p class="text-[9px] text-amber-600/30">⚠️ न्यूनतम विथड्रॉवल: <span class="font-bold text-amber-600">$2 (2 USDT)</span></p>
+
                         <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-center">
                             <span class="text-[11px] font-bold text-red-600"><i class="fa-solid fa-circle-exclamation mr-1"></i> USDT (BEP20) में ही Withdrawal लें।</span>
+                            <span class="text-[10px] text-green-600 font-semibold block mt-0.5">💰 Minimum Withdrawal: $2 USDT</span>
                         </div>
                         <div>
                             <label class="block text-[10px] text-amber-600/50 mb-1">USDT (BEP20) QR कोड अपलोड करें</label>
@@ -1446,7 +1689,7 @@
                                 <span class="text-amber-600">(मिनिमम: 2 USDT)</span>
                             </div>
                             <div class="flex gap-2">
-                                <input type="number" id="withdrawAmountInput" placeholder="USDT संख्या दर्ज करें" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <input type="number" id="withdrawAmountInput" placeholder="USDT संख्या दर्ज करें" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm" min="2">
                                 <button id="btn-submit-withdraw" onclick="submitWithdrawal(this)" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shadow-xl flex items-center justify-center gap-1.5">
                                     <span>विथड्रॉ</span> <i class="fa-solid fa-circle-down"></i>
                                 </button>
@@ -1457,15 +1700,16 @@
                             </div>
                         </div>
 
+                        <!-- SupriX Wallet Withdrawal -->
                         <div class="pt-3 border-t border-amber-500/15">
                             <h5 class="text-[10px] font-bold text-amber-600 mb-2"><i class="fa-solid fa-wallet mr-1"></i> SupriX Wallet में विथड्रॉवल</h5>
-                            <p class="text-[9px] text-amber-600/40 mb-2">SupriX Wallet से विथड्रॉवल करें (10% शुल्क) — SPX ID से भेजें</p>
+                            <p class="text-[9px] text-amber-600/40 mb-2">SPX ID के माध्यम से SupriX Wallet में विथड्रॉवल करें (10% शुल्क)</p>
                             <div>
-                                <label class="block text-[10px] text-amber-600/50 mb-1">प्राप्तकर्ता की SPX ID</label>
-                                <input type="text" id="coinxWalletSCAddress" placeholder="SPX ID दर्ज करें..." class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <label class="block text-[10px] text-amber-600/50 mb-1">रिसीवर की SPX ID</label>
+                                <input type="text" id="coinxWalletSCAddress" placeholder="SPX ID दर्ज करें (जैसे SPX100001)" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
                             </div>
                             <div class="flex gap-2 mt-2">
-                                <input type="number" id="coinxWalletWithdrawAmount" placeholder="USDT संख्या" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm">
+                                <input type="number" id="coinxWalletWithdrawAmount" placeholder="USDT संख्या" class="flex-1 bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm" min="2">
                                 <button onclick="submitCoinXWalletWithdrawal()" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shadow-xl flex items-center justify-center gap-1.5">
                                     <span>सबमिट</span> <i class="fa-solid fa-arrow-right"></i>
                                 </button>
@@ -1474,6 +1718,7 @@
                         </div>
                     </div>
 
+                    <!-- My Referrals & Transactions & Team -->
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="toggleMyReferralsModal(true)" class="glass-gold border-amber-500/30 text-[#1a1a2e] py-2.5 rounded-xl text-xs font-semibold hover:border-amber-400/50 transition-all btn-animate">
                             <i class="fa-solid fa-users mr-1 text-amber-500"></i> Referrals
@@ -1486,6 +1731,7 @@
                         </button>
                     </div>
 
+                    <!-- Session Support -->
                     <div class="glass-gold p-4 rounded-2xl border-blue-500/30 space-y-3">
                         <div class="flex items-center gap-2 text-blue-600 text-xs font-bold">
                             <i class="fa-solid fa-headset"></i>
@@ -1504,11 +1750,13 @@
                         <p class="text-[8px] text-amber-600/30 text-center">Session ID को कॉपी करें, Session ऐप में Paste करें और हमसे सीधे चैट करें।</p>
                     </div>
 
+                    <!-- Logout -->
                     <button onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-600 border border-red-500/30 font-semibold py-2.5 rounded-xl text-xs transition-all text-center btn-animate">
                         <i class="fa-solid fa-power-off mr-1.5"></i> लॉगआउट करें
                     </button>
                 </section>
 
+                <!-- BOTTOM NAV -->
                 <nav id="bottomNavBar" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bottom-nav hidden">
                     <button onclick="showPage('dashboardPage')" id="nav-dashboardPage" class="flex flex-col items-center justify-center text-amber-500 text-center transition-all btn-animate active">
                         <i class="fa-solid fa-house-chimney text-lg mb-0.5"></i>
@@ -1530,11 +1778,13 @@
 
             </div>
 
+            <!-- ======================== ADMIN PANEL ======================== -->
             <div id="adminPanelContainer" class="hidden">
 
+                <!-- Admin Login -->
                 <section id="adminLoginPage" class="admin-page w-full space-y-6">
                     <div class="text-center space-y-2 py-6">
-                        <div class="w-20 h-20 rounded-full bg-white/90 text-amber-500 flex items-center justify-center text-3xl mx-auto border border-amber-500 shadow-xl">
+                        <div class="w-20 h-20 rounded-full bg-white/90 text-amber-500 flex items-center justify-center text-3xl mx-auto neon-gold border border-amber-500 shadow-xl">
                             <i class="fa-solid fa-lock"></i>
                         </div>
                         <h2 class="text-2xl font-bold text-amber-600 mt-2">एडमिन लॉगिन</h2>
@@ -1555,6 +1805,7 @@
                     </div>
                 </section>
 
+                <!-- Admin Dashboard -->
                 <section id="adminDashboardPage" class="admin-page w-full hidden space-y-4">
                     <div class="glass-gold p-4 rounded-2xl border-amber-500/40 flex items-center justify-between">
                         <div>
@@ -1571,6 +1822,7 @@
                         </div>
                     </div>
 
+                    <!-- Stats -->
                     <div class="grid grid-cols-3 gap-2 text-center text-xs">
                         <div class="bg-white/80 p-2.5 rounded-xl border border-amber-500/15">
                             <span class="text-[8px] text-amber-600/30 block mb-0.5">Total Users</span>
@@ -1598,21 +1850,23 @@
                         </div>
                     </div>
 
+                    <!-- Tabs -->
                     <div class="flex bg-white/80 p-1 rounded-xl border border-amber-500/15 text-[10px] flex-wrap">
                         <button onclick="switchAdminTab('users')" id="adminTab-users" class="flex-1 py-1.5 text-center font-semibold rounded bg-amber-500 text-[#1a1a2e] transition-all btn-animate">Users</button>
                         <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Deposits</button>
                         <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Withdrawals</button>
                         <button onclick="switchAdminTab('staking')" id="adminTab-staking" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Staking</button>
                         <button onclick="switchAdminTab('referrals')" id="adminTab-referrals" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Referrals</button>
-                        <button onclick="switchAdminTab('transfers')" id="adminTab-transfers" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Transfers</button>
+                        <button onclick="switchAdminTab('transfer')" id="adminTab-transfer" class="flex-1 py-1.5 text-center font-semibold text-amber-600/40 rounded transition-all btn-animate">Transfer</button>
                     </div>
 
+                    <!-- Users Tab -->
                     <div id="adminSection-users" class="admin-sec space-y-3">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                             <h4 class="text-xs font-bold text-amber-700/70">यूजर USDT कस्टमाइज़ेशन (SPX ID से)</h4>
                             <div class="grid grid-cols-2 gap-2 text-xs">
-                                <input type="text" id="adminCoinUserId" placeholder="SPX ID या ईमेल" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
-                                <input type="number" id="adminCoinAmount" placeholder="USDT संख्या" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="text" id="adminCoinUserId" placeholder="SPX ID / ईमेल" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="number" id="adminCoinAmount" placeholder="USDT की संख्या" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
                                 <select id="adminCoinAction" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-amber-600/60 focus:outline-none backdrop-blur-sm">
                                     <option value="add">जोड़ें (Credit)</option>
                                     <option value="subtract">घटाएं (Debit)</option>
@@ -1628,6 +1882,7 @@
                         </div>
                     </div>
 
+                    <!-- Deposits Tab -->
                     <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2">
                             <h4 class="text-xs font-bold text-amber-700/70">पेंडिंग डिपॉजिट्स</h4>
@@ -1635,6 +1890,7 @@
                         </div>
                     </div>
 
+                    <!-- Withdrawals Tab -->
                     <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2">
                             <h4 class="text-xs font-bold text-amber-700/70">पेंडिंग विथड्रॉवल रिक्वेस्ट्स</h4>
@@ -1642,6 +1898,7 @@
                         </div>
                     </div>
 
+                    <!-- Staking Tab -->
                     <div id="adminSection-staking" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
                             <div class="flex justify-between items-center border-b border-amber-500/15 pb-2">
@@ -1662,6 +1919,7 @@
                         </div>
                     </div>
 
+                    <!-- Referrals Tab -->
                     <div id="adminSection-referrals" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2">
                             <h4 class="text-xs font-bold text-amber-700/70">रेफ़रल रिकॉर्ड ट्रैकर</h4>
@@ -1669,30 +1927,21 @@
                         </div>
                     </div>
 
-                    <div id="adminSection-transfers" class="admin-sec space-y-3 hidden">
+                    <!-- Transfer Tab -->
+                    <div id="adminSection-transfer" class="admin-sec space-y-3 hidden">
                         <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-3">
-                            <h4 class="text-xs font-bold text-amber-700/70 border-b border-amber-500/15 pb-2"><i class="fa-solid fa-arrow-right-arrow-left mr-1"></i> SPX ID से USDT ट्रांसफर</h4>
-                            <div class="admin-transfer-box">
-                                <span class="transfer-label">प्रेषक SPX ID</span>
-                                <input type="text" id="adminSenderSpX" placeholder="प्रेषक की SPX ID" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm mt-1">
+                            <h4 class="text-xs font-bold text-amber-700/70">USDT (BEP20) ट्रांसफर (SPX ID से)</h4>
+                            <p class="text-[9px] text-amber-600/40">SPX ID के माध्यम से किसी भी यूजर को USDT भेजें</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <input type="text" id="adminTransferFrom" placeholder="स्रोत SPX ID" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="text" id="adminTransferTo" placeholder="लक्ष्य SPX ID" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <input type="number" id="adminTransferAmount" placeholder="USDT संख्या" class="col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e] focus:outline-none backdrop-blur-sm">
+                                <button id="btn-admin-transfer" onclick="adminTransferUSDT(this)" class="col-span-2 btn-gold py-2 rounded-xl text-xs flex items-center justify-center gap-1 shadow-xl">
+                                    <span>USDT ट्रांसफर करें</span> <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                </button>
                             </div>
-                            <div class="admin-transfer-box">
-                                <span class="transfer-label">प्राप्तकर्ता SPX ID</span>
-                                <input type="text" id="adminReceiverSpX" placeholder="प्राप्तकर्ता की SPX ID" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm mt-1">
-                            </div>
-                            <div class="admin-transfer-box">
-                                <span class="transfer-label">USDT संख्या (BEP20)</span>
-                                <input type="number" id="adminTransferAmount" placeholder="USDT संख्या" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-amber-400 text-[#1a1a2e] font-mono backdrop-blur-sm mt-1">
-                            </div>
-                            <button onclick="adminSpXTransfer()" class="w-full btn-gold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-xl">
-                                <i class="fa-solid fa-arrow-right-arrow-left"></i> USDT ट्रांसफर करें
-                            </button>
-                            <div class="text-[9px] text-amber-600/30 text-center mt-1">⚠️ ट्रांसफर SPX ID के माध्यम से होगा</div>
-                        </div>
-                        <div class="glass-gold p-4 rounded-2xl border-amber-500/30 space-y-2">
-                            <h4 class="text-xs font-bold text-amber-700/70">हाल के ट्रांसफर</h4>
-                            <div id="adminTransferLog" class="space-y-2 text-xs max-h-[200px] overflow-y-auto">
-                                <p class="text-amber-600/30 text-center py-2">कोई ट्रांसफर नहीं</p>
+                            <div class="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
+                                <span class="text-[9px] text-amber-600/60"><i class="fa-solid fa-info-circle mr-1"></i> SPX ID का उपयोग करें (जैसे SPX100001)</span>
                             </div>
                         </div>
                     </div>
@@ -1701,24 +1950,36 @@
 
         </main>
 
+        <!-- ============================================================ -->
+        <!-- RECEIPT MODAL -->
+        <!-- ============================================================ -->
         <div id="receiptModal" class="receipt-modal hidden">
             <div class="receipt-card" id="receiptCard">
+                <div class="globe-watermark"><i class="fa-solid fa-globe"></i></div>
                 <div class="receipt-logo">
                     <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" style="height:32px;object-fit:contain;display:inline-block;" />
                     <small>Premium • Gold Edition</small>
                 </div>
                 <div class="receipt-header">
-                    <h3><i class="fa-regular fa-receipt mr-2"></i> रसीद</h3>
+                    <h3><i class="fa-solid fa-receipt mr-2"></i> Official Payment Receipt</h3>
                     <button class="receipt-close" onclick="closeReceipt()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="receiptContent"></div>
                 <div class="receipt-footer">
-                    <button class="btn-download" onclick="downloadReceipt()"><i class="fa-solid fa-download"></i> डाउनलोड</button>
-                    <button class="btn-print" onclick="printReceipt()"><i class="fa-solid fa-print"></i> प्रिंट</button>
+                    <button class="btn-download" onclick="downloadReceipt()"><i class="fa-solid fa-download"></i> डाउनलोड करें</button>
+                    <button class="btn-print" onclick="printReceipt()"><i class="fa-solid fa-print"></i> प्रिंट करें</button>
                 </div>
             </div>
         </div>
 
+        <!-- Voice Toast -->
+        <div id="voiceToast" class="voice-toast">
+            <span class="voice-icon"><i class="fa-solid fa-circle-check"></i></span>
+            <p class="voice-msg" id="voiceToastMsg">बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है।</p>
+            <button class="voice-close" onclick="closeVoiceToast()">ठीक है</button>
+        </div>
+
+        <!-- MODALS -->
         <div id="fullscreenImageModal" class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50 p-4 hidden">
             <div class="absolute top-4 right-4 z-50">
                 <button onclick="closeFullscreenImage()" class="bg-amber-500/20 hover:bg-amber-500 text-amber-500 hover:text-[#1a1a2e] w-10 h-10 rounded-full flex items-center justify-center transition-all btn-animate">
@@ -1730,7 +1991,6 @@
                 <p class="text-[10px] text-amber-300/30 mt-2">ज़ूम करने के लिए क्लिक करें</p>
             </div>
         </div>
-
         <div id="myReferralsModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30">
                 <div class="flex items-center justify-between border-b border-amber-500/15 pb-2 shrink-0">
@@ -1740,11 +2000,10 @@
                 <div id="referralsListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
-
         <div id="txHistoryModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30">
                 <div class="flex items-center justify-between border-b border-amber-500/15 pb-2 shrink-0">
-                    <h4 class="text-xs font-bold text-amber-600"><i class="fa-regular fa-clock mr-1"></i> लेनदेन इतिहास</h4>
+                    <h4 class="text-xs font-bold text-amber-600"><i class="fa-solid fa-receipt mr-1"></i> लेनदेन इतिहास</h4>
                     <button onclick="toggleTxHistoryModal(false)" class="text-amber-600/40 hover:text-[#1a1a2e] btn-animate"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="flex bg-white/80 p-1 rounded-xl border border-amber-500/15 text-[10px] shrink-0">
@@ -1755,7 +2014,6 @@
                 <div id="txHistoryListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
-
         <div id="teamModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl flex flex-col max-h-[85vh] border-amber-500/30">
                 <div class="flex items-center justify-between border-b border-amber-500/15 pb-2 shrink-0">
@@ -1779,7 +2037,6 @@
                 <div id="teamListArea" class="flex-1 overflow-y-auto space-y-2 text-xs pr-1"></div>
             </div>
         </div>
-
         <div id="forgotPasswordModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 hidden">
             <div class="glass-gold p-5 rounded-2xl w-full max-w-sm space-y-4 shadow-2xl border-amber-500/30">
                 <div class="flex items-center justify-between border-b border-amber-500/15 pb-2">
@@ -1796,10 +2053,14 @@
             </div>
         </div>
 
+        <!-- TOAST -->
         <div id="toastNotification"><span id="toastMessage"></span><button onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button></div>
 
     </div>
 
+    <!-- ============================================================ -->
+    <!-- FULL JAVASCRIPT                                               -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
         // APPWRITE CONFIGURATION
@@ -1811,13 +2072,15 @@
         const STAKING_SETTINGS_COLLECTION_ID = "staking_plan_settings";
         const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
         const STAKING_SETTINGS_DOC_ID = "global_config";
+        const ADMIN_TEAM_ID = "6a4a84580012aed57e61";
         const SECRET_ADMIN_KEY = "admin2025";
 
-        const { Client, Databases, Storage, Account, Query, ID } = Appwrite;
+        const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
         const databases = new Databases(client);
         const storage = new Storage(client);
         const account = new Account(client);
+        const teams = new Teams(client);
 
         // ============================================================
         // STATE
@@ -1840,7 +2103,7 @@
         let receiptData = null;
 
         // ============================================================
-        // UTILITY
+        // UTILITY FUNCTIONS
         // ============================================================
         function parseJsonSafe(value, fallback) {
             if (!value) return fallback;
@@ -1854,7 +2117,20 @@
             try { return storage.getFileView(SCREENSHOT_BUCKET_ID, value).href; } catch (e) { return ''; }
         }
 
-        function generateCoinXId() { return 'SPX' + String(Math.floor(100000000 + Math.random() * 900000000)); }
+        function generateCoinXId() {
+            const prefix = 'SPX';
+            const num = String(Math.floor(100000 + Math.random() * 900000));
+            return prefix + num;
+        }
+
+        function generateReceiptId() {
+            const now = new Date();
+            const d = String(now.getFullYear()).slice(2) +
+                String(now.getMonth() + 1).padStart(2, '0') +
+                String(now.getDate()).padStart(2, '0');
+            const num = String(Math.floor(100000 + Math.random() * 900000));
+            return 'SPX-' + d + '-' + num;
+        }
 
         function setButtonLoading(btn, isLoading) {
             if (!btn) return;
@@ -1882,19 +2158,19 @@
                 referrals: parseJsonSafe(doc.referrals, []),
                 transactions: parseJsonSafe(doc.transactions, []),
                 tradeHistory: parseJsonSafe(doc.tradeHistory, []),
+                dailyRewards: parseJsonSafe(doc.dailyRewards, []),
                 buySellWallet: parseFloat(doc.buySellWallet || 0),
                 coins: parseFloat(doc.coins || 0),
                 tradeWallet: parseFloat(doc.tradeWallet || 0),
                 coinxId: doc.coinxId || doc.coinxid || generateCoinXId(),
-                coinxWalletSC: doc.coinxWalletSC || '',
-                dailyRewards: parseJsonSafe(doc.dailyRewards, [])
+                coinxWalletSC: doc.coinxWalletSC || ''
             };
         }
 
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMessage').innerText = msg;
-            const colors = { success: 'rgba(11,126,74,0.3)', error: 'rgba(185,28,28,0.2)', info: 'rgba(212,175,55,0.25)' };
+            const colors = { success: 'rgba(34,197,94,0.3)', error: 'rgba(185,28,28,0.2)', info: 'rgba(212,175,55,0.25)' };
             toast.style.borderColor = colors[type] || colors.info;
             toast.classList.add('show');
             clearTimeout(toast._timer);
@@ -1927,6 +2203,43 @@
             showToast(msg || '✅ कॉपी हो गया!');
         }
 
+        function partialHide(str, show = 3) {
+            if (!str) return '****';
+            if (str.length <= show * 2) return str;
+            const first = str.slice(0, show);
+            const last = str.slice(-show);
+            return first + '****' + last;
+        }
+
+        // ============================================================
+        // VOICE NOTIFICATIONS
+        // ============================================================
+        function speakHindi(text, callback) {
+            try {
+                const speech = new SpeechSynthesisUtterance(text);
+                speech.lang = 'hi-IN';
+                speech.rate = 0.9;
+                speech.pitch = 1.1;
+                speech.volume = 1;
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(v => v.lang === 'hi-IN' && v.name.includes('Female'));
+                if (femaleVoice) speech.voice = femaleVoice;
+                window.speechSynthesis.speak(speech);
+                if (callback) setTimeout(callback, 3000);
+            } catch (e) { if (callback) callback(); }
+        }
+
+        function showVoiceToast(msg) {
+            const el = document.getElementById('voiceToast');
+            document.getElementById('voiceToastMsg').innerText = msg;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 6000);
+        }
+
+        function closeVoiceToast() {
+            document.getElementById('voiceToast').classList.remove('show');
+        }
+
         // ============================================================
         // BUTTERFLIES
         // ============================================================
@@ -1953,7 +2266,7 @@
         }
 
         // ============================================================
-        // ADMIN
+        // ADMIN CODE WORD
         // ============================================================
         function toggleAdminSearch() {
             const box = document.getElementById('adminSearchBox');
@@ -1999,6 +2312,9 @@
             showToast('एडमिन मोड बंद', 'info');
         }
 
+        // ============================================================
+        // LOAD ALL DATA FOR ADMIN
+        // ============================================================
         async function loadAllData() {
             if (!isAdminMode) return;
             try {
@@ -2011,7 +2327,6 @@
                 renderAdminWithdrawals();
                 renderAdminStaking();
                 renderAdminReferrals();
-                renderAdminTransfers();
             } catch (e) { showToast('डेटा लोड नहीं हो सका', 'error'); }
         }
 
@@ -2020,7 +2335,7 @@
                 const doc = await databases.getDocument(DATABASE_ID, STAKING_SETTINGS_COLLECTION_ID, STAKING_SETTINGS_DOC_ID);
                 adminStakingSettings.globallyEnabled = !!doc.globallyEnabled;
                 adminStakingSettings.plans = parseJsonSafe(doc.plans, adminStakingSettings.plans);
-            } catch (e) { /* defaults */ }
+            } catch (e) { /* use defaults */ }
         }
 
         function updateAdminStats() {
@@ -2038,6 +2353,9 @@
             document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(2)} USDT`;
         }
 
+        // ============================================================
+        // ADMIN TAB SWITCHING
+        // ============================================================
         function switchAdminTab(tab) {
             if (!isAdminMode) return;
             currentAdminTab = tab;
@@ -2055,9 +2373,11 @@
             if (tab === 'withdrawals') renderAdminWithdrawals();
             if (tab === 'staking') renderAdminStaking();
             if (tab === 'referrals') renderAdminReferrals();
-            if (tab === 'transfers') renderAdminTransfers();
         }
 
+        // ============================================================
+        // ADMIN USERS
+        // ============================================================
         function renderAdminUsers() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminUserList');
@@ -2067,7 +2387,8 @@
             users.forEach(u => {
                 const emailId = 'aemail' + u.$id,
                     phoneId = 'aphone' + u.$id,
-                    coinxId = 'acoinx' + u.$id;
+                    coinxId = 'acoinx' + u.$id,
+                    refId = 'aref' + u.$id;
                 const card = document.createElement('div');
                 card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-1';
                 card.innerHTML = `
@@ -2077,8 +2398,9 @@
                             </div>
                             <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
                                 <span>ईमेल: ${u.email||'N/A'} <button onclick="copyToClipboard('${emailId}','✅ Email कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span>SPX ID: ${u.coinxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SPX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                                <span class="col-span-2">📱 मोबाइल: ${u.phone||'N/A'} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span>मोबाइल: ${u.phone||'N/A'} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span class="col-span-2 font-bold text-amber-600">SPX ID: ${u.coinxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SPX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                                <span class="col-span-2">रेफरल: ${u.$id||'N/A'} <button onclick="copyToClipboard('${refId}','✅ रेफरल कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
                             </div>
                             <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
                                 <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
@@ -2087,6 +2409,7 @@
                             <span id="${emailId}" class="hidden">${u.email||''}</span>
                             <span id="${phoneId}" class="hidden">${u.phone||''}</span>
                             <span id="${coinxId}" class="hidden">${u.coinxId||''}</span>
+                            <span id="${refId}" class="hidden">${u.$id||''}</span>
                         `;
                 list.appendChild(card);
             });
@@ -2113,14 +2436,15 @@
             if (!targetId || !coinAmount || coinAmount <= 0) { showToast('सही SPX ID/ईमेल और मान्य USDT संख्या भरें।',
                     'error'); return; }
             setButtonLoading(btn, true);
-            const idx = users.findIndex(u => u.$id === targetId || u.email === targetId || u.coinxId === targetId);
+            const idx = users.findIndex(u => u.coinxId === targetId || u.email === targetId || u.$id === targetId);
             if (idx === -1) { setButtonLoading(btn, false);
                 showToast('यूजर नहीं मिला!', 'error'); return; }
-            const current = parseFloat(users[idx].coins || 0);
+            const field = 'coins';
+            const current = parseFloat(users[idx][field] || 0);
             const newBal = action === 'add' ? current + coinAmount : Math.max(0, current - coinAmount);
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { coins: newBal });
-                users[idx].coins = newBal;
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { [field]: newBal });
+                users[idx][field] = newBal;
                 showToast(action === 'add' ? `${coinAmount} USDT क्रेडिट!` : `${coinAmount} USDT डेबिट!`, 'success');
                 document.getElementById('adminCoinUserId').value = '';
                 document.getElementById('adminCoinAmount').value = '';
@@ -2129,73 +2453,61 @@
             } catch (e) { showToast('बैलेंस अपडेट में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
-        async function adminSpXTransfer() {
+        // ============================================================
+        // ADMIN TRANSFER (SPX ID based)
+        // ============================================================
+        async function adminTransferUSDT(btn) {
             if (!isAdminMode) return;
-            const senderSpX = document.getElementById('adminSenderSpX').value.trim();
-            const receiverSpX = document.getElementById('adminReceiverSpX').value.trim();
+            const fromId = document.getElementById('adminTransferFrom').value.trim();
+            const toId = document.getElementById('adminTransferTo').value.trim();
             const amount = parseFloat(document.getElementById('adminTransferAmount').value);
-            if (!senderSpX || !receiverSpX || !amount || amount <= 0) { showToast('सभी फील्ड भरें।', 'error'); return; }
-            if (senderSpX === receiverSpX) { showToast('खुद को ट्रांसफर नहीं कर सकते।', 'error'); return; }
-
-            const senderIdx = users.findIndex(u => u.coinxId === senderSpX);
-            const receiverIdx = users.findIndex(u => u.coinxId === receiverSpX);
-            if (senderIdx === -1) { showToast('प्रेषक SPX ID नहीं मिली!', 'error'); return; }
-            if (receiverIdx === -1) { showToast('प्राप्तकर्ता SPX ID नहीं मिली!', 'error'); return; }
-            if (parseFloat(users[senderIdx].coins || 0) < amount) { showToast('प्रेषक के पास पर्याप्त USDT नहीं!',
+            if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें और मान्य USDT संख्या डालें.',
                     'error'); return; }
-
-            const newSenderCoins = parseFloat(users[senderIdx].coins || 0) - amount;
-            const newReceiverCoins = parseFloat(users[receiverIdx].coins || 0) + amount;
-
+            if (fromId === toId) { showToast('खुद को ट्रांसफर नहीं कर सकते!', 'error'); return; }
+            setButtonLoading(btn, true);
+            const fromIdx = users.findIndex(u => u.coinxId === fromId || u.email === fromId || u.$id === fromId);
+            const toIdx = users.findIndex(u => u.coinxId === toId || u.email === toId || u.$id === toId);
+            if (fromIdx === -1 || toIdx === -1) { setButtonLoading(btn, false);
+                showToast('SPX ID नहीं मिली!', 'error'); return; }
+            const fromBal = parseFloat(users[fromIdx].coins || 0);
+            if (fromBal < amount) { setButtonLoading(btn, false);
+                showToast('स्रोत के पास पर्याप्त USDT नहीं!', 'error'); return; }
+            const newFrom = fromBal - amount;
+            const newTo = parseFloat(users[toIdx].coins || 0) + amount;
+            const tx = {
+                type: 'admin_transfer',
+                from: users[fromIdx].coinxId,
+                to: users[toIdx].coinxId,
+                amount: amount,
+                dateTime: new Date().toLocaleString('hi-IN'),
+                status: 'Completed',
+                network: 'USDT BEP20'
+            };
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[senderIdx].docId, { coins: newSenderCoins });
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[receiverIdx].docId, { coins: newReceiverCoins });
-                users[senderIdx].coins = newSenderCoins;
-                users[receiverIdx].coins = newReceiverCoins;
-
-                const logEntry = {
-                    from: senderSpX,
-                    to: receiverSpX,
-                    amount: amount,
-                    dateTime: new Date().toLocaleString('hi-IN'),
-                    timestamp: Date.now(),
-                    type: 'admin_transfer'
-                };
-                const logs = parseJsonSafe(document.getElementById('adminTransferLog').getAttribute('data-logs') || '[]', []);
-                logs.unshift(logEntry);
-                document.getElementById('adminTransferLog').setAttribute('data-logs', JSON.stringify(logs));
-                renderAdminTransfers();
-                document.getElementById('adminSenderSpX').value = '';
-                document.getElementById('adminReceiverSpX').value = '';
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[fromIdx].docId, { coins: newFrom });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[toIdx].docId, { coins: newTo });
+                users[fromIdx].coins = newFrom;
+                users[toIdx].coins = newTo;
+                const txsFrom = [...(users[fromIdx].transactions || []), { ...tx, type: 'admin_sent' }];
+                const txsTo = [...(users[toIdx].transactions || []), { ...tx, type: 'admin_received' }];
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[fromIdx].docId, { transactions: JSON
+                        .stringify(txsFrom) });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[toIdx].docId, { transactions: JSON
+                        .stringify(txsTo) });
+                users[fromIdx].transactions = txsFrom;
+                users[toIdx].transactions = txsTo;
+                showToast(`✅ ${amount} USDT ${users[fromIdx].coinxId} से ${users[toIdx].coinxId} को भेजे गए!`, 'success');
+                document.getElementById('adminTransferFrom').value = '';
+                document.getElementById('adminTransferTo').value = '';
                 document.getElementById('adminTransferAmount').value = '';
-                showToast(`✅ ${amount} USDT ${senderSpX} से ${receiverSpX} को भेजे गए!`, 'success');
                 updateAdminStats();
-            } catch (e) { showToast('ट्रांसफर विफल: ' + e.message, 'error'); }
+                renderAdminUsers();
+            } catch (e) { showToast('ट्रांसफर में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
-        function renderAdminTransfers() {
-            if (!isAdminMode) return;
-            const list = document.getElementById('adminTransferLog');
-            const logs = parseJsonSafe(list.getAttribute('data-logs') || '[]', []);
-            list.innerHTML = '';
-            if (logs.length === 0) {
-                list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई ट्रांसफर नहीं</p>';
-                return;
-            }
-            logs.slice(0, 20).forEach(l => {
-                const div = document.createElement('div');
-                div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
-                div.innerHTML = `
-                            <div>
-                                <div class="text-[10px] font-bold text-amber-600">${l.from} → ${l.to}</div>
-                                <div class="text-[9px] text-amber-600/30">${l.dateTime}</div>
-                            </div>
-                            <span class="currency-usdt text-sm font-bold">${l.amount} USDT</span>
-                        `;
-                list.appendChild(div);
-            });
-        }
-
+        // ============================================================
+        // ADMIN DEPOSITS
+        // ============================================================
         function renderAdminDeposits() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
@@ -2210,6 +2522,7 @@
                 card.innerHTML = `
                             <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="text-green-600">$${d.amountUSD}</span></div>
                             <div class="text-[10px] text-amber-600/30">USDT: ${d.coinsAmount} USDT | ${d.dateTime}</div>
+                            <div class="text-[10px] text-amber-600/30 font-mono">SPX: ${u.coinxId||'N/A'}</div>
                             ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(d.receiptFileId)}')"></div>`:''}
                             <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
                         `;
@@ -2229,12 +2542,20 @@
                     renderAdminDeposits(); return; }
                 const newCoins = parseFloat(fresh.coins || 0) + parseFloat(pending.coinsAmount || 0);
                 const approved = parseJsonSafe(fresh.approved_deposit, []);
-                approved.push({ ...pending, approvedAt: new Date().toISOString() });
+                const receiptId = generateReceiptId();
+                const tx = { ...pending, approvedAt: new Date().toISOString(), receiptId: receiptId };
+                approved.push(tx);
+                const txs = parseJsonSafe(fresh.transactions, []);
+                txs.push({ type: 'deposit', amountUSD: pending.amountUSD, coinsAmount: pending.coinsAmount,
+                    receiptFileId: pending.receiptFileId, dateTime: pending.dateTime, status: 'Approved',
+                    receiptId: receiptId });
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { coins: newCoins,
-                    approved_deposit: JSON.stringify(approved), pending_deposit: '' });
+                    approved_deposit: JSON.stringify(approved), pending_deposit: '', transactions: JSON.stringify(
+                        txs) });
                 users[idx].coins = newCoins;
                 users[idx].approvedDeposits = approved;
                 users[idx].pendingDeposit = null;
+                users[idx].transactions = txs;
                 showToast('✅ डिपॉजिट स्वीकृत', 'success');
                 updateAdminStats();
                 renderAdminDeposits();
@@ -2254,6 +2575,9 @@
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
+        // ============================================================
+        // ADMIN WITHDRAWALS
+        // ============================================================
         function renderAdminWithdrawals() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminWithdrawalsList');
@@ -2269,6 +2593,7 @@
                 card.innerHTML = `
                             <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="currency-usdt">${w.coinsAmount} USDT</span></div>
                             <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
+                            <div class="text-[10px] text-amber-600/30 font-mono">SPX: ${u.coinxId||'N/A'}</div>
                             <div class="text-[10px] currency-inr font-bold">💰 INR: ₹${inrAmount} (10% चार्ज कट)</div>
                             <div class="text-[10px] text-blue-600">💵 USDT BEP20: ${w.coinsAmount} USDT</div>
                             ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(u.withdrawal_screenshot)}')"></div>`:''}
@@ -2289,16 +2614,23 @@
                     users[idx].pendingWithdrawal = null;
                     renderAdminWithdrawals(); return; }
                 const approved = parseJsonSafe(fresh.approved_withdrawal, []);
-                approved.push({ ...pending, completedAt: new Date().toISOString() });
+                const receiptId = generateReceiptId();
+                const tx = { ...pending, completedAt: new Date().toISOString(), receiptId: receiptId };
+                approved.push(tx);
                 const newWithdrawn = parseFloat(fresh.withdrawal || 0) + parseFloat(pending.coinsAmount || 0);
+                const txs = parseJsonSafe(fresh.transactions, []);
+                txs.push({ type: 'withdrawal', coinsAmount: pending.coinsAmount, dateTime: pending.dateTime,
+                    status: 'Completed', receiptId: receiptId });
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, {
                     approved_withdrawal: JSON.stringify(approved),
                     withdrawal: newWithdrawn,
-                    pending_withdrawal: ''
+                    pending_withdrawal: '',
+                    transactions: JSON.stringify(txs)
                 });
                 users[idx].approvedWithdrawals = approved;
                 users[idx].withdrawal = newWithdrawn;
                 users[idx].pendingWithdrawal = null;
+                users[idx].transactions = txs;
                 showToast('✅ विथड्रॉवल पूरा', 'success');
                 updateAdminStats();
                 renderAdminWithdrawals();
@@ -2326,6 +2658,9 @@
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
+        // ============================================================
+        // ADMIN STAKING
+        // ============================================================
         function renderAdminStaking() {
             if (!isAdminMode) return;
             const plansConfig = document.getElementById('adminStakingPlansConfig');
@@ -2350,10 +2685,11 @@
                         const now = Date.now();
                         const isUnlockable = s.lockUntil <= now;
                         const div = document.createElement('div');
-                        div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
+                        div.className =
+                            'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
                         div.innerHTML = `
                                     <div>
-                                        <div class="text-amber-600 text-xs font-bold">${u.name}</div>
+                                        <div class="text-amber-600 text-xs font-bold">${u.name} (${u.coinxId||'N/A'})</div>
                                         <div class="text-[9px] text-amber-600/30">${s.amount} USDT | ${s.days} days</div>
                                         <div class="text-[9px] text-amber-600/30">Stake: ${s.startDate || 'N/A'} | Unlock: ${new Date(s.lockUntil).toLocaleDateString('hi-IN')}</div>
                                     </div>
@@ -2426,6 +2762,9 @@
                 renderAdminStaking(); }
         }
 
+        // ============================================================
+        // ADMIN REFERRALS
+        // ============================================================
         function renderAdminReferrals() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminReferralsList');
@@ -2433,7 +2772,8 @@
             const all = [];
             users.forEach(u => {
                 (u.referrals || []).forEach(r => {
-                    all.push({ ...r, referrer: u.name, referrerEmail: u.email });
+                    all.push({ ...r, referrer: u.name, referrerEmail: u.email, referrerSPX: u.coinxId ||
+                            'N/A' });
                 });
             });
             if (all.length === 0) { list.innerHTML =
@@ -2443,13 +2783,16 @@
                 const div = document.createElement('div');
                 div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 space-y-1';
                 div.innerHTML = `
-                            <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerEmail})</span><span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span></div>
+                            <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerSPX})</span><span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span></div>
                             <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'}) | स्टेक: ${Number(r.stakedAmount||0).toFixed(2)} USDT | ${r.dateTime||''}</div>
                         `;
                 list.appendChild(div);
             });
         }
 
+        // ============================================================
+        // EXPORT ALL USER DATA
+        // ============================================================
         function exportAllUserData() {
             if (!isAdminMode || users.length === 0) { showToast('कोई डेटा नहीं', 'error'); return; }
             let csv =
@@ -2487,7 +2830,7 @@
         }
 
         // ============================================================
-        // RECEIPT
+        // RECEIPT MODAL
         // ============================================================
         function openReceipt(data) {
             receiptData = data;
@@ -2501,81 +2844,74 @@
             const inrAmount = (usdtAmount * 85).toFixed(2);
             const usdtDisplay = usdtAmount.toFixed(2);
 
-            // Hide sensitive info - show partial
-            const emailDisplay = currentUser?.email ? currentUser.email.replace(/(.{2})(.*)(?=@)/, (m, a, b) => a + '*'.repeat(
-                Math.min(b.length, 6))) : 'N/A';
-            const phoneDisplay = currentUser?.phone ? currentUser.phone.replace(/(\d{3})\d{4}(\d{3})/, '$1****$2') : 'N/A';
-            const idDisplay = currentUser?.$id ? currentUser.$id.slice(0, 6) + '****' : 'N/A';
-            const spxIdDisplay = currentUser?.coinxId || 'N/A';
-
             let statusBadge = '';
             if (data.status === 'Approved' || data.status === 'Completed' || data.status === 'SUCCESS') {
-                statusBadge = '<span class="receipt-badge success">✅ ' + (data.status || 'SUCCESS') + '</span>';
+                statusBadge = '<span class="receipt-badge approved">✅ ' + data.status + '</span>';
             } else if (data.status === 'Pending') {
                 statusBadge = '<span class="receipt-badge pending">⏳ ' + data.status + '</span>';
             } else if (data.status === 'Rejected') {
                 statusBadge = '<span class="receipt-badge rejected">❌ ' + data.status + '</span>';
             } else {
-                statusBadge = '<span class="receipt-badge success">✅ ' + (data.status || 'SUCCESS') + '</span>';
+                statusBadge = '<span class="receipt-badge approved">✅ ' + (data.status || 'Completed') + '</span>';
             }
 
-            let typeLabel = isDeposit ? '💰 डिपॉजिट' : isWithdrawal ? '💸 विथड्रॉवल' : isDaily ? '⭐ डेली रिवॉर्ड' :
+            let typeLabel = isDeposit ? '💰 डिपॉजिट' : isWithdrawal ? '💸 विथड्रॉवल' : isDaily ? '🌟 डेली रिवॉर्ड' :
                 '🔄 ट्रांसफर';
 
-            const receiptId = 'SPX-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(Math.floor(
-                100000 + Math.random() * 900000));
-            const txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+            const memberName = currentUser?.name || 'N/A';
+            const memberId = currentUser?.coinxId || 'N/A';
+            const receiptId = data.receiptId || generateReceiptId();
+            const txHash = data.txHash || '0x' + Math.random().toString(16).slice(2, 14) + '...' + Math.random().toString(16)
+                .slice(2, 6);
 
-            let particles = '';
-            for (let i = 0; i < 10; i++) {
-                particles +=
-                    `<span style="left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;"></span>`;
-            }
+            // Partial hide email
+            const emailPartial = currentUser?.email ? partialHide(currentUser.email, 3) : 'N/A';
+            const phonePartial = currentUser?.phone ? partialHide(currentUser.phone, 3) : 'N/A';
 
             let receiptHTML = `
                         <div class="receipt-row"><span class="label">📋 लेनदेन प्रकार</span><span class="value highlight">${typeLabel}</span></div>
 
+                        <!-- CURRENCY BOX: INR + USDT -->
                         <div class="receipt-currency-box border-gold-strong bg-inr-light">
-                            <div class="green-particles">${particles}</div>
-                            <div class="globe-overlay"><i class="fa-solid fa-globe"></i></div>
+                            <span class="globe-bg"><i class="fa-solid fa-globe"></i></span>
+                            <span class="verified-stamp">✔ Verified</span>
                             <span class="inr-amount">₹${inrAmount}</span>
                             <span class="inr-label">💵 इंडियन रुपये (INR)</span>
                             <span class="usdt-amount">${usdtDisplay} USDT</span>
                             <span class="usdt-label">💲 USDT (BEP-20)</span>
                         </div>
 
-                        <div class="receipt-row"><span class="label">👤 सदस्य का नाम</span><span class="value">${currentUser?.name || 'N/A'}</span></div>
-                        <div class="receipt-row"><span class="label">🆓 सदस्य ID</span><span class="value">${idDisplay}</span></div>
-                        <div class="receipt-row"><span class="label">🆔 SPX ID</span><span class="value" style="color:#d4af37;font-weight:700;">${spxIdDisplay}</span></div>
-                        <div class="receipt-row"><span class="label">🧾 रसीद ID</span><span class="value" style="font-size:10px;">${receiptId}</span></div>
-                        <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value" style="font-size:10px;">${emailDisplay}</span></div>
-                        <div class="receipt-row"><span class="label">📱 मोबाइल</span><span class="value" style="font-size:10px;">${phoneDisplay}</span></div>
-                        <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || new Date().toLocaleString('hi-IN')}</span></div>
-                        <div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value" style="color:#26A17B;font-weight:600;">BNB Smart Chain (BEP20)</span></div>
+                        <div class="receipt-row"><span class="label">👤 सदस्य का नाम</span><span class="value">${memberName}</span></div>
+                        <div class="receipt-row"><span class="label">🆔 सदस्य ID</span><span class="value spx-id-display" style="font-size:13px;font-weight:700;color:#d4af37;">${memberId}</span></div>
+                        <div class="receipt-row"><span class="label">🧾 रसीद ID</span><span class="value" style="font-size:11px;">${receiptId}</span></div>
+                        <div class="receipt-row"><span class="label">📧 ईमेल</span><span class="value partial-hide-email" style="filter:blur(3px);">${emailPartial}</span></div>
+                        <div class="receipt-row"><span class="label">📱 मोबाइल</span><span class="value partial-hide-email" style="filter:blur(3px);">${phonePartial}</span></div>
+                        <div class="receipt-row"><span class="label">🌐 नेटवर्क</span><span class="value currency-usdt">BNB Smart Chain (BEP20)</span></div>
+                        <div class="receipt-row"><span class="label">📅 तारीख & समय</span><span class="value">${data.dateTime || 'N/A'}</span></div>
                         <div class="receipt-row"><span class="label">📊 स्थिति</span><span class="value">${statusBadge}</span></div>
-                        <div class="receipt-row"><span class="label">🔗 ट्रांजैक्शन हैश</span><span class="value" style="font-size:9px;max-width:70%;">${txHash}</span></div>
-
+                        <div class="receipt-row"><span class="label">🔗 ट्रांजैक्शन हैश</span><span class="value" style="font-size:10px;">${txHash}</span></div>
                         ${data.receiptFileId ? `<div class="receipt-row" style="flex-direction:column;align-items:center;padding:8px 0;"><span class="label" style="margin-bottom:6px;">🧾 रसीद स्क्रीनशॉट</span><img src="${resolveImageUrl(data.receiptFileId)}" class="w-24 h-24 object-contain rounded-lg border border-amber-500/20 cursor-pointer" onclick="openFullscreenImage('${resolveImageUrl(data.receiptFileId)}')"></div>` : ''}
-
-                        <div class="receipt-verified">
-                            <i class="fa-solid fa-circle-check"></i> Principal Amount Recorded
+                        <div class="receipt-qr-box">
+                            <div id="receiptQrContainer"></div>
                         </div>
-                        <div class="receipt-verified gold">
-                            <i class="fa-solid fa-lock"></i> Secure & Verified Transaction
-                        </div>
-
-                        <div class="receipt-qr">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(txHash)}" alt="QR Code">
-                        </div>
-
-                        <div style="border-top:1px solid rgba(212,175,55,0.08);margin-top:8px;padding-top:6px;text-align:center;">
-                            <span style="font-size:7px;color:#6b4a7a;letter-spacing:1px;">🔒 सुरक्षित लेनदेन • SupriX Global</span>
+                        <div style="border-top:1px solid rgba(212,175,55,0.08);margin-top:6px;padding-top:6px;text-align:center;">
+                            <span style="font-size:8px;color:#6b4a7a;">🔒 सुरक्षित लेनदेन • SupriX Global</span>
                         </div>
                     `;
-
             content.innerHTML = receiptHTML;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+
+            // Generate QR for receipt
+            setTimeout(() => {
+                const container = document.getElementById('receiptQrContainer');
+                if (container && typeof QRCode !== 'undefined') {
+                    container.innerHTML = '';
+                    const qrData = `SupriX|${receiptId}|${memberId}|${usdtDisplay}USDT|${data.dateTime}`;
+                    new QRCode(container, { text: qrData, width: 100, height: 100, colorDark: '#d4af37',
+                        colorLight: '#ffffff' });
+                }
+            }, 100);
         }
 
         function closeReceipt() {
@@ -2594,42 +2930,50 @@
             clone.style.padding = '24px';
             clone.style.background = '#ffffff';
             clone.style.color = '#1a1a2e';
-            clone.style.maxWidth = '460px';
+            clone.style.maxWidth = '480px';
             clone.style.margin = '0 auto';
             clone.style.fontFamily = "'Poppins', sans-serif";
+            clone.style.border = '3px solid #d4af37';
             const html = `
-                        <html><head><title>SupriX_Receipt_${receiptData.dateTime || Date.now()}.html</title>
-                        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-                        <style>
-                            body { background:#f5f0eb; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:20px; font-family:'Poppins',sans-serif; }
-                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid #d4af37; }
-                            .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
-                            .receipt-logo img { height:32px; object-fit:contain; display:inline-block; }
-                            .receipt-logo small { display:block; font-size:9px; color:#6b4a7a; letter-spacing:2px; }
-                            .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12px; }
-                            .receipt-row .label { color:#6b4a7a; }
-                            .receipt-row .value { color:#1a1a2e; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
-                            .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                            .receipt-currency-box { border:2px solid #d4af37; border-radius:16px; padding:18px 18px 14px; margin:10px 0 16px 0; background:rgba(34,197,94,0.05); text-align:center; position:relative; overflow:hidden; }
-                            .receipt-currency-box .inr-amount { font-size:30px; font-weight:800; color:#22C55E; letter-spacing:1px; }
-                            .receipt-currency-box .inr-label { font-size:14px; font-weight:600; color:#22C55E; display:block; margin-top:2px; }
-                            .receipt-currency-box .usdt-amount { font-size:20px; font-weight:700; color:#26A17B; margin-top:8px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:8px; }
-                            .receipt-currency-box .usdt-label { font-size:12px; font-weight:500; color:#26A17B; }
-                            .receipt-currency-box .globe-overlay { position:absolute; top:-20px; right:-20px; font-size:80px; opacity:0.06; color:#26A17B; pointer-events:none; }
-                            .receipt-currency-box .green-particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-                            .receipt-currency-box .green-particles span { position:absolute; width:4px; height:4px; background:#22C55E; border-radius:50%; opacity:0.15; animation:floatParticle 6s infinite ease-in-out; }
-                            @keyframes floatParticle { 0%,100% { transform:translate(0,0); opacity:0.05; } 50% { transform:translate(30px,-30px); opacity:0.25; } }
-                            .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                            .receipt-badge.success { background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); }
-                            .receipt-badge.pending { background:rgba(212,175,55,0.12); color:#b8962a; border:1px solid rgba(212,175,55,0.2); }
-                            .receipt-badge.rejected { background:rgba(185,28,28,0.12); color:#b91c1c; border:1px solid rgba(185,28,28,0.2); }
-                            .receipt-verified { display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.2); border-radius:30px; padding:4px 16px; margin:8px auto 4px; width:fit-content; font-size:11px; font-weight:600; color:#22C55E; }
-                            .receipt-verified.gold { border-color:#d4af37; color:#d4af37; background:rgba(212,175,55,0.08); }
-                            .receipt-qr { display:flex; justify-content:center; margin:10px 0 6px; }
-                            .receipt-qr img { width:80px; height:80px; object-fit:contain; border-radius:8px; border:1px solid rgba(212,175,55,0.2); padding:4px; background:#fff; }
-                            .globe-bg { display:none; }
-                        </style>
-                        </head><body>${clone.outerHTML}</body></html>
+                        <html>
+                        <head>
+                            <title>SupriX_Receipt_${receiptData.dateTime || Date.now()}.html</title>
+                            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+                            <style>
+                                body { background:#f5f0eb; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; padding:20px; font-family:'Poppins',sans-serif; }
+                                .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:480px; width:100%; border:3px solid #d4af37; }
+                                .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
+                                .receipt-logo img { height:32px; object-fit:contain; display:inline-block; }
+                                .receipt-logo small { display:block; font-size:9px; color:#6b4a7a; letter-spacing:2px; }
+                                .receipt-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12px; }
+                                .receipt-row .label { color:#6b4a7a; }
+                                .receipt-row .value { color:#1a1a2e; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
+                                .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
+                                .receipt-currency-box { border:3px solid #d4af37; border-radius:16px; padding:16px 18px; margin:10px 0 16px 0; background:rgba(34,197,94,0.06); text-align:center; position:relative; overflow:hidden; }
+                                .receipt-currency-box .inr-amount { font-size:32px; font-weight:800; color:#22C55E; letter-spacing:1px; }
+                                .receipt-currency-box .inr-label { font-size:14px; font-weight:600; color:#22C55E; display:block; margin-top:2px; }
+                                .receipt-currency-box .usdt-amount { font-size:20px; font-weight:700; color:#26A17B; margin-top:6px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:6px; }
+                                .receipt-currency-box .usdt-label { font-size:12px; font-weight:500; color:#26A17B; }
+                                .receipt-currency-box .globe-bg { position:absolute; top:-20px; right:-20px; font-size:80px; opacity:0.06; pointer-events:none; color:#26A17B; }
+                                .receipt-currency-box .verified-stamp { position:absolute; bottom:6px; left:6px; font-size:10px; color:#22C55E; font-weight:700; opacity:0.2; transform:rotate(-12deg); }
+                                .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
+                                .receipt-badge.approved { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
+                                .receipt-badge.pending { background:rgba(212,175,55,0.12); color:#b8962a; border:1px solid rgba(212,175,55,0.2); }
+                                .receipt-badge.completed { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
+                                .receipt-badge.rejected { background:rgba(185,28,28,0.12); color:#b91c1c; border:1px solid rgba(185,28,28,0.2); }
+                                .receipt-qr-box { display:flex; justify-content:center; align-items:center; margin:10px 0; padding:8px; background:#fff; border-radius:12px; border:1px solid rgba(212,175,55,0.2); }
+                                .receipt-qr-box canvas { max-width:100px; height:auto; }
+                                .spx-id-display { font-size:13px; font-weight:700; color:#d4af37; font-family:monospace; background:rgba(212,175,55,0.08); padding:2px 10px; border-radius:6px; display:inline-block; }
+                                .partial-hide-email { filter:blur(3px); }
+                                .watermark { text-align:center; font-size:8px; color:#6b4a7a; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
+                                .globe-watermark { display:none; }
+                            </style>
+                        </head>
+                        <body>
+                            ${clone.outerHTML}
+                            <p style="text-align:center;font-size:8px;color:#6b4a7a;margin-top:12px;">© SupriX Global • Premium Gold Edition</p>
+                        </body>
+                        </html>
                     `;
             const blob = new Blob([html], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
@@ -2652,7 +2996,7 @@
                         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
                         <style>
                             body { background:#f5f0eb; display:flex; justify-content:center; padding:30px 20px; font-family:'Poppins',sans-serif; }
-                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:460px; width:100%; border:2px solid #d4af37; }
+                            .receipt-card { background:#ffffff; border-radius:16px; padding:24px; max-width:480px; width:100%; border:3px solid #d4af37; }
                             .receipt-logo { text-align:center; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.1); }
                             .receipt-logo img { height:32px; object-fit:contain; display:inline-block; }
                             .receipt-logo small { display:block; font-size:9px; color:#6b4a7a; letter-spacing:2px; }
@@ -2660,29 +3004,31 @@
                             .receipt-row .label { color:#6b4a7a; }
                             .receipt-row .value { color:#1a1a2e; text-align:right; word-break:break-all; max-width:60%; font-family:monospace; }
                             .receipt-row .value.highlight { color:#d4af37; font-weight:600; }
-                            .receipt-currency-box { border:2px solid #d4af37; border-radius:16px; padding:18px 18px 14px; margin:10px 0 16px 0; background:rgba(34,197,94,0.05); text-align:center; position:relative; overflow:hidden; }
-                            .receipt-currency-box .inr-amount { font-size:30px; font-weight:800; color:#22C55E; letter-spacing:1px; }
+                            .receipt-currency-box { border:3px solid #d4af37; border-radius:16px; padding:16px 18px; margin:10px 0 16px 0; background:rgba(34,197,94,0.06); text-align:center; position:relative; overflow:hidden; }
+                            .receipt-currency-box .inr-amount { font-size:32px; font-weight:800; color:#22C55E; letter-spacing:1px; }
                             .receipt-currency-box .inr-label { font-size:14px; font-weight:600; color:#22C55E; display:block; margin-top:2px; }
-                            .receipt-currency-box .usdt-amount { font-size:20px; font-weight:700; color:#26A17B; margin-top:8px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:8px; }
+                            .receipt-currency-box .usdt-amount { font-size:20px; font-weight:700; color:#26A17B; margin-top:6px; display:block; border-top:1px solid rgba(38,161,123,0.2); padding-top:6px; }
                             .receipt-currency-box .usdt-label { font-size:12px; font-weight:500; color:#26A17B; }
-                            .receipt-currency-box .globe-overlay { display:none; }
-                            .receipt-currency-box .green-particles { display:none; }
+                            .receipt-currency-box .globe-bg { position:absolute; top:-20px; right:-20px; font-size:80px; opacity:0.06; pointer-events:none; color:#26A17B; }
+                            .receipt-currency-box .verified-stamp { position:absolute; bottom:6px; left:6px; font-size:10px; color:#22C55E; font-weight:700; opacity:0.2; transform:rotate(-12deg); }
                             .receipt-badge { display:inline-block; padding:2px 14px; border-radius:20px; font-size:9px; font-weight:700; }
-                            .receipt-badge.success { background:rgba(34,197,94,0.15); color:#22C55E; border:1px solid rgba(34,197,94,0.3); }
+                            .receipt-badge.approved { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
                             .receipt-badge.pending { background:rgba(212,175,55,0.12); color:#b8962a; border:1px solid rgba(212,175,55,0.2); }
+                            .receipt-badge.completed { background:rgba(34,197,94,0.12); color:#22C55E; border:1px solid rgba(34,197,94,0.2); }
                             .receipt-badge.rejected { background:rgba(185,28,28,0.12); color:#b91c1c; border:1px solid rgba(185,28,28,0.2); }
-                            .receipt-verified { display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.2); border-radius:30px; padding:4px 16px; margin:8px auto 4px; width:fit-content; font-size:11px; font-weight:600; color:#22C55E; }
-                            .receipt-verified.gold { border-color:#d4af37; color:#d4af37; background:rgba(212,175,55,0.08); }
-                            .receipt-qr { display:flex; justify-content:center; margin:10px 0 6px; }
-                            .receipt-qr img { width:80px; height:80px; object-fit:contain; border-radius:8px; border:1px solid rgba(212,175,55,0.2); padding:4px; background:#fff; }
-                            .globe-bg { display:none; }
-                            @media print { body { background:#fff; } .receipt-card { border-color:#d4af37; background:#ffffff; } }
+                            .receipt-qr-box { display:flex; justify-content:center; align-items:center; margin:10px 0; padding:8px; background:#fff; border-radius:12px; border:1px solid rgba(212,175,55,0.2); }
+                            .receipt-qr-box canvas { max-width:100px; height:auto; }
+                            .spx-id-display { font-size:13px; font-weight:700; color:#d4af37; font-family:monospace; background:rgba(212,175,55,0.08); padding:2px 10px; border-radius:6px; display:inline-block; }
+                            .partial-hide-email { filter:blur(3px); }
+                            .watermark { text-align:center; font-size:8px; color:#6b4a7a; margin-top:8px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.08); }
+                            .globe-watermark { display:none; }
+                            @media print { body { background:#fff; } .receipt-card { border-color:#d4af37; background:#f9f9f9; } }
                         </style>
                         </head><body>
                         <div class="receipt-card">
-                            <div class="receipt-logo"><img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" style="height:32px;object-fit:contain;display:inline-block;" /><small>Premium • Gold Edition</small></div>
+                            <div class="receipt-logo"><img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" style="height:32px;object-fit:contain;display:inline-block;" /><small>Premium • Gold Edition</small></div>
                             ${content.innerHTML}
-                            <div style="text-align:center;font-size:8px;color:#6b4a7a;margin-top:10px;padding-top:6px;border-top:1px solid rgba(212,175,55,0.08);">© SupriX Global • सुरक्षित लेनदेन</div>
+                            <div class="watermark">© SupriX Global • सुरक्षित लेनदेन</div>
                         </div>
                         </body></html>
                     `);
@@ -2697,10 +3043,12 @@
             if (isAdminMode) return;
             document.querySelectorAll('.app-page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
+
             const bottomBar = document.getElementById('bottomNavBar');
             const loggedPages = ['dashboardPage', 'purchasePage', 'stakingPage', 'profilePage'];
             if (loggedPages.includes(pageId)) bottomBar.classList.remove('hidden');
             else bottomBar.classList.add('hidden');
+
             document.querySelectorAll('#bottomNavBar button').forEach(b => {
                 b.classList.remove('text-amber-500', 'active');
                 b.classList.add('text-slate-400');
@@ -2710,16 +3058,18 @@
                 activeNavBtn.classList.remove('text-slate-400');
                 activeNavBtn.classList.add('text-amber-500', 'active');
             }
+
             if (currentUser) {
                 updateDashboardStats();
                 if (pageId === 'purchasePage') renderPurchaseSlabs();
                 if (pageId === 'stakingPage') renderStakingDetails();
-                if (pageId === 'profilePage') renderProfileDetails();
+                if (pageId === 'profilePage') { renderProfileDetails();
+                    generateReferralQR(); }
             }
         }
 
         // ============================================================
-        // USER AUTH - FIXED
+        // USER AUTH
         // ============================================================
         async function handleLogin(btn) {
             const email = document.getElementById('loginUserId').value.trim();
@@ -2727,15 +3077,11 @@
             if (!email || !password) { showToast('ईमेल और पासवर्ड दर्ज करें', 'error'); return; }
             setButtonLoading(btn, true);
             try {
-                try { await account.deleteSession('current'); } catch (e) {}
+                try { await account.get();
+                    await account.deleteSession('current'); } catch (e) {}
                 await account.createEmailPasswordSession(email, password);
                 const loaded = await loadCurrentUserData();
-                if (!loaded) {
-                    showToast('यूजर डेटा लोड नहीं हो पाया! कृपया पुनः प्रयास करें।', 'error');
-                    await account.deleteSession('current');
-                    currentUser = null;
-                    return;
-                }
+                if (!loaded) { showToast('यूजर डेटा लोड नहीं हो पाया!', 'error'); return; }
                 if (currentUser.isBlocked) {
                     showToast('आपका खाता ब्लॉक है!', 'error');
                     await account.deleteSession('current');
@@ -2745,14 +3091,7 @@
                 showToast('✅ लॉगिन सफल!', 'success');
                 showPage('dashboardPage');
             } catch (e) {
-                console.error('Login error:', e);
-                if (e.message && e.message.includes('Invalid credentials')) {
-                    showToast('❌ गलत ईमेल या पासवर्ड', 'error');
-                } else if (e.message && e.message.includes('rate limit')) {
-                    showToast('⏳ बहुत सारे प्रयास, कृपया थोड़ी देर बाद प्रयास करें।', 'error');
-                } else {
-                    showToast('❌ लॉगिन विफल: ' + (e.message || 'अज्ञात त्रुटि'), 'error');
-                }
+                showToast('❌ गलत ईमेल या पासवर्ड', 'error');
             } finally { setButtonLoading(btn, false); }
         }
 
@@ -2766,65 +3105,24 @@
         async function loadCurrentUserData() {
             try {
                 const acc = await account.get();
-                let doc;
-                try {
-                    doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id);
-                } catch (e) {
-                    if (e.code === 404) {
-                        console.log('User document missing, creating one for:', acc.email);
-                        const coinxId = generateCoinXId();
-                        const userData = {
-                            name: acc.name || acc.email || 'User',
-                            email: acc.email || '',
-                            phone: acc.phone || '',
-                            coins: 0,
-                            staked: 0,
-                            withdrawal: 0,
-                            staking: JSON.stringify([]),
-                            stakingHistory: JSON.stringify([]),
-                            pending_deposit: '',
-                            approved_deposit: JSON.stringify([]),
-                            pending_withdrawal: '',
-                            approved_withdrawal: JSON.stringify([]),
-                            withdrawal_address: '',
-                            withdrawal_screenshot: '',
-                            referrals: JSON.stringify([]),
-                            transactions: JSON.stringify([]),
-                            tradeHistory: JSON.stringify([]),
-                            buySellWallet: 0,
-                            tradeWallet: 0,
-                            coinxId: coinxId,
-                            referredBy: null,
-                            isBlocked: false,
-                            coinxWalletSC: '',
-                            dailyRewards: JSON.stringify([])
-                        };
-                        doc = await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id, userData);
-                        showToast('✅ नया खाता बनाया गया!', 'success');
-                    } else {
-                        throw e;
-                    }
-                }
+                const doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id);
                 if (!doc.coinxId && !doc.coinxid) {
                     const newId = generateCoinXId();
                     await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { coinxId: newId });
                     doc.coinxId = newId;
                 }
-                if (!doc.dailyRewards) {
-                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { dailyRewards: JSON.stringify([]) });
-                    doc.dailyRewards = [];
-                }
                 if (!doc.stakingHistory) {
                     await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { stakingHistory: JSON.stringify([]) });
                     doc.stakingHistory = [];
                 }
+                if (!doc.dailyRewards) {
+                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, doc.$id, { dailyRewards: JSON.stringify([]) });
+                    doc.dailyRewards = [];
+                }
                 currentUser = mapUserDoc(doc);
                 await loadStakingSettings();
                 return true;
-            } catch (e) {
-                console.error('loadCurrentUserData error:', e);
-                return false;
-            }
+            } catch (e) { return false; }
         }
 
         // ============================================================
@@ -2866,6 +3164,7 @@
                     withdrawal: 0,
                     staking: JSON.stringify([]),
                     stakingHistory: JSON.stringify([]),
+                    dailyRewards: JSON.stringify([]),
                     pending_deposit: '',
                     approved_deposit: JSON.stringify([]),
                     pending_withdrawal: '',
@@ -2880,8 +3179,7 @@
                     coinxId,
                     referredBy: referral || null,
                     isBlocked: false,
-                    coinxWalletSC: '',
-                    dailyRewards: JSON.stringify([])
+                    coinxWalletSC: ''
                 };
                 await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, newAccount.$id, userData);
                 if (referral) localStorage.setItem('cx_pending_referral_code', referral);
@@ -2897,7 +3195,7 @@
 
         function launchConfetti() {
             const container = document.getElementById('confettiContainer');
-            const colors = ['#d4af37', '#f5d97e', '#c9a030', '#e8c84a', '#b8962a', '#f0d060', '#0b7e4a', '#fbbf24'];
+            const colors = ['#d4af37', '#f5d97e', '#c9a030', '#e8c84a', '#b8962a', '#f0d060', '#22C55E', '#26A17B', '#fbbf24'];
             for (let i = 0; i < 50; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
@@ -2979,16 +3277,13 @@
         }
 
         // ============================================================
-        // MINING REWARD with AI Voice
+        // MINING REWARD
         // ============================================================
         async function triggerMiningReward(btn) {
             if (!currentUser) return;
             const staked = parseFloat(currentUser.staked || 0);
             if (staked < 500) {
                 document.getElementById('stakingWarning')?.classList.remove('hidden');
-                speakHindi(
-                    'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें। यदि समस्या बनी रहती है, तो सहायता केंद्र से संपर्क करें। धन्यवाद।'
-                    );
                 showToast('⚠️ कम से कम 500 USDT स्टेक करें!', 'info');
                 return;
             }
@@ -2999,36 +3294,43 @@
                 const diff = last + oneDayMs - now;
                 const h = Math.floor(diff / 3600000),
                     m = Math.floor((diff % 3600000) / 60000);
+                const msg =
+                    `⏳ आप आज का डेली रिवॉर्ड पहले ही प्राप्त कर चुके हैं। कृपया अगला रिवॉर्ड प्राप्त करने के लिए ${h} घंटे ${m} मिनट प्रतीक्षा करें।`;
+                showVoiceToast(msg);
                 speakHindi(
                     'आप आज का डेली रिवॉर्ड पहले ही प्राप्त कर चुके हैं। कृपया अगला रिवॉर्ड प्राप्त करने के लिए 24 घंटे पूरे होने तक प्रतीक्षा करें। धन्यवाद।'
                     );
-                showToast(`⏳ ${h} घंटे ${m} मिनट बाद।`, 'info');
                 return;
             }
             setButtonLoading(btn, true);
             try {
                 const reward = staked * 0.005;
                 const newCoins = parseFloat(currentUser.coins || 0) + reward;
-                await saveUserFields({ coins: newCoins });
-                localStorage.setItem('cx_last_claimed_' + currentUser.$id, String(now));
-
-                const dailyRewards = currentUser.dailyRewards || [];
+                const dailyRewards = [...(currentUser.dailyRewards || [])];
+                const receiptId = generateReceiptId();
                 dailyRewards.push({
                     amount: reward,
                     dateTime: new Date().toLocaleString('hi-IN'),
-                    timestamp: now,
                     status: 'SUCCESS',
+                    receiptId: receiptId,
                     type: 'daily_reward'
                 });
-                await saveUserFields({ dailyRewards: JSON.stringify(dailyRewards) });
-                currentUser.dailyRewards = dailyRewards;
-
+                await saveUserFields({ coins: newCoins, dailyRewards: JSON.stringify(dailyRewards) });
+                localStorage.setItem('cx_last_claimed_' + currentUser.$id, String(now));
                 updateDashboardStats();
+
+                const msg =
+                    `✅ बधाई हो! आपका आज का डेली रिवॉर्ड ${reward.toFixed(2)} USDT सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है। SupriX Global के साथ जुड़े रहने के लिए धन्यवाद।`;
+                showVoiceToast(msg);
                 speakHindi(
                     'बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है। SupriX Global के साथ जुड़े रहने के लिए आपका धन्यवाद। आपका दिन शुभ हो।'
                     );
+
                 showToast(`✅ ${reward.toFixed(2)} USDT रिवॉर्ड मिला!`, 'success');
             } catch (e) {
+                const msg =
+                    'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें।';
+                showVoiceToast(msg);
                 speakHindi(
                     'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें। यदि समस्या बनी रहती है, तो सहायता केंद्र से संपर्क करें। धन्यवाद।'
                     );
@@ -3036,30 +3338,13 @@
             } finally { setButtonLoading(btn, false); }
         }
 
-        function speakHindi(text) {
-            try {
-                const speech = new SpeechSynthesisUtterance(text);
-                speech.lang = 'hi-IN';
-                speech.rate = 1;
-                speech.pitch = 1.1;
-                speech.volume = 1;
-                const voices = window.speechSynthesis.getVoices();
-                const femaleVoice = voices.find(v => v.lang === 'hi-IN' && (v.name.includes('Female') || v.name.includes(
-                    'Google हिन्दी')));
-                if (femaleVoice) speech.voice = femaleVoice;
-                window.speechSynthesis.speak(speech);
-            } catch (e) {}
-        }
-
-        // ============================================================
-        // SAVE USER FIELDS
-        // ============================================================
         async function saveUserFields(fields) {
             if (!currentUser) return;
             await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, fields);
             Object.assign(currentUser, fields);
             if ('staking' in fields) currentUser.staking = parseJsonSafe(fields.staking, []);
             if ('stakingHistory' in fields) currentUser.stakingHistory = parseJsonSafe(fields.stakingHistory, []);
+            if ('dailyRewards' in fields) currentUser.dailyRewards = parseJsonSafe(fields.dailyRewards, []);
             if ('pending_deposit' in fields) currentUser.pendingDeposit = parseJsonSafe(fields.pending_deposit, null);
             if ('approved_deposit' in fields) currentUser.approvedDeposits = parseJsonSafe(fields.approved_deposit, []);
             if ('pending_withdrawal' in fields) currentUser.pendingWithdrawal = parseJsonSafe(fields.pending_withdrawal,
@@ -3073,7 +3358,6 @@
             if ('coins' in fields) currentUser.coins = parseFloat(fields.coins);
             if ('tradeWallet' in fields) currentUser.tradeWallet = parseFloat(fields.tradeWallet);
             if ('coinxWalletSC' in fields) currentUser.coinxWalletSC = fields.coinxWalletSC;
-            if ('dailyRewards' in fields) currentUser.dailyRewards = parseJsonSafe(fields.dailyRewards, []);
         }
 
         // ============================================================
@@ -3087,7 +3371,7 @@
         function generateCustomPurchase() {
             const val = parseFloat(document.getElementById('customUSDAmount').value);
             if (!val || val <= 0) { showToast('वैध डॉलर अमाउंट दर्ज करें।', 'error'); return; }
-            if (val < 10) { showToast('न्यूनतम $10', 'error'); return; }
+            if (val < 10) { showToast('Minimum Deposit $10 USDT है!', 'error'); return; }
             selectPurchaseSlab(val, val);
         }
 
@@ -3109,7 +3393,6 @@
 
         function selectPurchaseSlab(usd, coins) {
             if (currentUser?.pendingDeposit) { showToast('एक डिपॉजिट पहले से पेंडिंग है।', 'error'); return; }
-            if (usd < 10) { showToast('न्यूनतम $10', 'error'); return; }
             selectedPurchaseUsd = usd;
             selectedPurchaseCoins = coins;
             document.getElementById('paymentUSDVal').innerHTML = `$${usd}.00 USDT`;
@@ -3141,7 +3424,6 @@
             if (!currentUser) { showToast('लॉगिन करें।', 'error'); return; }
             if (!uploadReceiptFile) { showToast('स्क्रीनशॉट अपलोड करें।', 'error'); return; }
             if (currentUser.pendingDeposit) { showToast('पहले से पेंडिंग।', 'error'); return; }
-            if (selectedPurchaseUsd < 10) { showToast('न्यूनतम $10', 'error'); return; }
             setButtonLoading(btn, true);
             try {
                 const uploaded = await storage.createFile(SCREENSHOT_BUCKET_ID, ID.unique(), uploadReceiptFile);
@@ -3224,6 +3506,7 @@
                 const list = [...(currentUser.staking || []), stake];
                 await saveUserFields({ coins: newCoins, staked: newStaked, staking: JSON.stringify(list) });
 
+                // Referral bonus
                 try {
                     if (currentUser.referredBy) await awardReferralBonus(currentUser.referredBy, amount,
                         selectedStakingDays);
@@ -3338,13 +3621,12 @@
         function renderProfileDetails() {
             if (!currentUser) return;
             document.getElementById('profileName').innerText = currentUser.name || 'User';
-            document.getElementById('profileEmail').innerText = '';
-            document.getElementById('profileEmailDisplay').innerText = currentUser.email || '';
+            document.getElementById('profileEmail').innerText = currentUser.email || '';
             document.getElementById('profileCoinXIdDisplay').innerText = currentUser.coinxId || 'N/A';
             const ref = currentUser.$id;
             document.getElementById('profileReferralCode').innerText = ref;
-            const baseUrl = window.location.origin + window.location.pathname;
-            document.getElementById('referralShareLink').innerText = `${baseUrl}?ref=${ref}`;
+            document.getElementById('referralShareLink').innerText =
+                `${window.location.origin}${window.location.pathname}?ref=${ref}`;
             document.getElementById('withdrawAvailable').innerHTML =
                 `${parseFloat(currentUser.coins||0).toFixed(2)} <span class="currency-usdt">USDT</span>`;
             document.getElementById('userWithdrawAddress').value = currentUser.withdrawal_address || '';
@@ -3357,20 +3639,25 @@
                 qrPreview.classList.add('flex');
                 document.getElementById('qrUploadStatus').innerText = '✅ क्यूआर अपडेट';
             } else { qrPreview.classList.add('hidden'); }
-
-            generateReferralQR(baseUrl + '?ref=' + ref);
+            generateReferralQR();
         }
 
-        function generateReferralQR(url) {
+        function generateReferralQR() {
             const container = document.getElementById('referralQrContainer');
+            if (!container) return;
             container.innerHTML = '';
-            const img = document.createElement('img');
-            img.src =
-                `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
-            img.alt = 'Referral QR Code';
-            img.className = 'w-24 h-24 rounded-xl border-2 border-amber-500/40 p-1 bg-white shadow-lg';
-            img.loading = 'lazy';
-            container.appendChild(img);
+            const ref = currentUser?.$id;
+            if (!ref) return;
+            const url = `${window.location.origin}${window.location.pathname}?ref=${ref}`;
+            if (typeof QRCode !== 'undefined') {
+                try {
+                    new QRCode(container, { text: url, width: 100, height: 100, colorDark: '#d4af37',
+                        colorLight: '#ffffff' });
+                } catch (e) { container.innerHTML =
+                    `<p class="text-[8px] text-amber-600/30">QR जनरेट नहीं हो सका</p>`; }
+            } else {
+                container.innerHTML = `<p class="text-[8px] text-amber-600/30">QR लोड हो रहा...</p>`;
+            }
         }
 
         async function handleQrUpload(e) {
@@ -3402,7 +3689,7 @@
             const address = document.getElementById('userWithdrawAddress').value.trim();
             const amount = parseFloat(document.getElementById('withdrawAmountInput').value);
             if (!address) { showToast('USDT एड्रेस पेस्ट करें।', 'error'); return; }
-            if (!amount || amount < 2) { showToast('न्यूनतम 2 USDT ($2)', 'error'); return; }
+            if (!amount || amount < 2) { showToast('न्यूनतम 2 USDT', 'error'); return; }
             if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त नहीं!', 'error'); return; }
             if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग।', 'error'); return; }
             setButtonLoading(btn, true);
@@ -3423,88 +3710,26 @@
         // ============================================================
         async function submitCoinXWalletWithdrawal() {
             if (!currentUser) { showToast('लॉगिन करें।', 'error'); return; }
-            const spxId = document.getElementById('coinxWalletSCAddress').value.trim();
+            const targetSPX = document.getElementById('coinxWalletSCAddress').value.trim();
             const amount = parseFloat(document.getElementById('coinxWalletWithdrawAmount').value);
-            if (!spxId) { showToast('प्राप्तकर्ता की SPX ID दर्ज करें।', 'error'); return; }
-            if (!amount || amount < 50) { showToast('न्यूनतम 50 USDT', 'error'); return; }
+            if (!targetSPX) { showToast('रिसीवर की SPX ID दर्ज करें।', 'error'); return; }
+            if (!amount || amount < 2) { showToast('न्यूनतम 2 USDT', 'error'); return; }
             if (amount > parseFloat(currentUser.coins || 0)) { showToast('पर्याप्त USDT नहीं!', 'error'); return; }
             if (currentUser.pendingWithdrawal) { showToast('पहले से पेंडिंग।', 'error'); return; }
 
-            // Find receiver by SPX ID
-            const idx = users.findIndex(u => u.coinxId === spxId);
-            if (idx === -1) {
-                try {
-                    const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('coinxId',
-                        spxId)]);
-                    if (res.documents.length === 0) { showToast('❌ SPX ID मौजूद नहीं है!', 'error'); return; }
-                    const target = mapUserDoc(res.documents[0]);
-                    if (target.$id === currentUser.$id) { showToast('❌ खुद को नहीं भेज सकते!', 'error'); return; }
-                    const fee = amount * 0.10;
-                    const netAmount = amount - fee;
-                    const newSenderCoins = parseFloat(currentUser.coins || 0) - amount;
-                    const newReceiverCoins = parseFloat(target.coins || 0) + netAmount;
-
-                    const tx = {
-                        type: 'withdrawal_to_suprix_wallet',
-                        amount: amount,
-                        netAmount: netAmount,
-                        fee: fee,
-                        to: target.email,
-                        toSPX: target.coinxId,
-                        dateTime: new Date().toLocaleString('hi-IN'),
-                        status: 'completed',
-                        network: 'SupriX Wallet'
-                    };
-                    const txs = [...(currentUser.transactions || [])];
-                    txs.push(tx);
-
-                    const receiveTx = {
-                        type: 'receive_from_suprix_network',
-                        amount: netAmount,
-                        from: currentUser.email,
-                        fromSPX: currentUser.coinxId,
-                        dateTime: new Date().toLocaleString('hi-IN'),
-                        status: 'completed',
-                        network: 'SupriX Wallet'
-                    };
-
-                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, {
-                        coins: newSenderCoins,
-                        transactions: JSON.stringify(txs),
-                        coinxWalletSC: spxId
-                    });
-
-                    const receiverTxList = parseJsonSafe(target.transactions, []);
-                    receiverTxList.push(receiveTx);
-                    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, target.$id, {
-                        coins: newReceiverCoins,
-                        transactions: JSON.stringify(receiverTxList)
-                    });
-
-                    currentUser.coins = newSenderCoins;
-                    currentUser.transactions = txs;
-                    currentUser.coinxWalletSC = spxId;
-                    const targetIdx = users.findIndex(u => u.$id === target.$id);
-                    if (targetIdx !== -1) users[targetIdx].coins = newReceiverCoins;
-
-                    document.getElementById('coinxWalletWithdrawAmount').value = '';
-                    renderProfileDetails();
-                    updateDashboardStats();
-                    showToast(`✅ ${netAmount.toFixed(2)} USDT ${spxId} को भेजे गए (शुल्क: ${fee.toFixed(2)})`,
-                    'success');
-                } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
-                return;
-            }
-
-            const target = users[idx];
-            if (target.$id === currentUser.$id) { showToast('❌ खुद को नहीं भेज सकते!', 'error'); return; }
-
             const fee = amount * 0.10;
             const netAmount = amount - fee;
-            const newSenderCoins = parseFloat(currentUser.coins || 0) - amount;
-            const newReceiverCoins = parseFloat(target.coins || 0) + netAmount;
 
             try {
+                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('coinxId',
+                    targetSPX)]);
+                if (res.documents.length === 0) { showToast('❌ SPX ID नहीं मिली!', 'error'); return; }
+                const target = res.documents[0];
+                if (target.$id === currentUser.$id) { showToast('❌ खुद को नहीं भेज सकते!', 'error'); return; }
+
+                const newSenderCoins = parseFloat(currentUser.coins || 0) - amount;
+                const newReceiverTrade = parseFloat(target.tradeWallet || 0) + netAmount;
+
                 const tx = {
                     type: 'withdrawal_to_suprix_wallet',
                     amount: amount,
@@ -3514,7 +3739,7 @@
                     toSPX: target.coinxId,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     status: 'completed',
-                    network: 'SupriX Wallet'
+                    network: 'USDT BEP20'
                 };
                 const txs = [...(currentUser.transactions || [])];
                 txs.push(tx);
@@ -3526,31 +3751,30 @@
                     fromSPX: currentUser.coinxId,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     status: 'completed',
-                    network: 'SupriX Wallet'
+                    network: 'USDT BEP20'
                 };
 
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id, {
                     coins: newSenderCoins,
                     transactions: JSON.stringify(txs),
-                    coinxWalletSC: spxId
+                    coinxWalletSC: targetSPX
                 });
 
                 const receiverTxList = parseJsonSafe(target.transactions, []);
                 receiverTxList.push(receiveTx);
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, target.$id, {
-                    coins: newReceiverCoins,
+                    tradeWallet: newReceiverTrade,
                     transactions: JSON.stringify(receiverTxList)
                 });
 
                 currentUser.coins = newSenderCoins;
                 currentUser.transactions = txs;
-                currentUser.coinxWalletSC = spxId;
-                users[idx].coins = newReceiverCoins;
+                currentUser.coinxWalletSC = targetSPX;
 
                 document.getElementById('coinxWalletWithdrawAmount').value = '';
                 renderProfileDetails();
                 updateDashboardStats();
-                showToast(`✅ ${netAmount.toFixed(2)} USDT ${spxId} को भेजे गए (शुल्क: ${fee.toFixed(2)})`, 'success');
+                showToast(`✅ ${netAmount.toFixed(2)} USDT SupriX Wallet में भेजे गए (शुल्क: ${fee.toFixed(2)})`, 'success');
             } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
         }
 
@@ -3599,7 +3823,9 @@
             document.querySelectorAll('#txHistoryModal .flex button').forEach(b => {
                 b.className = 'flex-1 py-1 text-center font-bold rounded text-amber-600/40 transition-all btn-animate';
             });
-            document.getElementById('txTab-' + tab).className =
+            const tabMap = { deposit: 'txTab-deposit', withdraw: 'txTab-withdraw', daily: 'txTab-daily' };
+            const el = document.getElementById(tabMap[tab]);
+            if (el) el.className =
                 'flex-1 py-1 text-center font-bold rounded bg-amber-500 text-[#1a1a2e] transition-all btn-animate';
             renderTxHistory();
         }
@@ -3618,60 +3844,51 @@
                 if (currentUser?.pendingWithdrawal) entries.unshift({ ...currentUser.pendingWithdrawal,
                     status: 'Pending', type: 'withdrawal' });
             } else if (currentTxHistoryTab === 'daily') {
-                entries = [...(currentUser?.dailyRewards || []).map(d => ({ ...d, status: 'SUCCESS', type: 'daily' }))];
+                entries = [...(currentUser?.dailyRewards || []).map(r => ({ ...r, type: 'daily', status: r.status ||
+                        'SUCCESS' }))];
             }
             if (entries.length === 0) { list.innerHTML =
                     '<p class="text-amber-600/30 text-center py-4">कोई हिस्ट्री नहीं।</p>'; return; }
-            entries.forEach(e => {
+            entries.slice().reverse().forEach(e => {
                 const statusColors = {
                     'Pending': 'text-yellow-600 bg-yellow-500/10',
                     'Approved': 'text-green-600 bg-green-500/10',
                     'Completed': 'text-green-600 bg-green-500/20',
-                    'SUCCESS': 'text-green-600 bg-green-500/20'
+                    'SUCCESS': 'text-green-600 bg-green-500/20',
+                    'success': 'text-green-600 bg-green-500/20'
                 };
                 const color = statusColors[e.status] || 'text-amber-600/30 bg-amber-500/10';
                 const div = document.createElement('div');
                 div.className =
                     'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
-                const label = e.type === 'daily' ? `⭐ ${e.amount} USDT` : e.amountUSD ? `+$${e.amountUSD}` :
-                    `-${e.coinsAmount} USDT`;
-                const isDeposit = e.type === 'deposit' || e.amountUSD;
                 const isDaily = e.type === 'daily';
+                const label = isDaily ? `🌟 ${e.amount} USDT` : e.amountUSD ? `+$${e.amountUSD}` : `-${e.coinsAmount} USDT`;
+                const isDeposit = e.type === 'deposit' || e.amountUSD;
                 div.innerHTML = `
                             <div>
                                 <div class="font-bold text-[#1a1a2e] text-xs">${label}</div>
                                 <div class="text-[9px] text-amber-600/30">${e.dateTime||''} ${e.coinsAmount ? `(${e.coinsAmount} USDT)` : ''}</div>
+                                ${isDaily ? `<div class="text-[8px] text-green-600/50">⭐ Daily Reward</div>` : ''}
                             </div>
                             <div class="text-right flex flex-col items-end gap-1">
                                 <span class="px-2 py-0.5 rounded text-[9px] font-bold ${color}">${e.status}</span>
-                                ${isDeposit && e.receiptFileId ? `<button onclick="viewReceipt('${e.type}','${e.coinsAmount||0}','${e.amountUSD||0}','${e.dateTime||''}','${e.status||'Approved'}','${e.receiptFileId||''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View</button>` : ''}
-                                ${!isDeposit && !isDaily && e.coinsAmount ? `<button onclick="viewWithdrawalReceipt('${e.coinsAmount}','${e.dateTime||''}','${e.status||'Completed'}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View</button>` : ''}
-                                ${isDaily ? `<button onclick="viewDailyReceipt('${e.amount}','${e.dateTime||''}','${e.status||'SUCCESS'}')" class="text-[8px] bg-green-500/20 border border-green-500/30 px-2 py-0.5 rounded text-green-600 hover:bg-green-500/30 transition-all">⭐ View</button>` : ''}
+                                ${(isDeposit && e.receiptFileId) || isDaily || e.receiptId ? `<button onclick="viewReceiptItem('${e.type||'deposit'}','${e.coinsAmount||e.amount||0}','${e.amountUSD||0}','${e.dateTime||''}','${e.status||'SUCCESS'}','${e.receiptFileId||''}','${e.receiptId||''}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
+                                ${(!isDeposit && !isDaily && e.coinsAmount) ? `<button onclick="viewWithdrawalReceipt('${e.coinsAmount}','${e.dateTime||''}','${e.status||'Completed'}')" class="text-[8px] bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded text-amber-600 hover:bg-amber-500/30 transition-all">🧾 View Receipt</button>` : ''}
                             </div>
                         `;
                 list.appendChild(div);
             });
         }
 
-        function viewDailyReceipt(amount, dateTime, status) {
+        function viewReceiptItem(type, coinsAmount, amountUSD, dateTime, status, receiptFileId, receiptId) {
             openReceipt({
-                type: 'daily',
-                coinsAmount: amount,
-                dateTime: dateTime,
-                status: status || 'SUCCESS',
-                receiptFileId: null,
-                network: 'BEP20 (USDT)'
-            });
-        }
-
-        function viewReceipt(type, coinsAmount, amountUSD, dateTime, status, receiptFileId) {
-            openReceipt({
-                type: 'deposit',
-                coinsAmount: coinsAmount,
+                type: type === 'daily' ? 'daily' : 'deposit',
+                coinsAmount: coinsAmount || amountUSD,
                 amountUSD: amountUSD,
                 dateTime: dateTime,
                 status: status,
-                receiptFileId: receiptFileId,
+                receiptFileId: receiptFileId || null,
+                receiptId: receiptId || generateReceiptId(),
                 network: 'BEP20 (USDT)'
             });
         }
@@ -3683,6 +3900,7 @@
                 dateTime: dateTime,
                 status: status,
                 receiptFileId: null,
+                receiptId: generateReceiptId(),
                 network: 'BEP20 (USDT)'
             });
         }
@@ -3732,7 +3950,7 @@
             const baseSlides = [
                 { icon: '🚀', line1: 'अपने सपनों को पंख लगाओ', line2: 'SupriX Global के साथ आज ही शुरू करें',
                 badge: '✦ शुरुआत ✦' },
-                { icon: '💎', line1: 'हर कॉइन कीमती है', line2: 'स्मार्ट कॉन्ट्रैक्ट से सुरक्षित', badge: '✦ सुरक्षा ✦' },
+                { icon: '💎', line1: 'हर कॉइन कीमती है', line2: 'SPX ID से सुरक्षित लेनदेन', badge: '✦ सुरक्षा ✦' },
                 { icon: '🦋', line1: 'जीवन में उतार-चढ़ाव आते हैं', line2: 'पर हार न मानो, मंजिल पास है',
                 badge: '✦ धैर्य ✦' },
                 { icon: '🌟', line1: 'जो आज तुम्हारा मज़ाक उड़ा रहे हैं', line2: 'कल वही तुम्हारी सफलता पर ताली बजाएँगे',
@@ -3835,12 +4053,48 @@
         }
 
         // ============================================================
+        // ADMIN LOGIN (Appwrite Admin Auth)
+        // ============================================================
+        async function submitAdminLogin(btn) {
+            const username = document.getElementById('adminUsernameInput').value.trim();
+            const password = document.getElementById('adminPasswordInput').value.trim();
+            if (!username || !password) { showToast('एडमिन ईमेल और पासवर्ड दर्ज करें।', 'error'); return; }
+            setButtonLoading(btn, true);
+            try {
+                try { await account.get();
+                    await account.deleteSession('current'); } catch (e) {}
+                await account.createEmailPasswordSession(username, password);
+                const acc = await account.get();
+                try {
+                    const teamList = await teams.list();
+                    const isAdmin = teamList.teams.some(t => t.$id === ADMIN_TEAM_ID);
+                    if (!isAdmin) { showToast('आप एडमिन नहीं हैं!', 'error');
+                        await account.deleteSession('current'); return; }
+                } catch (e) { showToast('एडमिन वेरिफिकेशन में त्रुटि!', 'error');
+                    await account.deleteSession('current'); return; }
+                isAdminMode = true;
+                document.getElementById('userPanelContainer').classList.add('hidden');
+                document.getElementById('adminPanelContainer').classList.remove('hidden');
+                document.querySelector('#mainHeader').className =
+                    'w-full glass-gold-dark py-3 px-4 flex items-center justify-between sticky top-0 z-40 shadow-xl admin-header backdrop-blur-2xl border-b border-amber-500/50';
+                document.getElementById('headerTitle').className =
+                    'font-extrabold text-md tracking-wider leading-none text-amber-600';
+                document.getElementById('headerTitle').innerText = 'SUPRIX ADMIN';
+                document.getElementById('headerSubtitle').innerText = 'Super Admin';
+                document.getElementById('headerBadge').className = 'admin-badge';
+                document.getElementById('headerBadge').innerHTML = '<i class="fa-solid fa-shield-halved mr-1"></i> ADMIN';
+                document.getElementById('adminSearchBox').classList.add('hidden');
+                await loadAllData();
+                showToast('✅ एडमिन लॉगिन सफल!', 'success');
+            } catch (e) { showToast('❌ गलत एडमिन क्रेडेंशियल!', 'error'); } finally { setButtonLoading(btn, false); }
+        }
+
+        // ============================================================
         // INIT
         // ============================================================
         window.onload = async function() {
             createButterflies();
             renderSlider();
-            setTimeout(() => { window.speechSynthesis.getVoices(); }, 1000);
             try {
                 const loaded = await loadCurrentUserData();
                 if (loaded && !currentUser.isBlocked) {
@@ -3857,6 +4111,8 @@
                 const ref = urlParams.get('ref');
                 if (ref) document.getElementById('regReferral').value = ref;
             }
+            // Preload voices
+            setTimeout(() => { window.speechSynthesis.getVoices(); }, 1000);
         };
 
         // Global functions
@@ -3898,16 +4154,16 @@
         window.openFullscreenImage = openFullscreenImage;
         window.closeFullscreenImage = closeFullscreenImage;
         window.toggleZoomImage = toggleZoomImage;
-        window.viewReceipt = viewReceipt;
+        window.viewReceiptItem = viewReceiptItem;
         window.viewWithdrawalReceipt = viewWithdrawalReceipt;
-        window.viewDailyReceipt = viewDailyReceipt;
         window.closeReceipt = closeReceipt;
         window.downloadReceipt = downloadReceipt;
         window.printReceipt = printReceipt;
         window.toggleForgotPasswordModal = toggleForgotPasswordModal;
         window.handleForgotPassword = handleForgotPassword;
-        window.adminSpXTransfer = adminSpXTransfer;
-        window.renderAdminTransfers = renderAdminTransfers;
+        window.adminTransferUSDT = adminTransferUSDT;
+        window.submitAdminLogin = submitAdminLogin;
+        window.closeVoiceToast = closeVoiceToast;
     </script>
 
 </body>
