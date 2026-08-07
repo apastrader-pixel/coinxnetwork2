@@ -1792,7 +1792,7 @@
         <!-- Voice Toast -->
         <div id="voiceToast" class="voice-toast">
             <span class="voice-icon"><i class="fa-solid fa-circle-check"></i></span>
-            <p class="voice-msg" id="voiceToastMsg">बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है।</p>
+            <p class="voice-msg" id="voiceToastMsg">🎉 Congratulations! आपका Daily Reward सफलतापूर्वक आपके अकाउंट में क्रेडिट कर दिया गया है। 24 घंटे बाद फिर से आपका इंतज़ार रहेगा। SupriX Global से जुड़े रहने के लिए धन्यवाद! आपका दिन शुभ हो।</p>
             <button class="voice-close" onclick="closeVoiceToast()">ठीक है</button>
         </div>
 
@@ -1844,7 +1844,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- FULL JAVASCRIPT - FIXED VERSION                               -->
+    <!-- JAVASCRIPT – FIXED: dailyRewards removed, transactions used   -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -1948,7 +1948,6 @@
                 referrals: parseJsonSafe(doc.referrals, []),
                 transactions: parseJsonSafe(doc.transactions, []),
                 tradeHistory: parseJsonSafe(doc.tradeHistory, []),
-                dailyRewards: parseJsonSafe(doc.dailyRewards, []),
                 buySellWallet: parseFloat(doc.buySellWallet || 0),
                 coins: parseFloat(doc.coins || 0),
                 tradeWallet: parseFloat(doc.tradeWallet || 0),
@@ -2242,7 +2241,7 @@
             const fromId = document.getElementById('adminTransferFrom').value.trim();
             const toId = document.getElementById('adminTransferTo').value.trim();
             const amount = parseFloat(document.getElementById('adminTransferAmount').value);
-            if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें और मान्य USDT संख्या डालें.',
+            if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें और मान्य USDT संख्या डालें।',
                     'error'); return; }
             if (fromId === toId) { showToast('खुद को ट्रांसफर नहीं कर सकते!', 'error'); return; }
             setButtonLoading(btn, true);
@@ -2968,7 +2967,6 @@
                         withdrawal: 0,
                         staking: JSON.stringify([]),
                         stakingHistory: JSON.stringify([]),
-                        dailyRewards: JSON.stringify([]),
                         pending_deposit: '',
                         approved_deposit: JSON.stringify([]),
                         pending_withdrawal: '',
@@ -2990,7 +2988,7 @@
                         showToast('✅ नया यूजर बनाया गया!', 'success');
                     } catch (createErr) {
                         console.error('Create document failed:', createErr);
-                        showToast('❌ यूजर डॉक्यूमेंट नहीं बन पाया। कृपया Appwrite में "users" collection की permissions चेक करें。',
+                        showToast('❌ यूजर डॉक्यूमेंट नहीं बन पाया। कृपया Appwrite में "users" collection की permissions चेक करें।',
                             'error');
                         document.getElementById('loadingOverlay').classList.remove('show');
                         setButtonLoading(btn, false);
@@ -3009,8 +3007,7 @@
                     return;
                 }
 
-                if (!currentUser.stakingHistory) currentUser.stakingHistory = [];
-                if (!currentUser.dailyRewards) currentUser.dailyRewards = [];
+                // No dailyRewards field – we store daily rewards in transactions
 
                 await loadStakingSettings();
                 await autoUnlockMaturedStakes();
@@ -3081,7 +3078,6 @@
                     withdrawal: 0,
                     staking: JSON.stringify([]),
                     stakingHistory: JSON.stringify([]),
-                    dailyRewards: JSON.stringify([]),
                     pending_deposit: '',
                     approved_deposit: JSON.stringify([]),
                     pending_withdrawal: '',
@@ -3172,7 +3168,7 @@
         }
 
         // ============================================================
-        // MINING REWARD - FIXED: uses docId, better error handling
+        // MINING REWARD - FIXED: no dailyRewards, uses transactions
         // ============================================================
         async function triggerMiningReward(btn) {
             if (!currentUser) {
@@ -3212,17 +3208,19 @@
             try {
                 const reward = staked * 0.005;
                 const newCoins = parseFloat(currentUser.coins || 0) + reward;
-                const dailyRewards = [...(currentUser.dailyRewards || [])];
                 const receiptId = generateReceiptId();
-                dailyRewards.push({
-                    amount: reward,
+
+                // Store daily reward in transactions array (existing field)
+                const txs = [...(currentUser.transactions || [])];
+                txs.push({
+                    type: 'daily_reward',
+                    coinsAmount: reward,
                     dateTime: new Date().toLocaleString('hi-IN'),
                     status: 'SUCCESS',
                     receiptId: receiptId,
-                    type: 'daily_reward'
+                    network: 'USDT BEP20'
                 });
 
-                // Use docId for update (more reliable than $id)
                 const docId = currentUser.docId || currentUser.$id;
                 if (!docId) {
                     throw new Error('User document ID not found');
@@ -3230,27 +3228,32 @@
 
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, docId, {
                     coins: newCoins,
-                    dailyRewards: JSON.stringify(dailyRewards)
+                    transactions: JSON.stringify(txs)
                 });
 
                 // Update local state
                 currentUser.coins = newCoins;
-                currentUser.dailyRewards = dailyRewards;
+                currentUser.transactions = txs;
 
                 localStorage.setItem('cx_last_claimed_' + currentUser.$id, String(now));
 
                 updateDashboardStats();
+                // New success message as requested
                 const msg =
-                    `✅ बधाई हो! आपका आज का डेली रिवॉर्ड ${reward.toFixed(2)} USDT (₹${(reward * EXCHANGE_RATE).toFixed(2)}) सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है।`;
+                    `🎉 Congratulations! आपका Daily Reward सफलतापूर्वक आपके अकाउंट में क्रेडिट कर दिया गया है। 24 घंटे बाद फिर से आपका इंतज़ार रहेगा। SupriX Global से जुड़े रहने के लिए धन्यवाद! आपका दिन शुभ हो।`;
                 showVoiceToast(msg);
                 speakHindi(
-                    'बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है। SupriX Global के साथ जुड़े रहने के लिए आपका धन्यवाद। आपका दिन शुभ हो।'
+                    'बधाई हो! आपका आज का डेली रिवॉर्ड सफलतापूर्वक आपके वॉलेट में जोड़ दिया गया है। 24 घंटे बाद फिर से आपका इंतज़ार रहेगा। SupriX Global के साथ जुड़े रहने के लिए आपका धन्यवाद। आपका दिन शुभ हो।'
                     );
                 showToast(`✅ ${reward.toFixed(2)} USDT (₹${(reward * EXCHANGE_RATE).toFixed(2)}) रिवॉर्ड मिला!`, 'success');
             } catch (e) {
                 console.error('Mining reward error:', e);
-                const msg = 'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें।';
-                showVoiceToast(msg);
+                // Show a more specific error if it's about dailyRewards
+                let errorMsg = 'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें।';
+                if (e.message && e.message.includes('dailyRewards')) {
+                    errorMsg = '❌ सर्वर त्रुटि: dailyRewards फ़ील्ड मौजूद नहीं है। हमने इसे ठीक कर दिया है, कृपया पुनः प्रयास करें।';
+                }
+                showVoiceToast(errorMsg);
                 speakHindi(
                     'क्षमा करें, आपका डेली रिवॉर्ड इस समय प्राप्त नहीं हो सका। कृपया कुछ देर बाद पुनः प्रयास करें। यदि समस्या बनी रहती है, तो सहायता केंद्र से संपर्क करें। धन्यवाद।'
                     );
@@ -3267,7 +3270,7 @@
         }
 
         // ============================================================
-        // SAVE USER FIELDS - FIXED: uses docId
+        // SAVE USER FIELDS - FIXED: no dailyRewards
         // ============================================================
         async function saveUserFields(fields) {
             if (!currentUser) return;
@@ -3280,7 +3283,6 @@
             Object.assign(currentUser, fields);
             if ('staking' in fields) currentUser.staking = parseJsonSafe(fields.staking, []);
             if ('stakingHistory' in fields) currentUser.stakingHistory = parseJsonSafe(fields.stakingHistory, []);
-            if ('dailyRewards' in fields) currentUser.dailyRewards = parseJsonSafe(fields.dailyRewards, []);
             if ('pending_deposit' in fields) currentUser.pendingDeposit = parseJsonSafe(fields.pending_deposit, null);
             if ('approved_deposit' in fields) currentUser.approvedDeposits = parseJsonSafe(fields.approved_deposit, []);
             if ('pending_withdrawal' in fields) currentUser.pendingWithdrawal = parseJsonSafe(fields.pending_withdrawal,
@@ -3735,8 +3737,8 @@
                 if (currentUser?.pendingWithdrawal) entries.unshift({ ...currentUser.pendingWithdrawal,
                     status: 'Pending', type: 'withdrawal' });
             } else if (currentTxHistoryTab === 'daily') {
-                entries = [...(currentUser?.dailyRewards || []).map(r => ({ ...r, type: 'daily', status: r.status ||
-                        'SUCCESS' }))];
+                // Daily rewards are stored as transactions with type 'daily_reward'
+                entries = [...(currentUser?.transactions || []).filter(t => t.type === 'daily_reward')];
             }
             if (entries.length === 0) { list.innerHTML =
                     '<p class="text-amber-600/30 text-center py-4">कोई हिस्ट्री नहीं।</p>'; return; }
@@ -3748,8 +3750,8 @@
                 const div = document.createElement('div');
                 div.className =
                     'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
-                const isDaily = e.type === 'daily';
-                const label = isDaily ? `🌟 ${e.amount} USDT` : e.amountUSD ? `+$${e.amountUSD}` :
+                const isDaily = e.type === 'daily_reward' || e.type === 'daily';
+                const label = isDaily ? `🌟 ${e.coinsAmount} USDT` : e.amountUSD ? `+$${e.amountUSD}` :
                     `-${e.coinsAmount} USDT`;
                 const isDeposit = e.type === 'deposit' || e.amountUSD;
                 div.innerHTML =
@@ -4017,8 +4019,7 @@
                 ]);
                 if (result.documents.length > 0) {
                     currentUser = mapUserDoc(result.documents[0]);
-                    if (!currentUser.stakingHistory) currentUser.stakingHistory = [];
-                    if (!currentUser.dailyRewards) currentUser.dailyRewards = [];
+                    // No dailyRewards field – we use transactions
                     await loadStakingSettings();
                     return true;
                 }
