@@ -3069,7 +3069,7 @@
         }
 
         // ============================================================
-        // USER AUTH
+        // USER AUTH - FIXED: Better error handling + auto-create user doc
         // ============================================================
         async function handleLogin(btn) {
             const email = document.getElementById('loginUserId').value.trim();
@@ -3077,21 +3077,73 @@
             if (!email || !password) { showToast('ईमेल और पासवर्ड दर्ज करें', 'error'); return; }
             setButtonLoading(btn, true);
             try {
-                try { await account.get();
-                    await account.deleteSession('current'); } catch (e) {}
+                // 1) Try to delete any existing session
+                try { await account.deleteSession('current'); } catch (e) {}
+                // 2) Create email/password session
                 await account.createEmailPasswordSession(email, password);
+                // 3) Load or create user data
                 const loaded = await loadCurrentUserData();
-                if (!loaded) { showToast('यूजर डेटा लोड नहीं हो पाया!', 'error'); return; }
-                if (currentUser.isBlocked) {
+                if (!loaded) {
+                    // If still not loaded, try to create document
+                    const acc = await account.get();
+                    const existing = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('email',
+                        email)]);
+                    if (existing.documents.length === 0) {
+                        // Create new user document
+                        const coinxId = generateCoinXId();
+                        const userData = {
+                            name: acc.name || email.split('@')[0],
+                            email: email,
+                            phone: password, // password = phone number
+                            coins: 0,
+                            staked: 0,
+                            withdrawal: 0,
+                            staking: JSON.stringify([]),
+                            stakingHistory: JSON.stringify([]),
+                            dailyRewards: JSON.stringify([]),
+                            pending_deposit: '',
+                            approved_deposit: JSON.stringify([]),
+                            pending_withdrawal: '',
+                            approved_withdrawal: JSON.stringify([]),
+                            withdrawal_address: '',
+                            withdrawal_screenshot: '',
+                            referrals: JSON.stringify([]),
+                            transactions: JSON.stringify([]),
+                            tradeHistory: JSON.stringify([]),
+                            buySellWallet: 0,
+                            tradeWallet: 0,
+                            coinxId: coinxId,
+                            referredBy: null,
+                            isBlocked: false,
+                            coinxWalletSC: ''
+                        };
+                        await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id, userData);
+                        // Reload user data
+                        const loaded2 = await loadCurrentUserData();
+                        if (!loaded2) { showToast('यूजर डेटा लोड नहीं हो पाया!', 'error'); return; }
+                    } else {
+                        // Document exists but not loaded - reload
+                        const loaded2 = await loadCurrentUserData();
+                        if (!loaded2) { showToast('यूजर डेटा लोड नहीं हो पाया!', 'error'); return; }
+                    }
+                }
+                if (currentUser && currentUser.isBlocked) {
                     showToast('आपका खाता ब्लॉक है!', 'error');
                     await account.deleteSession('current');
                     currentUser = null;
+                    setButtonLoading(btn, false);
                     return;
                 }
                 showToast('✅ लॉगिन सफल!', 'success');
                 showPage('dashboardPage');
             } catch (e) {
-                showToast('❌ गलत ईमेल या पासवर्ड', 'error');
+                console.error('Login error:', e);
+                let msg = '❌ गलत ईमेल या पासवर्ड';
+                if (e.code === 401) msg = '❌ गलत ईमेल या पासवर्ड';
+                else if (e.code === 404) msg = '❌ यूजर नहीं मिला। कृपया रजिस्टर करें।';
+                else if (e.message && e.message.includes('network')) msg = '❌ नेटवर्क कनेक्शन में समस्या।';
+                else if (e.message) msg = '❌ ' + e.message;
+                showToast(msg, 'error');
             } finally { setButtonLoading(btn, false); }
         }
 
@@ -3122,11 +3174,14 @@
                 currentUser = mapUserDoc(doc);
                 await loadStakingSettings();
                 return true;
-            } catch (e) { return false; }
+            } catch (e) {
+                console.warn('loadCurrentUserData error:', e);
+                return false;
+            }
         }
 
         // ============================================================
-        // REGISTRATION
+        // REGISTRATION - FIXED: Better error handling
         // ============================================================
         async function handleRegistration(btn) {
             const name = document.getElementById('regName').value.trim();
@@ -3189,7 +3244,10 @@
                 setTimeout(() => launchConfetti(), 300);
                 showToast('🎉 रजिस्ट्रेशन सफल!', 'success');
             } catch (e) {
-                showToast('❌ ' + (e.message || 'त्रुटि'), 'error');
+                console.error('Registration error:', e);
+                let msg = '❌ ' + (e.message || 'त्रुटि');
+                if (e.message && e.message.includes('network')) msg = '❌ नेटवर्क कनेक्शन में समस्या।';
+                showToast(msg, 'error');
             } finally { setButtonLoading(btn, false); }
         }
 
@@ -4053,7 +4111,7 @@
         }
 
         // ============================================================
-        // ADMIN LOGIN (Appwrite Admin Auth)
+        // ADMIN LOGIN (Appwrite Admin Auth) - FIXED
         // ============================================================
         async function submitAdminLogin(btn) {
             const username = document.getElementById('adminUsernameInput').value.trim();
@@ -4086,7 +4144,14 @@
                 document.getElementById('adminSearchBox').classList.add('hidden');
                 await loadAllData();
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
-            } catch (e) { showToast('❌ गलत एडमिन क्रेडेंशियल!', 'error'); } finally { setButtonLoading(btn, false); }
+            } catch (e) {
+                console.error('Admin login error:', e);
+                let msg = '❌ गलत एडमिन क्रेडेंशियल!';
+                if (e.message && e.message.includes('network')) msg = '❌ नेटवर्क कनेक्शन में समस्या।';
+                else if (e.code === 401) msg = '❌ गलत ईमेल या पासवर्ड';
+                else if (e.message) msg = '❌ ' + e.message;
+                showToast(msg, 'error');
+            } finally { setButtonLoading(btn, false); }
         }
 
         // ============================================================
