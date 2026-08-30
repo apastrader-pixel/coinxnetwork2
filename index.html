@@ -323,59 +323,46 @@
         }
         .slider-track {
             display: flex;
-            width: 1000%;
+            width: 100%;
             height: 100%;
-            animation: slide 30s infinite ease-in-out;
+            transition: transform 0.8s ease-in-out;
         }
         .slider-track .slide-item {
-            width: 10%;
+            min-width: 100%;
             height: 100%;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0ebe4;
         }
         .slider-track .slide-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-        @keyframes slide {
-            0% { transform: translateX(0); }
-            8% { transform: translateX(0); }
-            10% { transform: translateX(-10%); }
-            18% { transform: translateX(-10%); }
-            20% { transform: translateX(-20%); }
-            28% { transform: translateX(-20%); }
-            30% { transform: translateX(-30%); }
-            38% { transform: translateX(-30%); }
-            40% { transform: translateX(-40%); }
-            48% { transform: translateX(-40%); }
-            50% { transform: translateX(-50%); }
-            58% { transform: translateX(-50%); }
-            60% { transform: translateX(-60%); }
-            68% { transform: translateX(-60%); }
-            70% { transform: translateX(-70%); }
-            78% { transform: translateX(-70%); }
-            80% { transform: translateX(-80%); }
-            88% { transform: translateX(-80%); }
-            90% { transform: translateX(-90%); }
-            98% { transform: translateX(-90%); }
-            100% { transform: translateX(0); }
+            object-fit: contain;
+            background: #f0ebe4;
         }
         .slider-dots {
             position: absolute;
-            bottom: 6px;
+            bottom: 8px;
             left: 0;
             right: 0;
             text-align: center;
             z-index: 10;
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 0 8px;
         }
         .slider-dots span {
             display: inline-block;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            margin: 0 3px;
+            background: rgba(255, 255, 255, 0.5);
             transition: all 0.5s;
+            cursor: pointer;
         }
         .slider-dots span.active {
             background: #d4af37;
@@ -1154,11 +1141,11 @@
         /* Floating APK Download Button - visible only on web, hidden in app */
         .floating-apk-btn {
             position: fixed;
-            bottom: 90px;
+            bottom: 100px;
             right: 16px;
             z-index: 60;
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
             box-shadow: 0 4px 25px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
@@ -1170,7 +1157,7 @@
             animation: floatBtn 2s ease-in-out infinite;
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: #1a1a2e;
-            font-size: 24px;
+            font-size: 18px;
             text-decoration: none;
         }
         .floating-apk-btn:hover {
@@ -1178,10 +1165,14 @@
             box-shadow: 0 6px 35px rgba(212, 175, 55, 0.7);
         }
         .floating-apk-btn img {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 4px;
             object-fit: contain;
+        }
+        .floating-apk-btn i {
+            font-size: 20px;
+            color: #1a1a2e;
         }
         @keyframes floatBtn {
             0%, 100% { transform: translateY(0px) scale(1); }
@@ -1194,6 +1185,33 @@
         /* Web only - show in all pages */
         .floating-apk-btn.web-only {
             display: flex;
+        }
+
+        /* Header APK Download Button - small round */
+        .header-apk-btn {
+            background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: floatBtn 2s ease-in-out infinite;
+            box-shadow: 0 2px 15px rgba(212, 175, 55, 0.4);
+            color: #1a1a2e;
+            font-size: 14px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .header-apk-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 25px rgba(212, 175, 55, 0.6);
+        }
+        .header-apk-btn.hidden-app {
+            display: none !important;
         }
     </style>
 </head>
@@ -1217,11 +1235,15 @@
                     <span id="headerSubtitle" class="text-[9px] text-amber-600/60">Premium • Gold Edition</span>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
                 <span class="ex-rate-badge"><i class="fa-solid fa-indian-rupee-sign"></i> $1 = ₹100</span>
                 <button onclick="toggleVoice()" id="voiceToggleBtn" class="voice-toggle-btn" title="वॉइस गाइड ऑन/ऑफ">
                     <i class="fa-solid fa-volume-high"></i> <span id="voiceToggleLabel">ऑन</span>
                 </button>
+                <!-- Header APK Download Button -->
+                <a id="headerApkBtn" class="header-apk-btn web-only" href="#" onclick="downloadApkDirect(event)" title="ऐप डाउनलोड करें">
+                    <i class="fa-solid fa-download"></i>
+                </a>
                 <button onclick="toggleAdminSearch()" class="text-amber-600/50 hover:text-amber-700 transition-all text-sm">
                     <i class="fa-solid fa-search"></i>
                 </button>
@@ -1562,8 +1584,6 @@
                     <button id="installAppBtn" onclick="installApp()" class="w-full app-download-btn justify-center">
                         <i class="fa-solid fa-download"></i> 📲 App Download (PWA)
                     </button>
-                    <!-- APK Download (Demo - link to your APK if you have) -->
-                    <a href="#" onclick="downloadAPK(); return false;" class="w-full text-center text-xs text-amber-600/60 hover:text-amber-700 mt-1 block">📥 APK Download (Coming Soon)</a>
                     <button onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-600 border border-red-500/30 font-semibold py-2.5 rounded-xl text-xs transition-all text-center btn-animate"><i class="fa-solid fa-power-off mr-1.5"></i> लॉगआउट करें</button>
                 </section>
                 <!-- BOTTOM NAV -->
@@ -1770,7 +1790,9 @@
         let cooldownTimerInterval = null;
         let voiceEnabled = true;
         let welcomeVoicePlayed = false;
-        let isAppInstalled = false; // Track if app is installed (PWA)
+        let isAppInstalled = false;
+        let sliderIndex = 0;
+        let sliderInterval = null;
 
         // ============================================================
         // UTILITY FUNCTIONS
@@ -1887,7 +1909,6 @@
         // ============================================================
         function downloadApkDirect(event) {
             event.preventDefault();
-            // Direct download link for APK
             const apkUrl = "https://drive.google.com/uc?export=download&id=1SoHGsDNb83Yo0-wv8ocKEqZvERrYYfkZ";
             const link = document.createElement('a');
             link.href = apkUrl;
@@ -1902,33 +1923,39 @@
         // DETECT APP INSTALLATION (PWA) - hide floating APK button
         // ============================================================
         function checkAppInstallation() {
-            // If in standalone mode (PWA installed), hide the floating APK button
             if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
                 isAppInstalled = true;
                 const btn = document.getElementById('floatingApkBtn');
+                const headerBtn = document.getElementById('headerApkBtn');
                 if (btn) btn.classList.add('hidden-app');
+                if (headerBtn) headerBtn.classList.add('hidden-app');
             } else {
-                // On web, show the button
+                isAppInstalled = false;
                 const btn = document.getElementById('floatingApkBtn');
+                const headerBtn = document.getElementById('headerApkBtn');
                 if (btn) btn.classList.remove('hidden-app');
+                if (headerBtn) headerBtn.classList.remove('hidden-app');
             }
         }
 
-        // Listen for display mode changes
         window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
             if (e.matches) {
                 isAppInstalled = true;
                 const btn = document.getElementById('floatingApkBtn');
+                const headerBtn = document.getElementById('headerApkBtn');
                 if (btn) btn.classList.add('hidden-app');
+                if (headerBtn) headerBtn.classList.add('hidden-app');
             } else {
                 isAppInstalled = false;
                 const btn = document.getElementById('floatingApkBtn');
+                const headerBtn = document.getElementById('headerApkBtn');
                 if (btn) btn.classList.remove('hidden-app');
+                if (headerBtn) headerBtn.classList.remove('hidden-app');
             }
         });
 
         // ============================================================
-        // VOICE SYSTEM – with female voice, clear pronunciation
+        // VOICE SYSTEM
         // ============================================================
         function toggleVoice() {
             voiceEnabled = !voiceEnabled;
@@ -1976,7 +2003,7 @@
         }
 
         // ============================================================
-        // CLAPPING SOUND & CONFETTI (Flowers/Leaves)
+        // CLAPPING SOUND & CONFETTI
         // ============================================================
         function playClappingSound(count = 3) {
             try {
@@ -2825,7 +2852,6 @@
                 else stopCooldownTimer();
             }
 
-            // Voice guidance per page
             if (voiceEnabled) {
                 if (pageId === 'registrationPage') {
                     speakHindi('SupriX Global में आपका स्वागत है। कृपया अपना डिटेल्स भरे और रजिस्ट्रेशन करें।');
@@ -2961,7 +2987,6 @@
             if (!input || !password) { showToast('ईमेल या SPX ID और पासवर्ड दर्ज करें', 'error'); return; }
 
             let email = input;
-            // Check if input is SPX ID (starts with "SPX")
             if (input.startsWith('SPX')) {
                 try {
                     const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('coinxId',
@@ -3054,7 +3079,6 @@
                 showToast('✅ लॉगिन सफल!', 'success');
                 showPage('dashboardPage');
                 startCooldownTimer();
-                // Voice welcome will be triggered inside showPage if not played
             } catch (e) {
                 console.error('Login error:', e);
                 let msg = '❌ गलत ईमेल/SPX ID या पासवर्ड';
@@ -3072,14 +3096,14 @@
         async function handleLogout() {
             try { await account.deleteSession('current'); } catch (e) {}
             currentUser = null;
-            welcomeVoicePlayed = false; // reset for next login
+            welcomeVoicePlayed = false;
             stopCooldownTimer();
             showToast('लॉगआउट हो गया', 'info');
             showPage('loginPage');
         }
 
         // ============================================================
-        // REGISTRATION – shows success page with Email and SPX ID
+        // REGISTRATION
         // ============================================================
         async function handleRegistration(btn) {
             const name = document.getElementById('regName').value.trim();
@@ -3139,13 +3163,11 @@
                 await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, newAccount.$id, userData);
                 if (referral) localStorage.setItem('cx_pending_referral_code', referral);
 
-                // Set success page fields
                 document.getElementById('successUserId').innerText = email;
                 document.getElementById('successSpxId').innerText = coinxId;
                 document.getElementById('successPassword').innerText = phone;
 
                 showPage('regSuccessPage');
-                // Launch confetti with flowers and clapping
                 setTimeout(() => {
                     launchConfetti(70);
                 }, 300);
@@ -3168,7 +3190,7 @@
         }
 
         // ============================================================
-        // FORGOT PASSWORD – uses Appwrite recovery (email template can be customized)
+        // FORGOT PASSWORD
         // ============================================================
         function toggleForgotPasswordModal(show) {
             document.getElementById('forgotPasswordModal').classList.toggle('hidden', !show);
@@ -3225,7 +3247,7 @@
         }
 
         // ============================================================
-        // MINING REWARD - with voice guidance
+        // MINING REWARD
         // ============================================================
         async function triggerMiningReward(btn) {
             if (!currentUser) {
@@ -3439,7 +3461,7 @@
         }
 
         // ============================================================
-        // STAKING – with voice guidance
+        // STAKING
         // ============================================================
         function renderStakingDetails() {
             if (!currentUser) return;
@@ -3646,7 +3668,7 @@
         }
 
         // ============================================================
-        // WITHDRAWAL – with voice guidance
+        // WITHDRAWAL
         // ============================================================
         async function submitWithdrawal(btn) {
             if (!currentUser) { showToast('लॉगिन करें।', 'error'); return; }
@@ -3869,14 +3891,16 @@
         }
 
         // ============================================================
-        // SLIDER - Image only, no text
+        // SLIDER - Images only, no text, smooth slow transition
         // ============================================================
         function renderSlider() {
             const track = document.getElementById('sliderTrack');
             const dots = document.getElementById('sliderDots');
             if (!track) return;
 
+            // List of images - user provided + additional Picsum images
             const imageUrls = [
+                // User provided images
                 "https://i.postimg.cc/0jWfTn08/file-00000000988c82119a7866f30faba9c2.png",
                 "https://i.postimg.cc/N0BHxTRP/IMG-20260830-154634.png",
                 "https://i.postimg.cc/C1tshNQ9/1786547570648.png",
@@ -3885,14 +3909,30 @@
                 "https://i.postimg.cc/FHRzp4Rr/file-000000002878820b8b1bdec0b2578d5d.png",
                 "https://i.postimg.cc/FzpFbWXP/1786547008768.png",
                 "https://i.postimg.cc/vmnQ2Hd6/file-00000000020c820b91c52e506903a683.png",
-                "https://i.postimg.cc/7ZRxHJN9/1788087971847.png"
+                "https://i.postimg.cc/7ZRxHJN9/1788087971847.png",
+                // Additional Picsum images (at least 15 total)
+                "https://picsum.photos/seed/gold1/800/400",
+                "https://picsum.photos/seed/gold2/800/400",
+                "https://picsum.photos/seed/gold3/800/400",
+                "https://picsum.photos/seed/gold4/800/400",
+                "https://picsum.photos/seed/gold5/800/400",
+                "https://picsum.photos/seed/gold6/800/400",
+                "https://picsum.photos/seed/gold7/800/400",
+                "https://picsum.photos/seed/gold8/800/400",
+                "https://picsum.photos/seed/gold9/800/400",
+                "https://picsum.photos/seed/gold10/800/400",
+                "https://picsum.photos/seed/gold11/800/400",
+                "https://picsum.photos/seed/gold12/800/400",
+                "https://picsum.photos/seed/gold13/800/400",
+                "https://picsum.photos/seed/gold14/800/400",
+                "https://picsum.photos/seed/gold15/800/400"
             ];
 
             track.innerHTML = '';
             imageUrls.forEach(url => {
                 const div = document.createElement('div');
                 div.className = 'slide-item';
-                div.innerHTML = `<img src="${url}" alt="Slider Image" loading="lazy" />`;
+                div.innerHTML = `<img src="${url}" alt="Slider" loading="lazy" />`;
                 track.appendChild(div);
             });
 
@@ -3902,9 +3942,43 @@
                 for (let i = 0; i < imageUrls.length; i++) {
                     const span = document.createElement('span');
                     if (i === 0) span.className = 'active';
+                    span.dataset.index = i;
+                    span.addEventListener('click', () => goToSlide(i));
                     dots.appendChild(span);
                 }
             }
+
+            // Start slider
+            sliderIndex = 0;
+            startSlider();
+        }
+
+        function startSlider() {
+            if (sliderInterval) clearInterval(sliderInterval);
+            sliderInterval = setInterval(() => {
+                const track = document.getElementById('sliderTrack');
+                const dots = document.querySelectorAll('#sliderDots span');
+                if (!track) return;
+                const total = track.children.length;
+                sliderIndex = (sliderIndex + 1) % total;
+                track.style.transform = `translateX(-${sliderIndex * 100}%)`;
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === sliderIndex);
+                });
+            }, 5000); // 5 seconds per slide
+        }
+
+        function goToSlide(index) {
+            const track = document.getElementById('sliderTrack');
+            const dots = document.querySelectorAll('#sliderDots span');
+            if (!track) return;
+            sliderIndex = index;
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            // Reset timer
+            startSlider();
         }
 
         // ============================================================
@@ -3952,7 +4026,7 @@
         }
 
         // ============================================================
-        // APP DOWNLOAD (PWA) AND APK FALLBACK
+        // APP DOWNLOAD (PWA)
         // ============================================================
         let deferredPrompt = null;
 
@@ -3968,9 +4042,10 @@
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         showToast('✅ ऐप इंस्टॉल हो रहा है!', 'success');
-                        // Hide floating APK button after install
                         const btn = document.getElementById('floatingApkBtn');
+                        const headerBtn = document.getElementById('headerApkBtn');
                         if (btn) btn.classList.add('hidden-app');
+                        if (headerBtn) headerBtn.classList.add('hidden-app');
                         isAppInstalled = true;
                     } else {
                         showToast('❌ इंस्टॉलेशन रद्द कर दिया गया।', 'info');
@@ -3980,10 +4055,6 @@
             } else {
                 showToast('📲 Browser Menu से "Add to Home Screen" / "Install App" चुनें।', 'info');
             }
-        }
-
-        function downloadAPK() {
-            downloadApkDirect(new Event('click'));
         }
 
         // ============================================================
@@ -4091,7 +4162,6 @@
         window.submitAdminLogin = submitAdminLogin;
         window.closeVoiceToast = closeVoiceToast;
         window.installApp = installApp;
-        window.downloadAPK = downloadAPK;
         window.toggleVoice = toggleVoice;
         window.speakHindi = speakHindi;
         window.showVoiceToast = showVoiceToast;
