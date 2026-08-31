@@ -503,7 +503,7 @@
 
     <script>
         // ============================================================
-        // APPWRITE CONFIGURATION
+        // APPWRITE CONFIGURATION - YOUR PROVIDED VALUES
         // ============================================================
         const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
         const APPWRITE_PROJECT_ID = "6a43cbf70027f5ff8960";
@@ -512,7 +512,7 @@
         const STAKING_SETTINGS_COLLECTION_ID = "staking_plan_settings";
         const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
         const STAKING_SETTINGS_DOC_ID = "global_config";
-        const ADMIN_TEAM_ID = "6a4a84580012aed57e61";
+        const ADMIN_TEAM_ID = "6a9508a4002c7bb3b799";
 
         const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
@@ -1096,7 +1096,7 @@
                 if (data) {
                     sliderImages = JSON.parse(data);
                 } else {
-                    // Default images
+                    // Default images - mix of user provided and Picsum
                     sliderImages = [
                         "https://i.postimg.cc/0jWfTn08/file-00000000988c82119a7866f30faba9c2.png",
                         "https://i.postimg.cc/N0BHxTRP/IMG-20260830-154634.png",
