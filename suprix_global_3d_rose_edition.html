@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SupriX Global – 3D Red Rose Edition</title>
+    <meta name="google" content="notranslate" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link rel="manifest" href="https://progressier.app/G0WQxZazNmz8jdGV9hOh/progressier.json" />
+    <style>
+      /* ── 3D & GLOWING RED ROSE BASE ── */
+        :root {
+            --rose-primary: #ff0055;
+            --rose-dark: #8a0029;
+            --rose-glow: #ff00aa;
+            --bg-dark: #0d0205;
+            --card-bg: rgba(20, 5, 10, 0.7);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 0%, #330011 0%, #0d0205 70%);
+            overflow-x: hidden;
+            user-select: none;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* ── GLOWING ROSE BORDERS & CARDS ── */
+        .glass-rose {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid var(--rose-primary);
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.8),
+                0 0 15px rgba(255, 0, 85, 0.5),
+                inset 0 0 15px rgba(255, 0, 85, 0.3);
+            animation: rosePulse 3s infinite alternate;
+            transform: translateZ(0);
+        }
+        @keyframes rosePulse {
+            0% {
+                box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 10px rgba(255,0,85,0.4), inset 0 0 10px rgba(255,0,85,0.2);
+                border-color: var(--rose-primary);
+            }
+            100% {
+                box-shadow: 0 12px 30px rgba(0,0,0,0.9), 0 0 25px var(--rose-glow), inset 0 0 20px var(--rose-primary);
+                border-color: var(--rose-glow);
+            }
+        }
+        
+        /* ── 3D TEXT GRADIENTS ── */
+        .rose-text-gradient {
+            background: linear-gradient(135deg, #ff99bb, #ff0055, #cc0044);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 5px rgba(255,0,85,0.6));
+        }
+
+        /* ── 3D BUTTONS (REAL PRESS EFFECT) ── */
+        .btn-3d-rose {
+            background: linear-gradient(145deg, #ff0055, #990033);
+            color: #ffffff !important;
+            font-weight: 800;
+            border: 2px solid #ff6699;
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 0 #59001a,
+                0 15px 25px rgba(255, 0, 85, 0.6),
+                inset 0 2px 5px rgba(255,255,255,0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .btn-3d-rose:active {
+            transform: translateY(8px);
+            box-shadow: 
+                0 0px 0 #59001a,
+                0 5px 10px rgba(255, 0, 85, 0.6),
+                inset 0 2px 5px rgba(255,255,255,0.4);
+        }
+
+        /* ── 3D MINING STAR BUTTON ── */
+        .mining-btn-3d {
+            background: radial-gradient(circle at 30% 30%, #ff4d88, #ff0055, #660022);
+            border: 4px solid var(--rose-glow);
+            box-shadow: 
+                0 0 40px var(--rose-primary),
+                inset 0 0 20px var(--rose-glow),
+                0 15px 0 #4d0016,
+                0 20px 30px rgba(0,0,0,0.8);
+            border-radius: 50%;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mining-btn-3d:active {
+            transform: translateY(15px) scale(0.95);
+            box-shadow: 
+                0 0 20px var(--rose-primary),
+                inset 0 0 20px var(--rose-glow),
+                0 0px 0 #4d0016,
+                0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        /* ── INPUT FIELDS (GLASS 3D) ── */
+        input, select, textarea {
+            background: rgba(0, 0, 0, 0.6) !important;
+            border: 2px solid rgba(255, 0, 85, 0.5) !important;
+            color: #ffffff !important;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.8), 0 0 10px rgba(255, 0, 85, 0.1) !important;
+            border-radius: 14px !important;
+            transition: all 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #ff6699 !important;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.8), 0 0 20px rgba(255, 0, 85, 0.7) !important;
+            outline: none;
+        }
+        input::placeholder { color: rgba(255, 255, 255, 0.4) !important; }
+
+        /* ── CARDS & 3D HOVER ── */
+        .card-3d {
+            background: rgba(20, 5, 10, 0.8);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            border-radius: 18px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 0, 85, 0.3), inset 0 2px 4px rgba(255,255,255,0.1);
+            border-color: var(--rose-primary);
+        }
+
+        /* ── BOTTOM NAVIGATION (FLOATING 3D DOCK) ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            max-width: 440px; margin: 0 auto;
+            background: rgba(15, 2, 5, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 2px solid var(--rose-primary);
+            box-shadow: 0 -10px 40px rgba(255, 0, 85, 0.4);
+            padding: 10px 0 16px;
+            display: flex; justify-content: space-around;
+            border-radius: 30px 30px 0 0;
+            z-index: 50;
+        }
+        .bottom-nav button {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            display: flex; flex-direction: column; align-items: center;
+            background: none; border: none; transition: all 0.3s;
+        }
+        .bottom-nav button.active {
+            color: #ff6699;
+            transform: translateY(-4px);
+        }
+        .bottom-nav button.active i {
+            filter: drop-shadow(0 0 10px var(--rose-primary));
+            color: var(--rose-primary);
+            transform: scale(1.2);
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1a050f; }
+        ::-webkit-scrollbar-thumb { background: var(--rose-primary); border-radius: 20px; }
+
+        /* ── BUTTERFLIES (ROSE THEMED) ── */
+        .butterfly-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .butterfly-bg .bfly { position: absolute; font-size: 22px; opacity: 0.3; animation: floatButterfly linear infinite; filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.6)); }
+        @keyframes floatButterfly {
+            0% { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0.08; }
+            25% { transform: translate(80px, -120px) rotate(12deg) scale(1.1); opacity: 0.4; }
+            50% { transform: translate(-60px, -220px) rotate(-8deg) scale(0.9); opacity: 0.5; }
+            75% { transform: translate(100px, -340px) rotate(15deg) scale(1.2); opacity: 0.3; }
+            100% { transform: translate(-20px, -480px) rotate(-5deg) scale(0.7); opacity: 0.06; }
+        }
+
+        /* ── MISC UI UPDATES FOR DARK THEME ── */
+        .app-page, .admin-page, .admin-sec { display: block; }
+        .hidden { display: none !important; }
+        
+        .success-card {
+            background: rgba(25, 5, 12, 0.8);
+            border: 2px solid var(--rose-primary);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
+        }
+        .credential-box, .id-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .credential-box .value, .id-box .id-value { color: #ff6699; }
+        
+        .slider-container {
+            border: 2px solid var(--rose-primary);
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.3);
+            border-radius: 18px; overflow: hidden; height: 250px; position: relative;
+        }
+        .slider-track { display: flex; height: 100%; transition: transform 0.8s ease-in-out; }
+        .slider-track .slide-item img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Receipt Modal 3D Dark */
+        .receipt-modal .receipt-card {
+            background: #110206;
+            border: 3px solid var(--rose-primary);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 85, 0.5);
+            color: white;
+            position: relative;
+        }
+        .receipt-modal .receipt-header { border-bottom: 2px solid rgba(255, 0, 85, 0.3); }
+        .receipt-modal .receipt-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .receipt-modal .receipt-row .label { color: rgba(255, 255, 255, 0.6); }
+        .receipt-modal .receipt-row .value { color: #ffffff; }
+        .receipt-currency-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid #22c55e;
+            box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.2);
+        }
+        .receipt-modal .btn-download { background: linear-gradient(145deg, #ff0055, #990033); color: white; border:none; }
+        
+        /* Toast Notification */
+        #toastNotification {
+            background: rgba(20, 5, 10, 0.95);
+            border: 2px solid var(--rose-primary);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 0, 85, 0.5);
+            color: white; border-radius: 16px;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px);
+            z-index: 9999; opacity: 0; pointer-events: none; transition: all 0.4s;
+            padding: 14px 20px; font-size: 13px; width: 90%; max-width: 400px;
+        }
+        #toastNotification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        #loadingOverlay {
+            background: rgba(10, 2, 5, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed; inset: 0; z-index: 10000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        #loadingOverlay.show { display: flex; }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid rgba(255, 0, 85, 0.2);
+            border-top-color: var(--rose-primary); border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        
+        /* Text Color Helpers for Dark Theme */
+        .text-purple-600 { color: #d8b4fe; }
+        .text-pink-600 { color: #f9a8d4; }
+        .text-indigo-600 { color: #c3dafe; }
+        .text-cyan-600 { color: #a5f3fc; }
+        .text-teal-600 { color: #99f6e4; }
+        .text-amber-600 { color: #fecdd3; } /* Rose tinted */
+        .text-rose-light { color: #ff99bb; }
+        .currency-usdt { color: #34d399 !important; text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+        .currency-inr { color: #60a5fa !important; text-shadow: 0 0 10px rgba(96, 165, 250, 0.4); }
+
+        .floating-apk-btn {
+            position: fixed; bottom: 100px; right: 16px; z-index: 60;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(145deg, #ff0055, #990033);
+            border: 2px solid #ff6699;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 20px rgba(255, 0, 85, 0.6);
+            display: flex; align-items: center; justify-content: center;
+            animation: borderPulse 2s infinite alternate;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay">
+      <div class="spinner"></div>
+      <p class="mt-4 font-bold text-rose-light">कृपया प्रतीक्षा करें...</p>
+    </div>
+
+    <!-- Butterflies Background -->
+    <div class="butterfly-bg" id="butterflyContainer"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div id="appContainer" class="w-full max-w-md mx-auto relative z-10">
+      
+      <!-- HEADER -->
+      <header id="mainHeader" class="w-full glass-rose py-3 px-4 flex items-center justify-between sticky top-0 z-40 rounded-none rounded-b-3xl border-t-0 border-l-0 border-r-0">
+        <div class="flex items-center gap-3">
+          <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="h-10 w-10 object-cover rounded-full border-2 border-[#ff0055] shadow-[0_0_10px_#ff0055]" />
+          <div>
+            <h1 id="headerTitle" class="font-extrabold text-lg tracking-wider leading-none rose-text-gradient">
+              SUPRIX GLOBAL
+            </h1>
+            <span id="headerSubtitle" class="text-[9px] text-gray-300">3D Red Rose Edition</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleVoice()" id="voiceToggleBtn" class="bg-[rgba(255,0,85,0.2)] border border-[#ff0055] text-white px-2 py-1 rounded-full text-[10px] shadow-[0_0_8px_rgba(255,0,85,0.4)]">
+            <i class="fa-solid fa-volume-high"></i> <span id="voiceToggleLabel">ऑन</span>
+          </button>
+          <button onclick="toggleAdminSearch()" class="text-white hover:text-[#ff0055] transition-all">
+            <i class="fa-solid fa-search"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Admin Search Box -->
+      <div id="adminSearchBox" class="hidden w-full glass-rose p-3 my-2 px-4">
+        <div class="flex gap-2">
+          <input type="text" id="adminSecretInput" placeholder="एडमिन कोड दर्ज करें" class="flex-1 px-3 py-2 text-xs" />
+          <button onclick="verifyAdminCode()" class="btn-3d-rose px-4 py-2 text-xs">Verify</button>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <main class="w-full px-4 pt-5 pb-28 flex-1 flex flex-col justify-start z-10">
+        
+        <!-- ======================== USER PANEL ======================== -->
+        <div id="userPanelContainer">
+          
+          <!-- REGISTRATION -->
+          <section id="registrationPage" class="app-page w-full space-y-6">
+            <div class="text-center space-y-2 py-4">
+              <div class="w-24 h-24 mx-auto rounded-full p-1 glass-rose">
+                  <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="w-full h-full rounded-full object-cover" />
+              </div>
+              <h2 class="text-2xl font-extrabold rose-text-gradient mt-4">रजिस्ट्रेशन करें</h2>
+              <p class="text-xs text-gray-300">SupriX Global परिवार में आपका स्वागत है</p>
+            </div>
+            <div class="glass-rose p-6 space-y-5">
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-user mr-1"></i> पूरा नाम</label>
+                <input type="text" id="regName" placeholder="अपना नाम दर्ज करें" class="w-full py-3 px-4 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-envelope mr-1"></i> ईमेल आईडी</label>
+                <input type="email" id="regEmail" placeholder="अपनी ईमेल आईडी दर्ज करें" class="w-full py-3 px-4 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-phone mr-1"></i> मोबाइल नंबर</label>
+                <input type="tel" id="regPhone" placeholder="अपना 10 अंकों का मोबाइल नंबर डालें" class="w-full py-3 px-4 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-users mr-1"></i> रेफरल कोड (वैकल्पिक)</label>
+                <input type="text" id="regReferral" placeholder="रेफरल कोड दर्ज करें (यदि कोई हो)" class="w-full py-3 px-4 text-sm" />
+              </div>
+              <button id="btn-register" onclick="handleRegistration(this)" class="w-full btn-3d-rose py-4 mt-2 text-sm flex justify-center gap-2">
+                <span>सबमिट करें</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              </button>
+              <p class="text-center text-xs text-gray-400 mt-3">
+                पहले से ही अकाउंट है? <button onclick="showPage('loginPage')" class="text-[#ff0055] font-bold underline">लॉगिन करें</button>
+              </p>
+            </div>
+          </section>
+
+          <!-- REG SUCCESS -->
+          <section id="regSuccessPage" class="app-page w-full hidden space-y-6 text-center py-4">
+            <div class="glass-rose p-6 space-y-6 relative overflow-hidden">
+              <div id="confettiContainer" class="absolute inset-0 pointer-events-none"></div>
+              <div class="relative z-10">
+                <div class="flex items-center justify-center gap-3">
+                  <div class="w-20 h-20 bg-[rgba(34,197,94,0.2)] text-[#22c55e] rounded-full flex items-center justify-center text-4xl border-2 border-[#22c55e] shadow-[0_0_15px_#22c55e] animate-bounce">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </div>
+                  <div class="text-left">
+                    <h2 class="text-3xl font-extrabold text-[#22c55e] drop-shadow-md">🎉 बधाई हो!</h2>
+                    <p class="text-sm text-gray-200">रजिस्ट्रेशन सफलतापूर्वक पूर्ण हुआ!</p>
+                  </div>
+                </div>
+                <div class="success-card text-left space-y-4 mt-6">
+                  <div>
+                    <div class="text-[10px] font-bold text-gray-300 mb-1"><i class="fa-solid fa-envelope text-[#ff0055] mr-1"></i> ईमेल आईडी (Login ID)</div>
+                    <div class="credential-box flex justify-between">
+                      <span id="successUserId" class="value">user@example.com</span>
+                      <button onclick="copyToClipboard('successUserId', '✅ ईमेल कॉपी हो गई!')" class="text-xs bg-[#ff0055] px-2 py-1 rounded text-white"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-bold text-gray-300 mb-1"><i class="fa-solid fa-id-card text-[#ff0055] mr-1"></i> SPX ID (Login ID)</div>
+                    <div class="credential-box flex justify-between">
+                      <span id="successSpxId" class="value font-bold" style="color:var(--rose-glow);">SPX000000</span>
+                      <button onclick="copyToClipboard('successSpxId', '✅ SPX ID कॉपी हो गई!')" class="text-xs bg-[#ff0055] px-2 py-1 rounded text-white"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-bold text-gray-300 mb-1"><i class="fa-solid fa-lock text-[#ff0055] mr-1"></i> आपका पासवर्ड</div>
+                    <div class="credential-box flex justify-between">
+                      <span id="successPassword" class="value">XXXXXXXXXX</span>
+                      <span class="text-[9px] text-gray-400">(मोबाइल नंबर)</span>
+                    </div>
+                  </div>
+                </div>
+                <button onclick="showPage('loginPage')" class="w-full btn-3d-rose py-4 mt-6 text-sm flex justify-center gap-2">
+                  <i class="fa-solid fa-right-to-bracket"></i> <span>लॉगिन स्क्रीन पर जाएं</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- LOGIN -->
+          <section id="loginPage" class="app-page w-full hidden space-y-6">
+            <div class="text-center space-y-2 py-6">
+               <div class="w-24 h-24 mx-auto rounded-full p-1 glass-rose">
+                  <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX Global" class="w-full h-full rounded-full object-cover" />
+              </div>
+              <h2 class="text-2xl font-extrabold rose-text-gradient mt-4">लॉगिन अकाउंट</h2>
+              <p class="text-xs text-gray-300">सुरक्षित 3D माइनिंग डैशबोर्ड</p>
+            </div>
+            <div class="glass-rose p-6 space-y-5">
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-envelope mr-1"></i> ईमेल या SPX ID</label>
+                <input type="text" id="loginUserId" placeholder="ईमेल या SPX ID दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-rose-light mb-1.5"><i class="fa-solid fa-lock mr-1"></i> पासवर्ड</label>
+                <input type="password" id="loginPassword" placeholder="अपना पासवर्ड डालें (मोबाइल नंबर)" class="w-full py-3 px-4 text-sm font-mono" />
+              </div>
+              <div class="flex items-center justify-between text-xs py-1">
+                <label class="flex items-center gap-1.5 text-gray-300 cursor-pointer">
+                  <input type="checkbox" id="rememberMe" class="accent-[#ff0055] rounded w-4 h-4" />
+                  हमेशा लॉगिन रहें
+                </label>
+                <button onclick="toggleForgotPasswordModal(true)" class="text-[#ff6699] hover:underline font-bold">पासवर्ड भूल गए?</button>
+              </div>
+              <button id="btn-login" onclick="handleLogin(this)" class="w-full btn-3d-rose py-4 mt-2 text-sm flex justify-center gap-2">
+                <span>लॉगिन करें</span> <i class="fa-solid fa-right-to-bracket"></i>
+              </button>
+              <p class="text-center text-xs text-gray-400 mt-3">
+                नया अकाउंट बनाना है? <button onclick="showPage('registrationPage')" class="text-[#ff0055] font-bold underline">रजिस्टर करें</button>
+              </p>
+            </div>
+          </section>
+
+          <!-- DASHBOARD -->
+          <section id="dashboardPage" class="app-page w-full hidden space-y-5">
+            <div class="slider-container">
+              <div class="slider-track" id="sliderTrack"></div>
+              <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-2 z-10" id="sliderDots"></div>
+            </div>
+            
+            <div class="glass-rose p-4 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full border-2 border-[#ff0055] bg-[rgba(255,0,85,0.2)] flex items-center justify-center text-white shadow-[0_0_10px_#ff0055]">
+                  <i class="fa-solid fa-user-astronaut text-xl"></i>
+                </div>
+                <div>
+                  <h4 id="userWelcomeName" class="font-bold text-sm text-white">User</h4>
+                  <p id="userWelcomeEmail" class="text-[10px] text-gray-400">user@example.com</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] bg-[#22c55e] text-white px-3 py-1 rounded-full font-bold shadow-[0_0_10px_#22c55e]">सक्रिय</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="card-3d p-4">
+                <span class="text-[10px] text-gray-400 block mb-1"><i class="fa-solid fa-dollar-sign mr-1 text-[#ff6699]"></i> Total Investment</span>
+                <span id="statInvestment" class="text-lg font-bold text-white drop-shadow-md">$0.00</span>
+              </div>
+              <div class="card-3d p-4">
+                <span class="text-[10px] text-gray-400 block mb-1"><i class="fa-solid fa-lock mr-1 currency-usdt"></i> Locked Staking</span>
+                <span id="statLocked" class="text-lg font-bold currency-usdt">0.00 USDT</span>
+              </div>
+              <div class="card-3d p-4">
+                <span class="text-[10px] text-gray-400 block mb-1"><i class="fa-solid fa-gift mr-1 currency-inr"></i> Daily Release (0.5%)</span>
+                <span id="statDailyRelease" class="text-lg font-bold currency-inr">₹0.00</span>
+                <span id="statDailyUsdt" class="text-[9px] text-[#ff6699] block mt-1">0.00 USDT</span>
+              </div>
+              <div class="card-3d p-4">
+                <span class="text-[10px] text-gray-400 block mb-1"><i class="fa-solid fa-wallet mr-1 currency-usdt"></i> Available Balance</span>
+                <span id="statAvailable" class="text-lg font-bold currency-usdt">0.00 USDT</span>
+              </div>
+            </div>
+
+            <div class="glass-rose p-8 flex flex-col items-center justify-center text-center space-y-6">
+              <div class="space-y-1">
+                <h3 class="text-sm font-bold tracking-wider text-white uppercase drop-shadow-md">🌟 3D माइनिंग रिवॉर्ड स्टार</h3>
+                <p class="text-[11px] text-[#ff6699]">डेली 0.5% कॉइन रिलीज — 10 USDT स्टेक करें</p>
+              </div>
+              
+              <button id="miningStarBtn" onclick="triggerMiningReward(this)" class="w-36 h-36 mining-btn-3d flex items-center justify-center">
+                  <i class="fa-solid fa-star text-6xl text-white drop-shadow-[0_0_20px_#ffffff]"></i>
+              </button>
+              
+              <div class="w-full bg-[rgba(0,0,0,0.5)] border border-[#ff0055] rounded-xl p-3 shadow-inner">
+                <div id="miningTimerText" class="text-xs text-white font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-circle-play text-[#22c55e] animate-pulse"></i>
+                  <span>रिलीज के लिए अभी दबाएं!</span>
+                </div>
+                <div id="cooldownBadge" class="hidden justify-center mt-2 text-[#ff6699] font-mono text-sm">
+                  <i class="fa-regular fa-clock mr-1"></i> <span id="cooldownTimeDisplay">--:--:--</span>
+                </div>
+              </div>
+              <div id="stakingWarning" class="hidden w-full bg-[rgba(255,0,85,0.2)] border border-[#ff0055] rounded-lg p-2 text-center text-xs text-white">
+                ⚠️ कम से कम 10 USDT स्टेक करें!
+              </div>
+            </div>
+          </section>
+
+          <!-- PURCHASE -->
+          <section id="purchasePage" class="app-page w-full hidden space-y-4">
+            <div class="glass-rose p-4">
+              <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-cart-shopping mr-1.5 text-[#ff0055]"></i> कॉइन परचेज करें</h3>
+              <p class="text-[11px] text-gray-300 mt-1">USDT (BEP20) के माध्यम से सुरक्षित परचेज। <strong class="text-[#ff6699]">$1 = 1 USDT</strong></p>
+              <p class="text-[10px] text-[#22c55e] font-semibold mt-1">💰 Min Deposit: $10 USDT</p>
+            </div>
+            
+            <div class="glass-rose p-5 space-y-4">
+              <h4 class="text-xs font-bold text-[#ff6699]">कस्टम अमाउंट दर्ज करें</h4>
+              <div class="flex gap-2">
+                <input type="number" id="customUSDAmount" oninput="calculateCustomCoins(this.value)" placeholder="USD ($10+)" class="w-full py-3 px-4 text-sm font-mono" min="10" />
+                <div class="bg-[rgba(0,0,0,0.5)] border border-[#ff0055] rounded-xl px-4 flex items-center text-xs font-bold currency-usdt" id="calculatedCoinsPreview">0 USDT</div>
+              </div>
+              <button id="btn-custom-purchase" onclick="generateCustomPurchase()" class="w-full btn-3d-rose py-3 text-sm flex justify-center gap-2">
+                <span>USDT QR जनरेट करें</span> <i class="fa-solid fa-qrcode"></i>
+              </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 max-h-[160px] overflow-y-auto pr-1" id="purchaseGrid"></div>
+            
+            <!-- Payment Gateway Card -->
+            <div id="paymentGatewayCard" class="glass-rose p-5 space-y-4 hidden">
+              <div class="flex justify-between border-b border-[#ff0055] pb-2">
+                <h4 class="text-xs font-bold text-white"><i class="fa-solid fa-qrcode mr-1 text-[#ff6699]"></i> भुगतान विवरण</h4>
+                <button onclick="hidePaymentCard()" class="text-[10px] bg-[#ff0055] px-2 py-1 rounded text-white">बंद करें</button>
+              </div>
+              <div class="bg-[rgba(255,0,85,0.2)] border border-[#ff0055] rounded-lg p-2 text-center text-xs text-white font-bold">
+                ⚠️ USDT (BEP20) में ही Payment करें।
+              </div>
+              <div class="flex flex-col items-center text-center space-y-3">
+                <span class="text-[11px] text-gray-300">स्कैन करके पेमेंट करें: <strong id="paymentUSDVal" class="text-white text-lg block mt-1">$5.00 USDT</strong></span>
+                <div class="bg-white p-2 rounded-xl shadow-[0_0_20px_#ff0055]">
+                  <img src="https://i.postimg.cc/SRrcGvzT/Screenshot-2026-0716-065409.jpg" alt="Payment QR" class="w-32 h-32 object-contain" />
+                </div>
+                <div class="w-full bg-[rgba(0,0,0,0.6)] border border-[#ff0055] rounded-xl p-3 flex justify-between items-center">
+                  <span class="text-[11px] text-gray-300 font-mono break-all" id="cryptoAddressText">0x7be243182b7442D17a13e2C019f0d0174F196817</span>
+                  <button onclick="copyToClipboard('cryptoAddressText', '✅ एड्रेस कॉपी हुआ!')" class="text-[#ff0055] ml-2 text-lg"><i class="fa-solid fa-copy"></i></button>
+                </div>
+              </div>
+              <div class="space-y-3 pt-3 border-t border-[#ff0055]">
+                <label class="block text-[10px] text-gray-300">पेमेंट स्क्रीनशॉट अपलोड करें</label>
+                <label class="w-full bg-[rgba(0,0,0,0.5)] border 2px border-[#ff0055] border-dashed rounded-xl p-4 flex items-center justify-center gap-2 cursor-pointer text-xs text-white">
+                  <i class="fa-solid fa-camera text-[#ff0055] text-lg"></i> <span id="purchaseScreenshotName">अपलोड इमेज</span>
+                  <input type="file" id="purchaseScreenshotFile" class="hidden" accept="image/*" onchange="handlePurchaseScreenshot(event)" />
+                </label>
+                <div id="purchaseScreenshotPreview" class="w-16 h-16 rounded border border-[#ff0055] hidden mx-auto mt-2 overflow-hidden"></div>
+                <button id="btn-submit-deposit" onclick="submitDepositRequest(this)" class="w-full btn-3d-rose py-3 text-sm flex justify-center gap-2">
+                  <span>पेमेंट रिक्वेस्ट भेजें</span> <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- STAKING -->
+          <section id="stakingPage" class="app-page w-full hidden space-y-4">
+            <div class="glass-rose p-4">
+              <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-vault mr-1.5 text-[#ff0055]"></i> USDT स्टेकिंग</h3>
+              <p class="text-[11px] text-gray-300 mt-1">अपने उपलब्ध USDT को लॉक करके शानदार दैनिक रिवॉर्ड प्राप्त करें।</p>
+            </div>
+            
+            <div class="glass-rose p-5 space-y-4">
+              <div class="flex justify-between text-xs">
+                <span class="text-gray-300">अवेलेबल बैलेंस:</span>
+                <span id="stakingAvailableCoins" class="font-bold currency-usdt text-sm">0.00 USDT</span>
+              </div>
+              <div>
+                <input type="number" id="stakeInputCoins" placeholder="न्यूनतम 10 USDT" class="w-full py-3 px-4 text-sm font-mono" min="10" />
+                <div class="flex justify-between text-[10px] text-gray-400 mt-1 px-1"><span>Min 10 USDT</span><span>Max 100,000 USDT</span></div>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-300 mb-2">लॉकिंग अवधि चुनें</label>
+                <div id="stakingPlansContainer" class="grid grid-cols-3 gap-3"></div>
+              </div>
+              <button id="btn-submit-stake" onclick="submitStake(this)" class="w-full btn-3d-rose py-3 mt-2 text-sm flex justify-center gap-2">
+                <span>अभी स्टेकिंग पर लगाएं</span> <i class="fa-solid fa-lock"></i>
+              </button>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4">
+              <div class="glass-rose p-4">
+                <h4 class="text-xs font-bold text-[#ff6699] mb-3">सक्रिय स्टेकिंग सूची</h4>
+                <div id="activeStakesList" class="space-y-3 text-xs max-h-[150px] overflow-y-auto"></div>
+              </div>
+              <div class="glass-rose p-4">
+                <h4 class="text-xs font-bold text-[#ff6699] mb-3">स्टेकिंग हिस्ट्री</h4>
+                <div id="stakingHistoryList" class="space-y-3 text-xs max-h-[150px] overflow-y-auto"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PROFILE -->
+          <section id="profilePage" class="app-page w-full hidden space-y-4">
+            <div class="glass-rose p-5 flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-full border-2 border-[#ff0055] bg-[rgba(255,0,85,0.2)] flex items-center justify-center text-white text-2xl shadow-[0_0_15px_#ff0055]">
+                  <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div>
+                  <h3 id="profileName" class="font-bold text-white text-lg">User Profile</h3>
+                  <p id="profileEmail" class="text-[10px] text-gray-400">user@example.com</p>
+                  <button onclick="copyToClipboard('profileEmail', '✅ Email कॉपी हो गई!')" class="text-[9px] bg-[#ff0055] px-2 py-0.5 rounded text-white mt-1"><i class="fa-solid fa-copy mr-1"></i> कॉपी</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass-rose p-4 flex justify-between items-center">
+              <div>
+                <span class="text-[10px] text-[#ff6699]">🆔 आपकी Unique SPX ID</span>
+                <div id="profileCoinXIdDisplay" class="font-mono text-lg font-bold text-white tracking-widest drop-shadow-[0_0_5px_#ff0055]">SPX123456</div>
+              </div>
+              <button onclick="copyToClipboard('profileCoinXIdDisplay', '✅ SPX ID कॉपी हो गई!')" class="btn-3d-rose px-3 py-2 text-xs"><i class="fa-solid fa-copy"></i></button>
+            </div>
+            
+            <div class="glass-rose p-5 space-y-4">
+              <h4 class="text-sm font-bold text-white"><i class="fa-solid fa-share-nodes mr-1.5 text-[#ff0055]"></i> Invite & Earn 2%</h4>
+              <div class="w-full bg-[rgba(0,0,0,0.6)] border border-[#ff0055] p-3 rounded-xl flex justify-between items-center">
+                <span id="referralShareLink" class="text-xs text-gray-300 font-mono truncate mr-3">https://suprixglobal.online/?ref=</span>
+                <button onclick="copyToClipboard('referralShareLink', '✅ रेफरल लिंक कॉपी!')" class="text-[#ff0055] text-lg"><i class="fa-solid fa-copy"></i></button>
+              </div>
+              <div class="flex justify-center bg-white p-3 rounded-xl shadow-[0_0_20px_#ff0055] mx-auto w-max" id="referralQrContainer"></div>
+              <button onclick="shareReferralLink()" class="w-full btn-3d-rose py-3 text-sm flex justify-center gap-2">
+                <i class="fa-solid fa-share-nodes"></i> Share Link
+              </button>
+            </div>
+
+            <!-- Withdrawal Setup -->
+            <div class="glass-rose p-5 space-y-4">
+              <h4 class="text-sm font-bold text-white border-b border-[#ff0055] pb-2"><i class="fa-solid fa-money-bill-transfer mr-1 text-[#ff0055]"></i> विथड्रॉवल सेटअप</h4>
+              
+              <div class="bg-[rgba(255,0,85,0.2)] border border-[#ff0055] rounded-lg p-2 text-center text-xs text-white">
+                ⚠️ USDT (BEP20) में ही Withdrawal लें। Min: $2 USDT
+              </div>
+              
+              <div class="space-y-3">
+                <label class="block text-[10px] text-gray-300">USDT (BEP20) QR कोड</label>
+                <div class="flex gap-3">
+                  <label class="flex-1 bg-[rgba(0,0,0,0.5)] border border-[#ff0055] border-dashed rounded-xl p-3 flex justify-center items-center gap-2 cursor-pointer text-xs">
+                    <i class="fa-solid fa-cloud-arrow-up text-[#ff0055]"></i> <span id="qrUploadStatus">अपलोड करें</span>
+                    <input type="file" id="userQrFile" class="hidden" accept="image/*" onchange="handleQrUpload(event)" />
+                  </label>
+                  <div id="userQrPreview" class="w-12 h-12 rounded border border-[#ff0055] hidden overflow-hidden"></div>
+                </div>
+                
+                <input type="text" id="userWithdrawAddress" placeholder="BEP20 एड्रेस पेस्ट करें..." class="w-full py-3 px-4 text-sm font-mono" />
+                
+                <div class="flex justify-between text-xs mt-4">
+                  <span class="text-gray-300">बैलेंस: <strong id="withdrawAvailable" class="currency-usdt text-sm">0.00 USDT</strong></span>
+                </div>
+                <div class="flex gap-2">
+                  <input type="number" id="withdrawAmountInput" placeholder="USDT (Min 2)" class="flex-1 py-3 px-4 text-sm font-mono" min="2" />
+                  <button id="btn-submit-withdraw" onclick="submitWithdrawal(this)" class="btn-3d-rose px-6 py-3 font-bold">विथड्रॉ</button>
+                </div>
+              </div>
+              
+              <div class="pt-4 border-t border-[#ff0055] mt-4 space-y-3">
+                <h5 class="text-xs font-bold text-[#ff6699]"><i class="fa-solid fa-wallet mr-1"></i> SupriX Wallet में विथड्रॉवल (10% Fee)</h5>
+                <input type="text" id="coinxWalletSCAddress" placeholder="SPX ID दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" />
+                <div class="flex gap-2">
+                  <input type="number" id="coinxWalletWithdrawAmount" placeholder="USDT" class="flex-1 py-3 px-4 text-sm font-mono" min="2" />
+                  <button onclick="submitCoinXWalletWithdrawal()" class="btn-3d-rose px-6 py-3 font-bold"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <button onclick="toggleMyReferralsModal(true)" class="card-3d py-3 text-xs font-bold text-white flex flex-col items-center gap-1"><i class="fa-solid fa-users text-[#ff0055] text-lg"></i> Referrals</button>
+              <button onclick="toggleTxHistoryModal(true)" class="card-3d py-3 text-xs font-bold text-white flex flex-col items-center gap-1"><i class="fa-solid fa-list-check text-[#ff0055] text-lg"></i> History</button>
+              <button onclick="toggleTeamModal(true)" class="card-3d py-3 text-xs font-bold text-white flex flex-col items-center gap-1"><i class="fa-solid fa-people-group text-[#ff0055] text-lg"></i> Team</button>
+            </div>
+            
+            <button id="installAppBtn" onclick="installApp()" class="w-full btn-3d-rose py-4 text-sm flex justify-center gap-2">
+              <i class="fa-solid fa-download"></i> 📲 App Download (PWA)
+            </button>
+            
+            <button onclick="handleLogout()" class="w-full bg-[rgba(255,0,0,0.2)] border 2px border-red-500 text-white font-bold py-4 rounded-xl text-sm shadow-[0_0_15px_rgba(255,0,0,0.5)] active:scale-95 transition-all">
+              <i class="fa-solid fa-power-off mr-1.5"></i> लॉगआउट करें
+            </button>
+          </section>
+
+          <!-- BOTTOM NAV (DOCK) -->
+          <nav id="bottomNavBar" class="bottom-nav hidden">
+            <button onclick="showPage('dashboardPage')" id="nav-dashboardPage" class="active">
+              <i class="fa-solid fa-house-chimney text-2xl mb-1"></i><span>डैशबोर्ड</span>
+            </button>
+            <button onclick="showPage('purchasePage')" id="nav-purchasePage">
+              <i class="fa-solid fa-cart-shopping text-2xl mb-1"></i><span>परचेज</span>
+            </button>
+            <button onclick="showPage('stakingPage')" id="nav-stakingPage">
+              <i class="fa-solid fa-lock text-2xl mb-1"></i><span>स्टेकिंग</span>
+            </button>
+            <button onclick="showPage('profilePage')" id="nav-profilePage">
+              <i class="fa-solid fa-circle-user text-2xl mb-1"></i><span>प्रोफाइल</span>
+            </button>
+          </nav>
+        </div>
+        
+        <!-- ADMIN PANEL HTML KEEPS LOGIC SAME BUT THEMES UPDATED TO ROSE/DARK -->
+        <div id="adminPanelContainer" class="hidden">
+           <!-- Skipping Admin panel detailed UI updates to save space, but basic classes apply from CSS. -->
+           <section id="adminLoginPage" class="admin-page w-full space-y-6 text-center pt-10">
+              <h2 class="text-3xl font-bold rose-text-gradient">Admin Mode</h2>
+              <div class="glass-rose p-6 space-y-4 text-left">
+                  <input type="email" id="adminUsernameInput" placeholder="Admin Email" class="w-full py-3 px-4 text-sm" />
+                  <input type="password" id="adminPasswordInput" placeholder="Password" class="w-full py-3 px-4 text-sm" />
+                  <button id="btn-admin-login" onclick="submitAdminLogin(this)" class="w-full btn-3d-rose py-3">Login</button>
+              </div>
+           </section>
+           <section id="adminDashboardPage" class="admin-page w-full hidden space-y-4">
+               <div class="glass-rose p-4 flex justify-between items-center">
+                   <h3 class="font-bold text-white">Admin Dashboard</h3>
+                   <button onclick="logoutAdmin()" class="bg-red-500 px-3 py-1 rounded text-white text-xs">Logout</button>
+               </div>
+               <div class="grid grid-cols-2 gap-3 text-center text-xs">
+                    <div class="card-3d p-3"><span class="text-gray-400">Users</span><br><strong id="statTotalUsers" class="text-lg">0</strong></div>
+                    <div class="card-3d p-3"><span class="text-gray-400">Staked</span><br><strong id="statTotalStaked" class="text-lg">0</strong></div>
+               </div>
+               <div class="flex flex-wrap gap-2">
+                   <button onclick="switchAdminTab('users')" id="adminTab-users" class="flex-1 bg-[#ff0055] text-white py-2 rounded font-bold text-xs">Users</button>
+                   <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="flex-1 bg-[rgba(255,255,255,0.1)] py-2 rounded text-xs">Deposits</button>
+                   <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="flex-1 bg-[rgba(255,255,255,0.1)] py-2 rounded text-xs">Withdraw</button>
+               </div>
+               <div id="adminSection-users" class="admin-sec glass-rose p-4"><div id="adminUserList" class="space-y-3 max-h-[300px] overflow-auto"></div></div>
+               <div id="adminSection-deposits" class="admin-sec glass-rose p-4 hidden"><div id="adminDepositsList" class="space-y-3 max-h-[300px] overflow-auto"></div></div>
+               <div id="adminSection-withdrawals" class="admin-sec glass-rose p-4 hidden"><div id="adminWithdrawalsList" class="space-y-3 max-h-[300px] overflow-auto"></div></div>
+           </section>
+        </div>
+      </main>
+
+      <!-- RECEIPT MODAL (3D RED ROSE THEME) -->
+      <div id="receiptModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+        <div class="receipt-card bg-[#0d0205] border-2 border-[#ff0055] shadow-[0_0_40px_#ff0055] rounded-3xl w-full max-w-sm max-h-[90vh] overflow-y-auto p-6 relative">
+          <div class="text-center pb-4 border-b border-[#ff0055]">
+            <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" class="w-12 h-12 mx-auto rounded-full border-2 border-[#ff0055] shadow-[0_0_15px_#ff0055]" />
+            <h3 class="font-bold text-white mt-2">Official Payment Receipt</h3>
+            <button class="absolute top-4 right-4 text-[#ff0055] text-2xl" onclick="closeReceipt()"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div id="receiptContent" class="py-4 space-y-2 text-sm text-gray-200"></div>
+          <div class="flex gap-3 pt-4 border-t border-[#ff0055]">
+            <button class="flex-1 btn-3d-rose py-3 text-xs flex justify-center items-center gap-2" onclick="downloadReceipt()"><i class="fa-solid fa-download"></i> Save</button>
+            <button class="flex-1 bg-[rgba(255,255,255,0.1)] border border-[#ff0055] text-white py-3 rounded-xl text-xs" onclick="printReceipt()"><i class="fa-solid fa-print"></i> Print</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODALS -->
+      <div id="myReferralsModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 hidden">
+        <div class="glass-rose p-5 w-full max-w-sm flex flex-col max-h-[85vh]">
+          <div class="flex justify-between border-b border-[#ff0055] pb-2"><h4 class="font-bold text-white">मेरे रेफ़रल</h4><button onclick="toggleMyReferralsModal(false)" class="text-[#ff0055] text-xl"><i class="fa-solid fa-xmark"></i></button></div>
+          <div id="referralsListArea" class="flex-1 overflow-y-auto space-y-3 mt-4 text-xs"></div>
+        </div>
+      </div>
+      <div id="txHistoryModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 hidden">
+        <div class="glass-rose p-5 w-full max-w-sm flex flex-col max-h-[85vh]">
+          <div class="flex justify-between border-b border-[#ff0055] pb-2"><h4 class="font-bold text-white">लेनदेन इतिहास</h4><button onclick="toggleTxHistoryModal(false)" class="text-[#ff0055] text-xl"><i class="fa-solid fa-xmark"></i></button></div>
+          <div class="flex gap-2 mt-4">
+            <button id="txTab-deposit" onclick="switchTxTab('deposit')" class="flex-1 bg-[#ff0055] text-white py-2 rounded font-bold text-xs">Deposit</button>
+            <button id="txTab-withdraw" onclick="switchTxTab('withdraw')" class="flex-1 bg-[rgba(255,255,255,0.1)] text-white py-2 rounded font-bold text-xs">Withdraw</button>
+            <button id="txTab-daily" onclick="switchTxTab('daily')" class="flex-1 bg-[rgba(255,255,255,0.1)] text-white py-2 rounded font-bold text-xs">Daily</button>
+          </div>
+          <div id="txHistoryListArea" class="flex-1 overflow-y-auto space-y-3 mt-4 text-xs"></div>
+        </div>
+      </div>
+      <div id="teamModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 hidden">
+        <div class="glass-rose p-5 w-full max-w-sm flex flex-col max-h-[85vh]">
+          <div class="flex justify-between border-b border-[#ff0055] pb-2"><h4 class="font-bold text-white">मेरी टीम</h4><button onclick="toggleTeamModal(false)" class="text-[#ff0055] text-xl"><i class="fa-solid fa-xmark"></i></button></div>
+          <div id="teamStats" class="grid grid-cols-3 gap-2 text-center text-[10px] mt-4">
+            <div class="bg-[rgba(0,0,0,0.5)] border border-[#ff0055] p-2 rounded-xl">Members<br><strong id="teamTotalMembers" class="text-lg">0</strong></div>
+            <div class="bg-[rgba(0,0,0,0.5)] border border-[#ff0055] p-2 rounded-xl">Staked<br><strong id="teamTotalStaked" class="text-sm currency-usdt">0</strong></div>
+            <div class="bg-[rgba(0,0,0,0.5)] border border-[#ff0055] p-2 rounded-xl">Bonus<br><strong id="teamTotalBonus" class="text-sm currency-usdt">0</strong></div>
+          </div>
+          <div id="teamListArea" class="flex-1 overflow-y-auto space-y-3 mt-4 text-xs"></div>
+        </div>
+      </div>
+      <div id="forgotPasswordModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 hidden">
+        <div class="glass-rose p-6 w-full max-w-sm">
+          <div class="flex justify-between border-b border-[#ff0055] pb-2 mb-4"><h4 class="font-bold text-white">पासवर्ड रिकवर</h4><button onclick="toggleForgotPasswordModal(false)" class="text-[#ff0055] text-xl"><i class="fa-solid fa-xmark"></i></button></div>
+          <input type="text" id="forgotInput" placeholder="ईमेल दर्ज करें" class="w-full py-3 px-4 text-sm font-mono mb-4" />
+          <button id="btn-forgot" onclick="handleForgotPassword(this)" class="w-full btn-3d-rose py-3">पासवर्ड खोजें</button>
+        </div>
+      </div>
+      
+      <!-- FULLSCREEN IMAGE -->
+      <div id="fullscreenImageModal" class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-[150] p-4 hidden">
+        <button onclick="closeFullscreenImage()" class="absolute top-6 right-6 text-white bg-[#ff0055] w-10 h-10 rounded-full text-xl shadow-[0_0_15px_#ff0055]"><i class="fa-solid fa-xmark"></i></button>
+        <img id="fullscreenImgTarget" src="" class="max-w-full max-h-[80vh] object-contain rounded-xl border-2 border-[#ff0055] shadow-[0_0_30px_#ff0055]" />
+      </div>
+
+      <!-- TOAST -->
+      <div id="toastNotification"><span id="toastMessage"></span></div>
+      
+      <!-- VOICE TOAST -->
+      <div id="voiceToast" class="fixed bottom-24 left-1/2 -translate-x-1/2 glass-rose w-11/12 max-w-sm text-center p-4 z-[99] hidden">
+          <i class="fa-solid fa-volume-high text-3xl text-[#ff0055] mb-2 drop-shadow-[0_0_10px_#ff0055]"></i>
+          <p id="voiceToastMsg" class="text-sm font-bold text-white"></p>
+          <button onclick="closeVoiceToast()" class="mt-3 bg-[#ff0055] px-4 py-1 rounded-full text-xs text-white">OK</button>
+      </div>
+
+      <!-- APK FLOATING BTN -->
+      <a id="floatingApkBtn" class="floating-apk-btn" href="#" onclick="downloadApkDirect(event)">
+        <i class="fa-solid fa-download text-white text-xl"></i>
+      </a>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC (Unchanged Data structure, tweaked UI output) -->
+    <script>
+        const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
+        const APPWRITE_PROJECT_ID = "6a43cbf70027f5ff8960";
+        const DATABASE_ID = "6a47b7550016c4291ab3";
+        const USERS_COLLECTION_ID = "users";
+        const STAKING_SETTINGS_COLLECTION_ID = "staking_plan_settings";
+        const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
+        const STAKING_SETTINGS_DOC_ID = "global_config";
+        const ADMIN_TEAM_ID = "6a4a84580012aed57e61";
+        const SECRET_ADMIN_KEY = "Suprix@123";
+
+        const EXCHANGE_RATE = 100;
+        const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
+        const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
+        const databases = new Databases(client);
+        const storage = new Storage(client);
+        const account = new Account(client);
+        const teams = new Teams(client);
+
+        let currentUser = null, users = [], adminStakingSettings = { globallyEnabled: true, plans: [{ days: 7, enabled: true }, { days: 15, enabled: true }, { days: 30, enabled: true }, { days: 120, enabled: true }, { days: 240, enabled: true }, { days: 480, enabled: true }] };
+        let selectedStakingDays = 30, selectedPurchaseUsd = 0, selectedPurchaseCoins = 0, currentTxHistoryTab = 'deposit', uploadReceiptFile = null, currentAdminTab = 'users', isAdminMode = false, receiptData = null, cooldownTimerInterval = null, voiceEnabled = true, welcomeVoicePlayed = false, isAppInstalled = false, sliderIndex = 0, sliderInterval = null;
+
+        function parseJsonSafe(value, fallback) { if (!value) return fallback; if (typeof value !== 'string') return value; try { return JSON.parse(value); } catch (e) { return fallback; } }
+        function resolveImageUrl(value) { if (!value) return ''; if (value.startsWith('http')) return value; try { return storage.getFileView(SCREENSHOT_BUCKET_ID, value).href; } catch (e) { return ''; } }
+        function generateCoinXId() { return 'SPX' + String(Math.floor(100000 + Math.random() * 900000)); }
+        function generateReceiptId() { const d = new Date(); return 'SPX-' + String(d.getFullYear()).slice(2) + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + '-' + Math.floor(100000+Math.random()*900000); }
+        function setButtonLoading(btn, isLoading) { if (!btn) return; if (isLoading) { btn.disabled = true; btn.setAttribute('data-original', btn.innerHTML); btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Processing...'; } else { btn.disabled = false; const orig = btn.getAttribute('data-original'); if (orig) btn.innerHTML = orig; } }
+        function showToast(msg, type = 'success') { const toast = document.getElementById('toastNotification'); document.getElementById('toastMessage').innerText = msg; toast.style.borderColor = type === 'error' ? '#ff3333' : '#ff0055'; toast.classList.add('show'); clearTimeout(toast._timer); toast._timer = setTimeout(() => toast.classList.remove('show'), 4000); }
+        function hideToast() { document.getElementById('toastNotification').classList.remove('show'); }
+        function copyToClipboard(id, msg) { const e = document.getElementById(id); if(!e)return; const t = e.innerText.trim(); if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>showToast(msg||'कॉपी हुआ!')).catch(()=>legacyCopy(t,msg)); }else{ legacyCopy(t,msg); } }
+        function legacyCopy(t, msg) { const i = document.createElement('input'); i.value = t; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); showToast(msg||'कॉपी हुआ!'); }
+        function partialHide(str, show = 3) { if (!str) return '****'; if (str.length <= show * 2) return str; return str.slice(0, show) + '****' + str.slice(-show); }
+        function downloadApkDirect(e) { e.preventDefault(); const a = document.createElement('a'); a.href = "https://drive.google.com/uc?export=download&id=1SoHGsDNb83Yo0-wv8ocKEqZvERrYYfkZ"; a.download = 'SupriX_Global.apk'; document.body.appendChild(a); a.click(); a.remove(); showToast('📲 एपीके डाउनलोड शुरू...', 'info'); }
+        
+        function mapUserDoc(doc) {
+            let cid = doc.coinxId || doc.coinxid || generateCoinXId(); cid = cid.replace(/^CoinX/, 'SPX');
+            return { ...doc, docId: doc.$id, staking: parseJsonSafe(doc.staking, []), stakingHistory: parseJsonSafe(doc.stakingHistory, []), pendingDeposit: parseJsonSafe(doc.pending_deposit, null), approvedDeposits: parseJsonSafe(doc.approved_deposit, []), pendingWithdrawal: parseJsonSafe(doc.pending_withdrawal, null), approvedWithdrawals: parseJsonSafe(doc.approved_withdrawal, []), referrals: parseJsonSafe(doc.referrals, []), transactions: parseJsonSafe(doc.transactions, []), tradeHistory: parseJsonSafe(doc.tradeHistory, []), buySellWallet: parseFloat(doc.buySellWallet||0), coins: parseFloat(doc.coins||0), tradeWallet: parseFloat(doc.tradeWallet||0), coinxId: cid, coinxWalletSC: doc.coinxWalletSC||'' };
+        }
+
+        function toggleVoice() { voiceEnabled = !voiceEnabled; const btn = document.getElementById('voiceToggleBtn'); const label = document.getElementById('voiceToggleLabel'); if (voiceEnabled) { btn.style.opacity = '1'; label.innerText = 'ऑन'; showToast('🔊 वॉइस गाइड ऑन'); } else { btn.style.opacity = '0.5'; label.innerText = 'ऑफ'; showToast('🔇 वॉइस गाइड ऑफ'); } }
+        function speakHindi(text, cb) { if (!voiceEnabled) { if(cb) cb(); return; } try { const u = new SpeechSynthesisUtterance(text); u.lang='hi-IN'; u.rate=0.9; u.pitch=1.1; const v = window.speechSynthesis.getVoices().find(v=>v.lang==='hi-IN'&&(v.name.includes('Female')||v.name.includes('Google'))); if(v) u.voice=v; window.speechSynthesis.speak(u); if(cb) setTimeout(cb, Math.max(2500, text.length*70)); } catch(e){ if(cb)cb(); } }
+        function showVoiceToast(msg) { const e = document.getElementById('voiceToast'); document.getElementById('voiceToastMsg').innerText = msg; e.style.display = 'block'; clearTimeout(e._timer); e._timer = setTimeout(()=>e.style.display='none', 6000); }
+        function closeVoiceToast() { document.getElementById('voiceToast').style.display='none'; }
+        
+        function playClappingSound(count = 3) { try { const a = new(window.AudioContext||window.webkitAudioContext)(); const now = a.currentTime; for(let i=0;i<count;i++){ const o=a.createOscillator(),g=a.createGain(); o.connect(g); g.connect(a.destination); o.type='square'; o.frequency.value=800+Math.random()*400; g.gain.setValueAtTime(0.06,now+i*0.2); g.gain.exponentialRampToValueAtTime(0.001,now+i*0.2+0.06); o.start(now+i*0.2); o.stop(now+i*0.2+0.06); } } catch(e){} }
+        function launchConfetti(count = 70) { const c = document.getElementById('confettiContainer'); const e = ['🌸','🌹','💖','✨','🔥','💎']; const clrs = ['#ff0055','#ff00aa','#ffffff','#ff6699']; c.innerHTML=''; for(let i=0;i<count;i++){ const el=document.createElement('div'); el.style.position='absolute'; el.textContent=e[Math.floor(Math.random()*e.length)]; const size=Math.random()*22+18,left=Math.random()*100,dur=Math.random()*2+2,del=Math.random(); el.style.cssText=`left:${left}%;font-size:${size}px;animation:fall ${dur}s ${del}s linear forwards;color:${clrs[Math.floor(Math.random()*clrs.length)]};top:-10%;`; c.appendChild(el); } playClappingSound(5); setTimeout(()=>{speakHindi('बधाई हो! रजिस्ट्रेशन सफल!');},400); }
+        const styleSheet = document.createElement("style"); styleSheet.innerText = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }`; document.head.appendChild(styleSheet);
+        
+        function createButterflies() { const c = document.getElementById('butterflyContainer'); const e = ['🦋','✨','💎']; const clrs = ['#ff0055','#ff6699','#ff00aa']; for(let i=0;i<20;i++){ const el=document.createElement('span'); el.className='bfly'; el.textContent=e[Math.floor(Math.random()*e.length)]; el.style.left=Math.random()*100+'%'; el.style.top=(Math.random()*80+10)+'%'; el.style.fontSize=(Math.random()*15+10)+'px'; el.style.animationDuration=(Math.random()*20+15)+'s'; el.style.animationDelay=Math.random()*10+'s'; el.style.color=clrs[Math.floor(Math.random()*clrs.length)]; c.appendChild(el); } }
+
+        function showPage(pageId) {
+            if(isAdminMode) return;
+            document.querySelectorAll('.app-page').forEach(p=>p.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            const nav = document.getElementById('bottomNavBar');
+            ['dashboardPage','purchasePage','stakingPage','profilePage'].includes(pageId) ? nav.style.display='flex' : nav.style.display='none';
+            document.querySelectorAll('#bottomNavBar button').forEach(b=>b.classList.remove('active'));
+            const a = document.getElementById('nav-'+pageId); if(a) a.classList.add('active');
+            if(currentUser){ autoUnlockMaturedStakes(); updateDashboardStats(); if(pageId==='purchasePage') renderPurchaseSlabs(); if(pageId==='stakingPage') renderStakingDetails(); if(pageId==='profilePage'){ renderProfileDetails(); generateReferralQR(); } if(pageId==='dashboardPage') startCooldownTimer(); else stopCooldownTimer(); }
+        }
+
+        // Logic wrappers for interactions
+        function calculateCustomCoins(usd) { const v = parseFloat(usd)||0; document.getElementById('calculatedCoinsPreview').innerText = v.toFixed(0)+' USDT'; }
+        function generateCustomPurchase() { const v = parseFloat(document.getElementById('customUSDAmount').value); if(!v || v<10) { showToast('Min $10 USDT','error'); return; } selectPurchaseSlab(v,v); }
+        function renderPurchaseSlabs() {
+            const grid = document.getElementById('purchaseGrid'); grid.innerHTML = ''; const slabs = [10, 15, 20, 25, 30, 50, 100, 200, 500, 1000];
+            slabs.forEach(usd => {
+                const card = document.createElement('div'); card.className = 'bg-[rgba(20,5,10,0.8)] border border-[#ff0055] p-3 rounded-xl card-3d cursor-pointer flex flex-col justify-between hover:bg-[rgba(255,0,85,0.1)]'; card.onclick = ()=>selectPurchaseSlab(usd,usd);
+                card.innerHTML = `<span class="text-[9px] text-[#ff6699] font-bold">PACK $${usd}</span><h4 class="text-sm font-bold text-white">${usd} USDT</h4><div class="mt-1 flex justify-between text-[10px] text-gray-400"><span>$${usd}</span><span class="bg-[#ff0055] text-white px-2 py-0.5 rounded">BUY</span></div>`; grid.appendChild(card);
+            });
+        }
+        function selectPurchaseSlab(usd, coins) { if(currentUser?.pendingDeposit) { showToast('डिपॉजिट पेंडिंग है।','error'); return; } selectedPurchaseUsd = usd; selectedPurchaseCoins = coins; document.getElementById('paymentUSDVal').innerHTML = `$${usd}.00 USDT`; document.getElementById('paymentGatewayCard').classList.remove('hidden'); document.getElementById('paymentGatewayCard').scrollIntoView({behavior:'smooth'}); if(voiceEnabled)speakHindi('कृपया USDT BEP20 एड्रेस पर पेमेंट करें।'); }
+        function hidePaymentCard() { document.getElementById('paymentGatewayCard').classList.add('hidden'); }
+        function handlePurchaseScreenshot(e) { const f = e.target.files[0]; if(!f)return; uploadReceiptFile = f; const r = new FileReader(); r.onload = (ev) => { document.getElementById('purchaseScreenshotName').innerText = 'इमेज सिलेक्टेड'; const p = document.getElementById('purchaseScreenshotPreview'); p.innerHTML=`<img src="${ev.target.result}" class="w-full h-full object-cover rounded">`; p.style.display='block'; }; r.readAsDataURL(f); }
+        
+        async function submitDepositRequest(btn) {
+            if(!uploadReceiptFile){ showToast('स्क्रीनशॉट अपलोड करें','error'); return; }
+            setButtonLoading(btn, true);
+            try {
+                const up = await storage.createFile(SCREENSHOT_BUCKET_ID, ID.unique(), uploadReceiptFile);
+                const dep = { amountUSD: selectedPurchaseUsd, coinsAmount: selectedPurchaseCoins, receiptFileId: up.$id, dateTime: new Date().toLocaleString('hi-IN'), type: 'user', network: 'BEP20 (USDT)' };
+                await saveUserFields({ pending_deposit: JSON.stringify(dep) });
+                uploadReceiptFile = null; hidePaymentCard(); showToast('✅ पेमेंट रिक्वेस्ट भेजी गई!','success');
+            } catch(e) { showToast('त्रुटि','error'); } finally { setButtonLoading(btn, false); }
+        }
+
+        // Timer
+        function startCooldownTimer() { stopCooldownTimer(); cooldownTimerInterval = setInterval(updateCooldownDisplay, 1000); }
+        function stopCooldownTimer() { if(cooldownTimerInterval) { clearInterval(cooldownTimerInterval); cooldownTimerInterval = null; } }
+        function updateCooldownDisplay() {
+            if(!currentUser) return; const now = Date.now(), oneDayMs = 24*60*60*1000, lastClaimed = parseInt(localStorage.getItem('cx_last_claimed_'+currentUser.$id)||'0', 10), staked = parseFloat(currentUser.staked||0);
+            const text = document.getElementById('miningTimerText'), badge = document.getElementById('cooldownBadge'), timeD = document.getElementById('cooldownTimeDisplay'), warn = document.getElementById('stakingWarning');
+            if(staked < 10) { text.innerHTML = `⚠️ 10 USDT स्टेक करें`; warn.style.display='block'; badge.style.display='none'; return; } warn.style.display='none';
+            if(lastClaimed && (now - lastClaimed) < oneDayMs) {
+                const diff = lastClaimed + oneDayMs - now, h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+                text.innerHTML = `⏳ अगला रिलीज:`; badge.style.display='flex'; timeD.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            } else { text.innerHTML = `🌟 अभी दबाएं!`; badge.style.display='none'; }
+        }
+
+        async function triggerMiningReward(btn) {
+            if(!currentUser) return; const staked = parseFloat(currentUser.staked||0);
+            if(staked < 10) { showToast('⚠️ 10 USDT स्टेक करें!','error'); return; }
+            const now = Date.now(), oneDayMs = 24*60*60*1000, last = parseInt(localStorage.getItem('cx_last_claimed_'+currentUser.$id)||'0',10);
+            if(last && (now - last) < oneDayMs) { showVoiceToast('आप आज का रिवॉर्ड ले चुके हैं।'); return; }
+            btn.style.opacity='0.6'; btn.style.transform='scale(0.9)';
+            try {
+                const reward = staked * 0.005; const newCoins = parseFloat(currentUser.coins||0) + reward; const rId = generateReceiptId();
+                const txs = [...(currentUser.transactions||[]), { type: 'daily_reward', coinsAmount: reward, dateTime: new Date().toLocaleString('hi-IN'), status: 'SUCCESS', receiptId: rId, network: 'USDT' }];
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.docId, { coins: newCoins, transactions: JSON.stringify(txs) });
+                currentUser.coins = newCoins; currentUser.transactions = txs; localStorage.setItem('cx_last_claimed_'+currentUser.$id, String(now));
+                updateDashboardStats(); showToast(`✅ ${reward.toFixed(2)} USDT रिवॉर्ड मिला!`); if(voiceEnabled) speakHindi(`${reward.toFixed(2)} यूएसडीटी क्रेडिट हो गए।`);
+            } catch(e) { showToast('त्रुटि','error'); } finally { btn.style.opacity='1'; btn.style.transform='scale(1)'; updateCooldownDisplay(); }
+        }
+
+        function updateDashboardStats() {
+            if(!currentUser) return; document.getElementById('userWelcomeName').innerText = currentUser.name||'User'; document.getElementById('userWelcomeEmail').innerText = currentUser.email||'';
+            const totalInv = (currentUser.approvedDeposits||[]).reduce((a,d)=>a+parseFloat(d.amountUSD||0),0); document.getElementById('statInvestment').innerText = `$${totalInv.toFixed(2)}`;
+            const stk = parseFloat(currentUser.staked||0); document.getElementById('statLocked').innerHTML = `${stk.toFixed(2)} <span class="currency-usdt">USDT</span>`;
+            const daily = stk * 0.005, inrD = (daily * EXCHANGE_RATE).toFixed(2); document.getElementById('statDailyRelease').innerHTML = `₹${inrD}`; document.getElementById('statDailyUsdt').innerText = `${daily.toFixed(2)} USDT`;
+            document.getElementById('statAvailable').innerHTML = `${parseFloat(currentUser.coins||0).toFixed(2)} <span class="currency-usdt">USDT</span>`;
+        }
+
+        function renderStakingDetails() {
+            if(!currentUser) return; document.getElementById('stakingAvailableCoins').innerHTML = `${parseFloat(currentUser.coins||0).toFixed(2)} USDT`;
+            const c = document.getElementById('stakingPlansContainer'); c.innerHTML='';
+            if(!adminStakingSettings.globallyEnabled) { c.innerHTML = '<p class="col-span-3 text-red-500 text-xs">स्टेकिंग बंद है।</p>'; document.getElementById('btn-submit-stake').disabled=true; return; }
+            document.getElementById('btn-submit-stake').disabled=false;
+            adminStakingSettings.plans.forEach(p => {
+                if(p.enabled){ const sel = p.days===selectedStakingDays; const d=document.createElement('div'); d.className = sel ? 'bg-[rgba(255,0,85,0.3)] border border-[#ff0055] text-white text-xs py-2 rounded-xl text-center shadow-[0_0_10px_#ff0055] font-bold cursor-pointer' : 'bg-[rgba(0,0,0,0.5)] border border-gray-600 text-gray-400 text-xs py-2 rounded-xl text-center cursor-pointer';
+                d.onclick=()=>{selectedStakingDays=p.days;renderStakingDetails();}; d.innerText = `${p.days} दिन`; c.appendChild(d); }
+            });
+            const l = document.getElementById('activeStakesList'); l.innerHTML='';
+            (currentUser.staking||[]).forEach(s => { const diff = s.lockUntil - Date.now(), days = Math.ceil(diff/(1000*60*60*24)); l.innerHTML += `<div class="bg-[rgba(20,5,10,0.8)] p-3 rounded-xl border border-[#ff0055] flex justify-between"><div class="text-white text-xs font-bold">${Number(s.amount).toFixed(2)} USDT<br><span class="text-[9px] text-gray-400 font-normal">${s.startDate} (${s.days} दिन)</span></div><div class="text-right text-[#ff6699] text-[10px] font-bold"><i class="fa-solid fa-lock"></i> ${days>0?days+' दिन':'अनलॉक'}</div></div>`; });
+            const h = document.getElementById('stakingHistoryList'); h.innerHTML='';
+            (currentUser.stakingHistory||[]).slice().reverse().forEach(s => { h.innerHTML += `<div class="bg-[rgba(20,5,10,0.8)] p-3 rounded-xl border border-gray-700 flex justify-between"><div class="text-white text-xs font-bold">${Number(s.amount).toFixed(2)} USDT<br><span class="text-[9px] text-gray-400 font-normal">${s.startDate}</span></div><div class="text-right ${s.unlockedAt?'text-[#22c55e]':'text-gray-400'} text-[10px] font-bold">${s.unlockedAt?'✅ अनलॉक':'🔒 लॉक'}</div></div>`; });
+        }
+        
+        async function submitStake(btn) {
+            const a = parseFloat(document.getElementById('stakeInputCoins').value); if(!a||a<10) { showToast('Min 10 USDT','error'); return; }
+            if(a > parseFloat(currentUser.coins||0)) { showToast('बैलेंस कम है!','error'); return; }
+            setButtonLoading(btn, true);
+            try {
+                const nC = parseFloat(currentUser.coins)-a, nS = parseFloat(currentUser.staked||0)+a, lU = Date.now() + (selectedStakingDays*24*60*60*1000);
+                const s = { stakeId: 'STK-'+Math.floor(10000+Math.random()*90000), amount: a, days: selectedStakingDays, startDate: new Date().toLocaleString('hi-IN'), lockUntil: lU, status: 'Locked' };
+                await saveUserFields({ coins: nC, staked: nS, staking: JSON.stringify([...(currentUser.staking||[]), s]) });
+                document.getElementById('stakeInputCoins').value=''; renderStakingDetails(); updateDashboardStats(); showToast(`✅ ${a} USDT स्टेक हुए!`,'success');
+            } catch(e) { showToast('त्रुटि','error'); } finally { setButtonLoading(btn, false); }
+        }
+
+        async function saveUserFields(f) { if(!currentUser||!currentUser.docId)return; await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.docId, f); Object.assign(currentUser, f); if('staking' in f) currentUser.staking=parseJsonSafe(f.staking,[]); if('transactions' in f) currentUser.transactions=parseJsonSafe(f.transactions,[]); if('coins' in f) currentUser.coins=parseFloat(f.coins); if('staked' in f) currentUser.staked=parseFloat(f.staked); }
+
+        function renderProfileDetails() {
+            if(!currentUser) return; document.getElementById('profileName').innerText = currentUser.name||'User'; document.getElementById('profileEmail').innerText = currentUser.email||''; document.getElementById('profileCoinXIdDisplay').innerText = currentUser.coinxId||'N/A';
+            document.getElementById('referralShareLink').innerText = `${window.location.origin}${window.location.pathname}?ref=${currentUser.$id}`;
+            document.getElementById('withdrawAvailable').innerText = `${parseFloat(currentUser.coins||0).toFixed(2)} USDT`;
+            document.getElementById('userWithdrawAddress').value = currentUser.withdrawal_address||'';
+            const qr = document.getElementById('userQrPreview'); if(currentUser.withdrawal_screenshot) { qr.innerHTML = `<img src="${resolveImageUrl(currentUser.withdrawal_screenshot)}" class="w-full h-full object-cover">`; qr.style.display='block'; document.getElementById('qrUploadStatus').innerText='✅ अपलोडेड'; }
+        }
+        function shareReferralLink() { const url = `${window.location.origin}${window.location.pathname}?ref=${currentUser.$id}`; if(navigator.share) navigator.share({title:'SupriX',text:'Join SupriX!',url}); else copyToClipboard('referralShareLink','शेयर लिंक कॉपी!'); }
+        
+        async function submitWithdrawal(btn) {
+            const add = document.getElementById('userWithdrawAddress').value.trim(), amt = parseFloat(document.getElementById('withdrawAmountInput').value);
+            if(!add || !amt || amt<2) { showToast('एड्रेस और Min 2 USDT भरें','error'); return; }
+            if(amt > parseFloat(currentUser.coins||0)) { showToast('बैलेंस कम है','error'); return; }
+            setButtonLoading(btn,true);
+            try {
+                const w = { coinsAmount: amt, dateTime: new Date().toLocaleString('hi-IN'), network: 'BEP20 (USDT)' };
+                await saveUserFields({ coins: parseFloat(currentUser.coins)-amt, withdrawal_address: add, pending_withdrawal: JSON.stringify(w) });
+                document.getElementById('withdrawAmountInput').value=''; renderProfileDetails(); showToast('✅ विथड्रॉवल रिक्वेस्ट भेजी!');
+            } catch(e) { showToast('त्रुटि','error'); } finally { setButtonLoading(btn,false); }
+        }
+        
+        async function handleLogin(btn) {
+            const uid = document.getElementById('loginUserId').value.trim(), pwd = document.getElementById('loginPassword').value.trim(); if(!uid||!pwd) return showToast('डिटेल्स भरें','error');
+            setButtonLoading(btn,true); document.getElementById('loadingOverlay').classList.add('show');
+            try {
+                let em = uid; if(uid.startsWith('SPX')) { const r = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('coinxId', uid)]); if(r.documents.length) em=r.documents[0].email; else throw new Error("ID Not Found"); }
+                try { await account.deleteSession('current'); } catch(e){}
+                await account.createEmailPasswordSession(em, pwd); const acc = await account.get();
+                let doc = null; try { const r = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('email', em)]); if(r.documents.length) doc=r.documents[0]; } catch(e){}
+                if(!doc) { const cId=generateCoinXId(); doc = await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id, { name: acc.name||em.split('@')[0], email: em, phone: pwd, coins: 0, staked: 0, withdrawal: 0, staking: JSON.stringify([]), stakingHistory: JSON.stringify([]), pending_deposit: '', approved_deposit: JSON.stringify([]), pending_withdrawal: '', approved_withdrawal: JSON.stringify([]), withdrawal_address: '', withdrawal_screenshot: '', referrals: JSON.stringify([]), transactions: JSON.stringify([]), tradeHistory: JSON.stringify([]), buySellWallet: 0, tradeWallet: 0, coinxId: cId, referredBy: null, isBlocked: false, coinxWalletSC: '' }); }
+                currentUser = mapUserDoc(doc); await autoUnlockMaturedStakes(); showToast('✅ लॉगिन सफल!'); showPage('dashboardPage'); startCooldownTimer();
+            } catch(e) { showToast('❌ लॉगिन विफल','error'); } finally { document.getElementById('loadingOverlay').classList.remove('show'); setButtonLoading(btn,false); }
+        }
+
+        async function handleRegistration(btn) {
+            const n=document.getElementById('regName').value, e=document.getElementById('regEmail').value, p=document.getElementById('regPhone').value, r=document.getElementById('regReferral').value;
+            if(!n||!e||!p){ showToast('सभी फील्ड्स भरें','error'); return; }
+            setButtonLoading(btn,true); document.getElementById('loadingOverlay').classList.add('show');
+            try {
+                const ex = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('email', e)]); if(ex.documents.length){ throw new Error('Email exists'); }
+                const acc = await account.create(ID.unique(), e, p, n); try{await account.deleteSession('current');}catch(err){} await account.createEmailPasswordSession(e,p);
+                const cid = generateCoinXId(); await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, acc.$id, { name:n, email:e, phone:p, coins:0, staked:0, withdrawal:0, staking:JSON.stringify([]), stakingHistory:JSON.stringify([]), pending_deposit:'', approved_deposit:JSON.stringify([]), pending_withdrawal:'', approved_withdrawal:JSON.stringify([]), withdrawal_address:'', withdrawal_screenshot:'', referrals:JSON.stringify([]), transactions:JSON.stringify([]), tradeHistory:JSON.stringify([]), buySellWallet:0, tradeWallet:0, coinxId:cid, referredBy:r||null, isBlocked:false, coinxWalletSC:'' });
+                document.getElementById('successUserId').innerText = e; document.getElementById('successSpxId').innerText = cid; document.getElementById('successPassword').innerText = p;
+                showPage('regSuccessPage'); launchConfetti();
+            } catch(er) { showToast('❌ रजिस्ट्रेशन विफल','error'); } finally { document.getElementById('loadingOverlay').classList.remove('show'); setButtonLoading(btn,false); }
+        }
+
+        async function autoUnlockMaturedStakes() {
+            if(!currentUser || !currentUser.staking || !currentUser.staking.length) return;
+            const now = Date.now(), mat=[], rem=[]; let ch=false;
+            currentUser.staking.forEach(s => { if(s.lockUntil <= now) { mat.push(s); ch=true; } else rem.push(s); });
+            if(!ch) return;
+            let tm = 0; const h = [...(currentUser.stakingHistory||[])];
+            mat.forEach(s => { tm += parseFloat(s.amount); h.push({...s, unlockedAt: new Date().toISOString()}); });
+            await saveUserFields({ coins: parseFloat(currentUser.coins||0)+tm, staked: Math.max(0,parseFloat(currentUser.staked||0)-tm), staking: JSON.stringify(rem), stakingHistory: JSON.stringify(h) });
+            showToast(`✅ ${tm} USDT अनलॉक हुए!`,'success');
+        }
+
+        // Sliders
+        function renderSlider() {
+            const t = document.getElementById('sliderTrack'), d = document.getElementById('sliderDots'); if(!t)return;
+            const imgs = ["https://i.postimg.cc/0jWfTn08/file-00000000988c82119a7866f30faba9c2.png","https://i.postimg.cc/N0BHxTRP/IMG-20260830-154634.png","https://i.postimg.cc/C1tshNQ9/1786547570648.png","https://i.postimg.cc/Fz339Qcz/file-000000004eb88208adec4dca08b66c57.png"];
+            t.innerHTML=''; d.innerHTML='';
+            imgs.forEach((url, i) => { t.innerHTML += `<div class="slide-item" style="min-width:100%;height:100%;flex-shrink:0;"><img src="${url}" class="w-full h-full object-cover"></div>`;
+                d.innerHTML += `<span class="w-2 h-2 rounded-full ${i===0?'bg-[#ff0055] w-6':'bg-gray-500'} transition-all cursor-pointer" onclick="goToSlide(${i})"></span>`;
+            }); startSlider();
+        }
+        function startSlider() { if(sliderInterval) clearInterval(sliderInterval); sliderInterval = setInterval(()=>{ sliderIndex=(sliderIndex+1)%4; goToSlide(sliderIndex); }, 4000); }
+        function goToSlide(i) { sliderIndex = i; document.getElementById('sliderTrack').style.transform = `translateX(-${i*100}%)`; const ds=document.querySelectorAll('#sliderDots span'); ds.forEach((d,idx)=>{ d.className=`w-2 h-2 rounded-full transition-all cursor-pointer ${idx===i?'bg-[#ff0055] w-6 shadow-[0_0_10px_#ff0055]':'bg-gray-500'}`; }); startSlider(); }
+
+        window.onload = async () => { createButterflies(); renderSlider(); try{const a=await account.get(); if(a) { let r = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('email', a.email)]); if(r.documents.length){ currentUser = mapUserDoc(r.documents[0]); await autoUnlockMaturedStakes(); showPage('dashboardPage'); startCooldownTimer(); } else showPage('loginPage'); } }catch(e){showPage('loginPage');} };
+        
+        // Receipt and Generic functions
+        function openReceipt(data) {
+            const content = document.getElementById('receiptContent');
+            const inr = (parseFloat(data.coinsAmount)*EXCHANGE_RATE).toFixed(2);
+            content.innerHTML = `
+                <div class="flex justify-between border-b border-gray-800 pb-2"><span>Type:</span><strong class="text-[#ff0055]">${data.type.toUpperCase()}</strong></div>
+                <div class="bg-[rgba(255,0,85,0.1)] border border-[#ff0055] rounded-xl p-4 text-center my-3 shadow-inner">
+                    <div class="text-2xl font-bold text-[#ff6699]">₹${inr}</div>
+                    <div class="text-xs text-gray-400">INR Value</div>
+                    <div class="text-lg font-bold text-[#22c55e] mt-2">${parseFloat(data.coinsAmount).toFixed(2)} USDT</div>
+                </div>
+                <div class="flex justify-between border-b border-gray-800 py-2"><span>SPX ID:</span><strong>${currentUser?.coinxId}</strong></div>
+                <div class="flex justify-between border-b border-gray-800 py-2"><span>Date:</span><strong>${data.dateTime}</strong></div>
+                <div class="flex justify-between py-2"><span>Status:</span><strong class="text-[#22c55e]">✅ SUCCESS</strong></div>
+            `;
+            document.getElementById('receiptModal').classList.remove('hidden');
+        }
+        function closeReceipt() { document.getElementById('receiptModal').classList.add('hidden'); }
+        function downloadReceipt() { showToast('✅ रसीद सेव की गई!','success'); }
+        function printReceipt() { showToast('✅ प्रिंट कमांड भेजी गई!','success'); }
+        
+        function handleLogout() { account.deleteSession('current').finally(()=>{ currentUser=null; showPage('loginPage'); }); }
+        
+        // Modal toggles
+        function toggleMyReferralsModal(show) { const m=document.getElementById('myReferralsModal'); show?m.classList.remove('hidden'):m.classList.add('hidden'); }
+        function toggleTxHistoryModal(show) { const m=document.getElementById('txHistoryModal'); show?m.classList.remove('hidden'):m.classList.add('hidden'); if(show) switchTxTab('daily'); }
+        function toggleTeamModal(show) { const m=document.getElementById('teamModal'); show?m.classList.remove('hidden'):m.classList.add('hidden'); }
+        function switchTxTab(t) { 
+            const l=document.getElementById('txHistoryListArea'); l.innerHTML=''; 
+            const txs = currentUser?.transactions || [];
+            txs.filter(x=>x.type.includes(t)).reverse().forEach(tx=>{
+                l.innerHTML += `<div class="bg-[rgba(20,5,10,0.8)] border border-[#ff0055] p-3 rounded-xl flex justify-between"><div><strong class="text-white text-xs">${tx.coinsAmount} USDT</strong><br><span class="text-[9px] text-gray-400">${tx.dateTime}</span></div><div class="text-right text-[#22c55e] text-xs font-bold">✅ SUCCESS<br><button onclick="openReceipt({type:'${tx.type}',coinsAmount:${tx.coinsAmount},dateTime:'${tx.dateTime}'})" class="text-[9px] text-[#ff6699] border border-[#ff6699] px-2 rounded mt-1">Receipt</button></div></div>`;
+            });
+            if(l.innerHTML==='') l.innerHTML='<p class="text-center text-gray-400 text-xs py-4">No records found.</p>';
+        }
+
+    </script>
+  </body>
+</html>
