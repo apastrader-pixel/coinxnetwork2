@@ -436,7 +436,7 @@
 
         <main class="w-full px-4 pt-4 pb-10 flex-1 flex flex-col justify-start z-10">
 
-            <!-- ==================== ADMIN LOGIN ==================== -->
+            <!-- ADMIN LOGIN -->
             <section id="adminLoginPage" class="w-full space-y-6">
                 <div class="text-center space-y-2 py-6">
                     <div class="w-20 h-20 rounded-full bg-black/60 text-rose-400 flex items-center justify-center text-3xl mx-auto border-2 border-rose-500 shadow-xl" style="box-shadow: 0 0 40px rgba(255,0,85,0.5);">
@@ -448,20 +448,20 @@
                 <div class="glass-rose p-6 rounded-3xl space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-rose-300/80 mb-1.5"><i class="fa-solid fa-envelope mr-1 text-rose-400"></i> एडमिन ईमेल</label>
-                        <input type="email" id="adminUsernameInput" placeholder="ईमेल दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="username">
+                        <input type="email" id="adminUsernameInput" placeholder="ईमेल दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="off">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-rose-300/80 mb-1.5"><i class="fa-solid fa-lock mr-1 text-rose-400"></i> एडमिन पासवर्ड</label>
-                        <input type="password" id="adminPasswordInput" placeholder="पासवर्ड दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="current-password">
+                        <input type="password" id="adminPasswordInput" placeholder="पासवर्ड दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="off">
                     </div>
                     <button id="btn-admin-login" onclick="submitAdminLogin(this)" class="w-full btn-3d-rose py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2">
                         <span>एडमिन एक्सेस खोलें</span> <i class="fa-solid fa-unlock-keyhole"></i>
                     </button>
-                    <p class="text-[10px] text-rose-300/40 text-center mt-1"><i class="fa-solid fa-info-circle mr-1"></i> सुरक्षित Appwrite Team verification</p>
+                    <p class="text-[10px] text-rose-300/40 text-center mt-1"><i class="fa-solid fa-lock mr-1"></i> सुरक्षित Appwrite लॉगिन</p>
                 </div>
             </section>
 
-            <!-- ==================== ADMIN DASHBOARD ==================== -->
+            <!-- ADMIN DASHBOARD -->
             <section id="adminDashboardPage" class="w-full hidden space-y-4">
 
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
@@ -695,7 +695,7 @@
 
     <script>
         // ============================================================
-        // CONFIGURATION
+        // APPWRITE CONFIG
         // ============================================================
         const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
         const APPWRITE_PROJECT_ID = "6a43cbf70027f5ff8960";
@@ -705,9 +705,11 @@
         const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
-        // ⚠️ अपनी Appwrite Team ID यहाँ डालें
-        // Appwrite Console → Auth → Teams → अपनी Admin Team का ID copy करें
-        const ADMIN_TEAM_ID = "YOUR_ADMIN_TEAM_ID_HERE";
+        // ============================================================
+        // ADMIN EMAIL ALLOWED (Appwrite me यही user मौजूद है)
+        // सिर्फ यही email Login कर सकता है — कोई और email/मोबाइल नहीं
+        // ============================================================
+        const ADMIN_ALLOWED_EMAIL = "yadavsurajkumar014@gmail.com";
 
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
@@ -754,12 +756,11 @@
             "19zV3C_5v0UF0nCdtzb0GPa8t4pMgaqTA"
         ];
 
-        const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
+        const { Client, Databases, Storage, Account, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
         const databases = new Databases(client);
         const storage = new Storage(client);
         const account = new Account(client);
-        const teams = new Teams(client);
 
         // ============================================================
         // STATE
@@ -942,15 +943,17 @@
         }
 
         // ============================================================
-        // ADMIN LOGIN (Appwrite Team-based verification)
+        // ADMIN LOGIN (Appwrite se verify, sirf ek hi email allowed)
         // ============================================================
         async function submitAdminLogin(btn) {
             const email = document.getElementById('adminUsernameInput').value.trim();
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            if (ADMIN_TEAM_ID === "YOUR_ADMIN_TEAM_ID_HERE") {
-                showToast('⚠️ पहले code में ADMIN_TEAM_ID अपडेट करें!', 'error');
+            // Only allow this specific email
+            if (email.toLowerCase() !== ADMIN_ALLOWED_EMAIL.toLowerCase()) {
+                showToast('❌ यह एडमिन अकाउंट नहीं है!', 'error');
+                if (voiceEnabled) speakHindi('यह एडमिन अकाउंट नहीं है।');
                 return;
             }
 
@@ -958,37 +961,34 @@
             document.getElementById('loadingOverlay').classList.add('show');
 
             try {
+                // Appwrite se login
                 try { await account.get(); await account.deleteSession('current'); } catch (e) {}
                 await account.createEmailPasswordSession(email, password);
                 const acc = await account.get();
 
-                // Verify team membership
-                let isAdmin = false;
-                try {
-                    const teamList = await teams.list();
-                    isAdmin = teamList.teams.some(t => t.$id === ADMIN_TEAM_ID);
-                } catch (teamErr) {
-                    console.warn('Team check failed:', teamErr);
-                }
-
-                if (!isAdmin) {
+                // Double-check: logged-in user ka email wahi hona chahiye
+                if (acc.email.toLowerCase() !== ADMIN_ALLOWED_EMAIL.toLowerCase()) {
                     await account.deleteSession('current');
-                    showToast('❌ आप एडमिन नहीं हैं!', 'error');
+                    showToast('❌ अनऑथराइज़्ड एक्सेस!', 'error');
                     return;
                 }
 
                 isAdminMode = true;
+                document.getElementById('loadingOverlay').classList.remove('show');
                 document.getElementById('adminLoginPage').classList.add('hidden');
                 document.getElementById('adminDashboardPage').classList.remove('hidden');
+                document.getElementById('adminUsernameInput').value = '';
+                document.getElementById('adminPasswordInput').value = '';
                 await loadAllData();
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
                 if (voiceEnabled) speakHindi('एडमिन पैनल में आपका स्वागत है।');
             } catch (e) {
                 console.error('Admin login error:', e);
-                let msg = '❌ गलत क्रेडेंशियल!';
+                let msg = '❌ गलत ईमेल या पासवर्ड!';
                 if (e.code === 401) msg = '❌ गलत ईमेल या पासवर्ड';
                 else if (e.message) msg = '❌ ' + e.message;
                 showToast(msg, 'error');
+                if (voiceEnabled) speakHindi('गलत ईमेल या पासवर्ड। कृपया दोबारा प्रयास करें।');
             } finally {
                 document.getElementById('loadingOverlay').classList.remove('show');
                 setButtonLoading(btn, false);
