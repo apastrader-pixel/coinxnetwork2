@@ -17,10 +17,6 @@
             --rose-glow: #ff00aa;
             --bg-dark: #070104;
             --card-bg: rgba(18, 4, 10, 0.78);
-            --cyan-accent: #00f0ff;
-            --green-accent: #22c55e;
-            --amber-accent: #f59e0b;
-            --usdt-green: #34d399;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -86,7 +82,6 @@
             border: 1.5px solid rgba(255, 0, 85, 0.4);
             border-radius: 16px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 85, 0.15);
-            animation: rainbowBorder 10s linear infinite;
         }
 
         .btn-3d-rose {
@@ -135,6 +130,21 @@
             box-shadow: 0 0px 0 #7f1d1d, 0 3px 8px rgba(239, 68, 68, 0.4);
         }
 
+        .btn-3d-gold {
+            background: linear-gradient(145deg, #d4af37, #b8962a);
+            color: #1a1a2e !important;
+            font-weight: 800;
+            border: 2px solid #f5d97e;
+            border-radius: 12px;
+            box-shadow: 0 4px 0 #8a6d1a, 0 8px 15px rgba(212, 175, 55, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .btn-3d-gold:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #8a6d1a, 0 3px 8px rgba(212, 175, 55, 0.4);
+        }
+
         input, select, textarea {
             background: rgba(0, 0, 0, 0.65) !important;
             border: 2px solid rgba(255, 0, 85, 0.5) !important;
@@ -148,6 +158,8 @@
             outline: none;
         }
         input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+        select option { background: #1a0510; color: #fff; }
 
         .butterfly-bg {
             position: fixed;
@@ -261,8 +273,8 @@
         }
         .status-approved { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
         .status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
-        .status-rejected { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
         .status-blocked { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-gold { background: rgba(212, 175, 55, 0.15); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.3); }
 
         .admin-badge {
             background: linear-gradient(135deg, #ff0055, #990033);
@@ -297,11 +309,68 @@
             overflow-y: auto;
             padding: 28px 24px;
             color: #fff;
-            animation: rainbowBorder 8s linear infinite;
+        }
+
+        /* Level Modal */
+        .level-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .level-modal .level-card {
+            background: #0d0105;
+            border: 3px solid #d4af37;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(212, 175, 55, 0.6);
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px 20px;
+            color: #fff;
+        }
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+        .level-opt {
+            padding: 8px 4px;
+            border-radius: 10px;
+            border: 1.5px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+        }
+        .level-opt:hover { border-color: #d4af37; color: #d4af37; }
+        .level-opt.selected {
+            background: linear-gradient(145deg, #d4af37, #b8962a);
+            color: #1a1a2e;
+            border-color: #f5d97e;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+        .level-opt.current {
+            border-color: #22c55e;
+            color: #22c55e;
         }
 
         .currency-usdt { color: #34d399 !important; text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
         .currency-inr { color: #22c55e !important; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+        .currency-gold { color: #d4af37 !important; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
 
         .hidden { display: none !important; }
         .flex { display: flex; }
@@ -380,6 +449,7 @@
 
         @media (max-width: 440px) {
             .receipt-modal .receipt-card { padding: 18px 14px; }
+            .level-modal .level-card { padding: 18px 14px; }
         }
     </style>
 </head>
@@ -447,6 +517,7 @@
 
                 <div class="flex bg-black/40 p-1 rounded-xl border border-rose-500/15 text-[10px] flex-wrap gap-1 overflow-x-auto">
                     <button onclick="switchAdminTab('users')" id="adminTab-users" class="admin-tab-btn active">👥 Users</button>
+                    <button onclick="switchAdminTab('levels')" id="adminTab-levels" class="admin-tab-btn">🎯 Levels</button>
                     <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="admin-tab-btn">📥 Deposits</button>
                     <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="admin-tab-btn">📤 Withdrawals</button>
                     <button onclick="switchAdminTab('staking')" id="adminTab-staking" class="admin-tab-btn">🔒 Staking</button>
@@ -455,7 +526,7 @@
                     <button onclick="switchAdminTab('settings')" id="adminTab-settings" class="admin-tab-btn">⚙️ Settings</button>
                 </div>
 
-                <!-- USERS -->
+                <!-- ============ USERS ============ -->
                 <div id="adminSection-users" class="admin-sec space-y-3">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-coins mr-1 text-rose-400"></i> यूजर USDT कस्टमाइज़ेशन</h4>
@@ -469,6 +540,19 @@
                             <button id="btn-admin-coin" onclick="updateUserCoinsManually(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">अपडेट करें</button>
                         </div>
                     </div>
+
+                    <!-- ⚡ NEW: Quick Level Update Box -->
+                    <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Quick Update (Email / SPX ID se)</h4>
+                        <p class="text-[10px] text-rose-300/50">किसी भी user का Level तुरंत सेट करें — User Panel में Green Tick दिखेगा</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <input type="text" id="quickLevelIdentifier" placeholder="SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
+                            <input type="number" id="quickLevelNumber" placeholder="Level (1-100)" min="1" max="100" class="p-2 text-xs">
+                            <button onclick="quickUpdateLevel(this)" class="btn-3d-gold py-2 rounded-xl text-xs">🎯 Level सेट करें</button>
+                        </div>
+                        <button onclick="setAllLevelsToZero()" class="w-full bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 text-[10px] font-bold py-2 rounded-xl transition-all">⚠️ सभी Users का Level Reset करें (L0)</button>
+                    </div>
+
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
                         <div class="flex justify-between items-center">
                             <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-users mr-1 text-rose-400"></i> सभी यूज़र्स</h4>
@@ -481,7 +565,39 @@
                     </div>
                 </div>
 
-                <!-- DEPOSITS -->
+                <!-- ============ LEVELS TAB (NEW) ============ -->
+                <div id="adminSection-levels" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Manager (Advanced)</h4>
+                        <p class="text-[10px] text-rose-300/60">Email या SPX ID से किसी भी user का Level manually set करें। User Panel में Green Tick automatic दिखेगा।</p>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <input type="text" id="levelManagerIdentifier" placeholder="Email / SPX ID" class="col-span-2 p-2 text-xs">
+                            <select id="levelManagerSelect" class="col-span-2 p-2 text-xs">
+                                <option value="">-- Level चुनें --</option>
+                            </select>
+                            <input type="text" id="levelManagerSearch" oninput="filterLevelUserList()" placeholder="🔍 Search user" class="col-span-2 p-2 text-xs">
+                        </div>
+
+                        <button onclick="applyLevelFromManager(this)" class="w-full btn-3d-gold py-2.5 rounded-xl text-xs">🎯 Level Apply करें</button>
+
+                        <div class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 space-y-1">
+                            <p class="text-[10px] text-yellow-300 font-bold"><i class="fa-solid fa-info-circle mr-1"></i> कैसे काम करता है:</p>
+                            <p class="text-[9px] text-rose-300/50">• L1 = $1000 total purchased</p>
+                            <p class="text-[9px] text-rose-300/50">• L2 = $2000 total purchased</p>
+                            <p class="text-[9px] text-rose-300/50">• L100 = $100,000 total purchased</p>
+                            <p class="text-[9px] text-rose-300/50">• Admin manually set करेगा → User Panel में Green Tick आएगा</p>
+                        </div>
+                    </div>
+
+                    <!-- Users List for Level -->
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-users mr-1" style="color: #d4af37;"></i> Users — Level Status</h4>
+                        <div id="levelManagerUserList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto font-mono"></div>
+                    </div>
+                </div>
+
+                <!-- ============ DEPOSITS ============ -->
                 <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center">
@@ -492,7 +608,7 @@
                     </div>
                 </div>
 
-                <!-- WITHDRAWALS -->
+                <!-- ============ WITHDRAWALS ============ -->
                 <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center">
@@ -503,7 +619,7 @@
                     </div>
                 </div>
 
-                <!-- STAKING -->
+                <!-- ============ STAKING ============ -->
                 <div id="adminSection-staking" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-rose-500/15 pb-2">
@@ -521,7 +637,7 @@
                     </div>
                 </div>
 
-                <!-- REFERRALS -->
+                <!-- ============ REFERRALS ============ -->
                 <div id="adminSection-referrals" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-tree mr-1 text-blue-400"></i> रेफ़रल ट्रैकर</h4>
@@ -529,7 +645,7 @@
                     </div>
                 </div>
 
-                <!-- TRANSFER -->
+                <!-- ============ TRANSFER ============ -->
                 <div id="adminSection-transfer" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-arrow-right-arrow-left mr-1 text-rose-400"></i> यूजर-टू-यूजर USDT ट्रांसफर</h4>
@@ -551,7 +667,7 @@
                     </div>
                 </div>
 
-                <!-- SETTINGS -->
+                <!-- ============ SETTINGS ============ -->
                 <div id="adminSection-settings" class="admin-sec space-y-3 hidden">
 
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
@@ -646,6 +762,20 @@
             </div>
         </div>
 
+        <!-- LEVEL PICKER MODAL -->
+        <div id="levelPickerModal" class="level-modal hidden">
+            <div class="level-card">
+                <div class="flex items-center justify-between border-b border-yellow-500/30 pb-2 mb-3">
+                    <h3 class="text-sm font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-2"></i> Level चुनें</h3>
+                    <button onclick="closeLevelPicker()" class="text-yellow-300/60 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="levelPickerUserInfo" class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 mb-3 text-xs"></div>
+                <div class="level-grid" id="levelPickerGrid"></div>
+                <button onclick="applyLevelFromPicker(this)" class="w-full btn-3d-gold py-3 rounded-xl text-sm font-bold mt-3" style="margin-top: 12px;">✅ Selected Level Apply करें</button>
+                <button onclick="closeLevelPicker()" class="w-full bg-rose-500/10 border border-rose-500/30 text-rose-300 py-2.5 rounded-xl text-xs mt-2">रद्द करें</button>
+            </div>
+        </div>
+
         <!-- FULLSCREEN IMAGE MODAL -->
         <div id="fullscreenImageModal" class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50 p-4 hidden">
             <div class="absolute top-4 right-4 z-50">
@@ -684,22 +814,12 @@
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
         // ============================================================
-        // 🔐 ADMIN CREDENTIALS (Base64 Encoded — Code me plain nahi dikhega)
+        // 🔐 ADMIN CREDENTIALS (Base64 Encoded)
         // ============================================================
-        // Decoded email: admin2@coinx.com
-        // Decoded password: Admin@2025
-        // ============================================================
-        const _AUTH_E = "YWRtaW4yQGNvaW54LmNvbQ==";
-        const _AUTH_P = "QWRtaW5AMjAyNQ==";
+        const _AUTH_E = "YWRtaW4yQGNvaW54LmNvbQ==";  // admin2@coinx.com
+        const _AUTH_P = "QWRtaW5AMjAyNQ==";            // Admin@2025
+        function _dk(x) { try { return atob(x); } catch (e) { return ''; } }
 
-        // Decode function (obfuscated name)
-        function _dk(x) {
-            try { return atob(x); } catch (e) { return ''; }
-        }
-
-        // ============================================================
-        // Global settings
-        // ============================================================
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
         let REFERRAL_BONUS_PCT = 2;
@@ -767,6 +887,9 @@
         let isAdminMode = false;
         let voiceEnabled = true;
         let filteredUsers = [];
+        let pickerSelectedLevel = 0;
+        let pickerUserId = '';
+        let levelManagerFiltered = [];
 
         // ============================================================
         // UTILS
@@ -840,7 +963,7 @@
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMessage').innerText = msg;
-            const colors = { success: 'rgba(34,197,94,0.6)', error: 'rgba(239,68,68,0.6)', info: 'rgba(255,0,85,0.5)' };
+            const colors = { success: 'rgba(34,197,94,0.6)', error: 'rgba(239,68,68,0.6)', info: 'rgba(255,0,85,0.5)', gold: 'rgba(212,175,55,0.6)' };
             toast.style.borderColor = colors[type] || colors.info;
             toast.style.opacity = '1';
             toast.style.pointerEvents = 'auto';
@@ -941,24 +1064,21 @@
         }
 
         // ============================================================
-        // ADMIN LOGIN — Base64 decoded email/password verify
+        // ADMIN LOGIN
         // ============================================================
         async function submitAdminLogin(btn) {
             const email = document.getElementById('adminUsernameInput').value.trim();
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            // Decode stored credentials
             const correctEmail = _dk(_AUTH_E);
             const correctPassword = _dk(_AUTH_P);
 
             setButtonLoading(btn, true);
             document.getElementById('loadingOverlay').classList.add('show');
 
-            // Small delay for UX
             await new Promise(r => setTimeout(r, 600));
 
-            // Verify credentials locally
             if (email.toLowerCase() === correctEmail.toLowerCase() && password === correctPassword) {
                 isAdminMode = true;
                 document.getElementById('loadingOverlay').classList.remove('show');
@@ -966,15 +1086,7 @@
                 document.getElementById('adminDashboardPage').classList.remove('hidden');
                 document.getElementById('adminUsernameInput').value = '';
                 document.getElementById('adminPasswordInput').value = '';
-
-                // Load data from Appwrite
-                try {
-                    await loadAllData();
-                } catch (e) {
-                    console.error('Data load error:', e);
-                    showToast('डेटा लोड नहीं हो सका, फिर भी लॉगिन सफल', 'info');
-                }
-
+                try { await loadAllData(); } catch (e) { console.error(e); }
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
                 if (voiceEnabled) speakHindi('एडमिन पैनल में आपका स्वागत है।');
             } else {
@@ -982,7 +1094,6 @@
                 showToast('❌ गलत ईमेल या पासवर्ड!', 'error');
                 if (voiceEnabled) speakHindi('गलत ईमेल या पासवर्ड। कृपया दोबारा प्रयास करें।');
             }
-
             setButtonLoading(btn, false);
         }
 
@@ -1003,19 +1114,9 @@
             if (!isAdminMode) return;
             try {
                 const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
-                console.log('📊 Loaded users:', res.documents.length);
                 users = res.documents.map(mapUserDoc);
                 filteredUsers = [...users];
-
-                const debugPendingDep = users.filter(u => u.pendingDeposit);
-                console.log('📥 Users with pending deposit:', debugPendingDep.length);
-                debugPendingDep.forEach(u => {
-                    console.log(`  → ${u.name} (${u.email}):`, u.pendingDeposit);
-                });
-
-                const debugPendingWith = users.filter(u => u.pendingWithdrawal);
-                console.log('📤 Users with pending withdrawal:', debugPendingWith.length);
-
+                levelManagerFiltered = [...users];
                 await loadStakingSettings();
                 await loadGlobalSettings();
                 updateAdminStats();
@@ -1025,6 +1126,8 @@
                 renderAdminStaking();
                 renderAdminReferrals();
                 loadSettingsTab();
+                populateLevelManagerDropdown();
+                renderLevelManagerList();
             } catch (e) {
                 console.error('Load error:', e);
                 showToast('डेटा लोड नहीं हो सका', 'error');
@@ -1125,6 +1228,7 @@
             const btn = document.getElementById('adminTab-' + tab);
             if (btn) btn.classList.add('active');
             if (tab === 'users') renderAdminUsers();
+            if (tab === 'levels') { populateLevelManagerDropdown(); renderLevelManagerList(); }
             if (tab === 'deposits') renderAdminDeposits();
             if (tab === 'withdrawals') renderAdminWithdrawals();
             if (tab === 'staking') renderAdminStaking();
@@ -1133,7 +1237,280 @@
         }
 
         // ============================================================
-        // DEPOSITS REFRESH
+        // ⚡ LEVEL MANAGEMENT (NEW)
+        // ============================================================
+        function populateLevelManagerDropdown() {
+            const sel = document.getElementById('levelManagerSelect');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Level चुनें --</option>';
+            for (let i = 1; i <= 100; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `L${i} ($${(i * LEVEL_TARGET).toLocaleString()})`;
+                sel.appendChild(opt);
+            }
+        }
+
+        // Find user by email or SPX ID
+        function findUserByIdentifier(identifier) {
+            if (!identifier) return null;
+            const id = identifier.trim().toLowerCase();
+            return users.find(u =>
+                (u.email || '').toLowerCase() === id ||
+                (u.coinxId || '').toLowerCase() === id ||
+                (u.$id || '').toLowerCase() === id
+            );
+        }
+
+        // ⚡ Quick Level Update (Users tab)
+        async function quickUpdateLevel(btn) {
+            if (!isAdminMode) return;
+            const identifier = document.getElementById('quickLevelIdentifier').value.trim();
+            const levelNum = parseInt(document.getElementById('quickLevelNumber').value);
+
+            if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
+            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level 1-100 के बीच होना चाहिए', 'error'); return; }
+
+            const user = findUserByIdentifier(identifier);
+            if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
+
+            setButtonLoading(btn, true);
+            try {
+                const newTotal = levelNum * LEVEL_TARGET;
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
+                    totalPurchased: newTotal
+                });
+                user.totalPurchased = newTotal;
+
+                showToast(`✅ ${user.name} का Level L${levelNum} सेट हो गया!`, 'success');
+                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} सेट कर दिया गया।`);
+
+                document.getElementById('quickLevelIdentifier').value = '';
+                document.getElementById('quickLevelNumber').value = '';
+
+                renderAdminUsers();
+                renderLevelManagerList();
+                updateAdminStats();
+            } catch (e) {
+                console.error(e);
+                showToast('त्रुटि: ' + e.message, 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+
+        // ⚡ Apply Level from Level Manager tab
+        async function applyLevelFromManager(btn) {
+            if (!isAdminMode) return;
+            const identifier = document.getElementById('levelManagerIdentifier').value.trim();
+            const levelNum = parseInt(document.getElementById('levelManagerSelect').value);
+
+            if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
+            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level चुनें (1-100)', 'error'); return; }
+
+            const user = findUserByIdentifier(identifier);
+            if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
+
+            setButtonLoading(btn, true);
+            try {
+                const newTotal = levelNum * LEVEL_TARGET;
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
+                    totalPurchased: newTotal
+                });
+                user.totalPurchased = newTotal;
+
+                showToast(`✅ ${user.name} का Level L${levelNum} Apply हो गया!`, 'success');
+                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} अप्लाई कर दिया गया।`);
+
+                document.getElementById('levelManagerIdentifier').value = '';
+                document.getElementById('levelManagerSelect').value = '';
+
+                renderAdminUsers();
+                renderLevelManagerList();
+                updateAdminStats();
+            } catch (e) {
+                console.error(e);
+                showToast('त्रुटि: ' + e.message, 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+
+        // ⚡ Filter in Level Manager tab
+        function filterLevelUserList() {
+            const q = document.getElementById('levelManagerSearch').value.trim().toLowerCase();
+            if (!q) { levelManagerFiltered = [...users]; }
+            else {
+                levelManagerFiltered = users.filter(u =>
+                    (u.name || '').toLowerCase().includes(q) ||
+                    (u.email || '').toLowerCase().includes(q) ||
+                    (u.coinxId || '').toLowerCase().includes(q)
+                );
+            }
+            renderLevelManagerList();
+        }
+
+        // ⚡ Render Level Manager user list
+        function renderLevelManagerList() {
+            if (!isAdminMode) return;
+            const list = document.getElementById('levelManagerUserList');
+            if (!list) return;
+            const display = levelManagerFiltered.length ? levelManagerFiltered : users;
+            list.innerHTML = '';
+            if (display.length === 0) {
+                list.innerHTML = '<p class="text-rose-300/30 text-center py-2">कोई यूजर नहीं</p>';
+                return;
+            }
+            display.forEach(u => {
+                const currentLevel = Math.floor(parseFloat(u.totalPurchased || 0) / LEVEL_TARGET);
+                const card = document.createElement('div');
+                card.className = 'item-card space-y-2';
+                card.style.borderColor = currentLevel > 0 ? 'rgba(34,197,94,0.4)' : 'rgba(255,0,85,0.15)';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-bold ${currentLevel > 0 ? 'text-green-400' : 'text-rose-400'} text-xs">${u.name||'N/A'}</div>
+                            <div class="text-[9px] text-rose-300/40">📧 ${u.email||'N/A'}</div>
+                            <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="currency-gold font-bold text-sm">L${currentLevel}</div>
+                            <div class="text-[9px] text-rose-300/40">$${parseFloat(u.totalPurchased||0).toFixed(0)}</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <button onclick="openLevelPicker('${u.$id}')" class="flex-1 btn-3d-gold py-1.5 text-[10px] rounded-lg">🎯 Level बदलें</button>
+                        <button onclick="resetUserLevel('${u.$id}')" class="bg-red-500/20 border border-red-500/30 text-red-400 px-2 py-1.5 rounded-lg text-[10px] font-bold">↺ Reset</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // ⚡ Open Level Picker Modal
+        function openLevelPicker(userId) {
+            const user = users.find(u => u.$id === userId);
+            if (!user) { showToast('यूजर नहीं मिला', 'error'); return; }
+            pickerUserId = userId;
+            pickerSelectedLevel = Math.floor(parseFloat(user.totalPurchased || 0) / LEVEL_TARGET);
+
+            document.getElementById('levelPickerUserInfo').innerHTML = `
+                <div class="flex justify-between">
+                    <div>
+                        <span class="text-rose-300/60">नाम:</span> <strong class="text-white">${user.name}</strong>
+                    </div>
+                    <div>
+                        <span class="text-rose-300/60">अभी:</span> <strong class="text-green-400">L${pickerSelectedLevel}</strong>
+                    </div>
+                </div>
+                <div class="text-[10px] text-rose-300/50 mt-1">📧 ${user.email}</div>
+                <div class="text-[10px] text-rose-300/50">🆔 ${user.coinxId}</div>
+            `;
+
+            const grid = document.getElementById('levelPickerGrid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 100; i++) {
+                const div = document.createElement('div');
+                div.className = `level-opt ${i === pickerSelectedLevel ? 'selected' : ''} ${i <= pickerSelectedLevel ? 'current' : ''}`;
+                div.textContent = 'L' + i;
+                div.onclick = () => selectPickerLevel(i);
+                grid.appendChild(div);
+            }
+
+            document.getElementById('levelPickerModal').classList.remove('hidden');
+        }
+
+        function selectPickerLevel(level) {
+            pickerSelectedLevel = level;
+            document.querySelectorAll('#levelPickerGrid .level-opt').forEach(el => {
+                el.classList.remove('selected');
+                if (parseInt(el.textContent.replace('L','')) === level) {
+                    el.classList.add('selected');
+                }
+            });
+        }
+
+        async function applyLevelFromPicker(btn) {
+            if (!pickerUserId || !pickerSelectedLevel) { showToast('Level चुनें', 'error'); return; }
+            const user = users.find(u => u.$id === pickerUserId);
+            if (!user) return;
+
+            setButtonLoading(btn, true);
+            try {
+                const newTotal = pickerSelectedLevel * LEVEL_TARGET;
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
+                    totalPurchased: newTotal
+                });
+                user.totalPurchased = newTotal;
+
+                showToast(`✅ ${user.name} → L${pickerSelectedLevel}`, 'success');
+                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${pickerSelectedLevel} सेट कर दिया गया।`);
+
+                closeLevelPicker();
+                renderAdminUsers();
+                renderLevelManagerList();
+                updateAdminStats();
+            } catch (e) {
+                console.error(e);
+                showToast('त्रुटि: ' + e.message, 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+
+        function closeLevelPicker() {
+            document.getElementById('levelPickerModal').classList.add('hidden');
+            pickerSelectedLevel = 0;
+            pickerUserId = '';
+        }
+
+        // ⚡ Reset single user level
+        async function resetUserLevel(userId) {
+            if (!confirm('इस यूजर का Level L0 करना है?')) return;
+            const user = users.find(u => u.$id === userId);
+            if (!user) return;
+            try {
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
+                    totalPurchased: 0
+                });
+                user.totalPurchased = 0;
+                showToast(`✅ ${user.name} का Level Reset (L0)`, 'info');
+                if (voiceEnabled) speakHindi(`${user.name} का लेवल रीसेट कर दिया गया।`);
+                renderAdminUsers();
+                renderLevelManagerList();
+                updateAdminStats();
+            } catch (e) {
+                showToast('त्रुटि: ' + e.message, 'error');
+            }
+        }
+
+        // ⚡ Reset ALL users levels
+        async function setAllLevelsToZero() {
+            if (!confirm('⚠️ सभी Users का Level L0 करना है? यह वापस नहीं होगा!')) return;
+            if (!confirm('पक्का? सभी users का totalPurchased 0 हो जाएगा!')) return;
+            try {
+                let count = 0;
+                for (const u of users) {
+                    if (parseFloat(u.totalPurchased || 0) > 0) {
+                        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, u.docId, {
+                            totalPurchased: 0
+                        });
+                        u.totalPurchased = 0;
+                        count++;
+                    }
+                }
+                showToast(`✅ ${count} users का Level Reset`, 'info');
+                if (voiceEnabled) speakHindi(`${count} यूजर्स का लेवल रीसेट कर दिया गया।`);
+                renderAdminUsers();
+                renderLevelManagerList();
+                updateAdminStats();
+            } catch (e) {
+                showToast('त्रुटि: ' + e.message, 'error');
+            }
+        }
+
+        // ============================================================
+        // REFRESH
         // ============================================================
         async function refreshDeposits(btn) {
             if (!isAdminMode) return;
@@ -1142,18 +1519,13 @@
                 const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
                 users = res.documents.map(mapUserDoc);
                 filteredUsers = [...users];
-                const pending = users.filter(u => u.pendingDeposit);
-                console.log('🔄 Refreshed. Pending deposits:', pending.length);
+                levelManagerFiltered = [...users];
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
-                showToast(`🔄 रिफ्रेश! ${pending.length} पेंडिंग डिपॉजिट`, 'success');
-            } catch (e) {
-                console.error('Refresh error:', e);
-                showToast('रिफ्रेश नहीं हो सका', 'error');
-            } finally {
-                setButtonLoading(btn, false);
-            }
+                showToast(`🔄 रिफ्रेश!`, 'success');
+            } catch (e) { showToast('रिफ्रेश नहीं हो सका', 'error'); }
+            finally { setButtonLoading(btn, false); }
         }
 
         async function refreshWithdrawals(btn) {
@@ -1163,18 +1535,13 @@
                 const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
                 users = res.documents.map(mapUserDoc);
                 filteredUsers = [...users];
-                const pending = users.filter(u => u.pendingWithdrawal);
-                console.log('🔄 Refreshed. Pending withdrawals:', pending.length);
+                levelManagerFiltered = [...users];
                 updateAdminStats();
                 renderAdminWithdrawals();
                 renderAdminUsers();
-                showToast(`🔄 रिफ्रेश! ${pending.length} पेंडिंग विथड्रॉवल`, 'success');
-            } catch (e) {
-                console.error('Refresh error:', e);
-                showToast('रिफ्रेश नहीं हो सका', 'error');
-            } finally {
-                setButtonLoading(btn, false);
-            }
+                showToast(`🔄 रिफ्रेश!`, 'success');
+            } catch (e) { showToast('रिफ्रेश नहीं हो सका', 'error'); }
+            finally { setButtonLoading(btn, false); }
         }
 
         // ============================================================
@@ -1207,12 +1574,14 @@
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <div class="font-bold text-rose-400 text-xs">${u.name||'N/A'}</div>
+                            <div class="font-bold ${level > 0 ? 'text-green-400' : 'text-rose-400'} text-xs">
+                                ${u.name||'N/A'} ${level > 0 ? '<i class="fa-solid fa-circle-check text-green-400" style="font-size: 10px;"></i>' : ''}
+                            </div>
                             <div class="text-[9px] text-rose-300/40">📅 ${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</div>
                         </div>
                         <div class="text-right">
                             <div class="text-white font-bold text-xs">${u.coins.toFixed(2)} USDT</div>
-                            <div class="text-[9px] text-rose-300/40">L${level} • ₹${(u.coins*EXCHANGE_RATE).toFixed(0)}</div>
+                            <div class="currency-gold text-[10px] font-bold">L${level} • ₹${(u.coins*EXCHANGE_RATE).toFixed(0)}</div>
                         </div>
                     </div>
                     <div class="text-[10px] text-rose-300/40 grid grid-cols-1 gap-1 pb-1 border-b border-rose-500/10">
@@ -1224,8 +1593,9 @@
                         ${u.pendingWithdrawal ? `<span class="text-yellow-400">⏳ पेंडिंग विथड्रॉवल: ${u.pendingWithdrawal.coinsAmount || 0} USDT</span>` : ''}
                     </div>
                     <div class="flex justify-between items-center gap-1 flex-wrap">
-                        <span class="status-badge ${u.isBlocked?'status-blocked':'status-approved'}">${u.isBlocked?'🚫 Blocked':'✅ Active'}</span>
+                        <span class="status-badge ${u.isBlocked?'status-blocked':(level>0?'status-gold':'status-approved')}">${u.isBlocked?'🚫 Blocked':'✅ Active'}</span>
                         <div class="flex gap-1 flex-wrap">
+                            <button onclick="openLevelPicker('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30" title="Level बदलें">🎯</button>
                             <button onclick="viewUserReceipt('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/25">🧾</button>
                             <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded ${u.isBlocked?'bg-green-500/20 text-green-400':'bg-red-500/20 text-red-400'} border border-rose-500/25">${u.isBlocked?'Unblock':'Block'}</button>
                         </div>
@@ -1282,12 +1652,14 @@
             const totalWithdrawn = parseFloat(u.withdrawal || 0);
             const totalRef = u.referrals.reduce((s, r) => s + parseFloat(r.bonusReceived || 0), 0);
             const balance = u.coins;
+            const currentLevel = Math.floor(parseFloat(u.totalPurchased || 0) / LEVEL_TARGET);
 
             const html = `
                 <div style="font-size:11px;color:#fff;">
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">👤 नाम</span><span>${u.name||'N/A'}</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📧 ईमेल</span><span style="font-family:monospace;font-size:10px;">${u.email||'N/A'}</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🆔 SPX ID</span><span style="font-family:monospace;color:#ff6699;">${u.coinxId||'N/A'}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🎯 Level</span><span style="color:#d4af37;font-weight:700;">L${currentLevel}</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📱 मोबाइल</span><span>${u.phone||'N/A'}</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">💰 मुख्य बैलेंस</span><span style="color:#34d399;font-weight:700;">${balance.toFixed(2)} USDT</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🔒 Staked</span><span style="color:#f59e0b;font-weight:700;">${totalStaked.toFixed(2)} USDT</span></div>
@@ -1308,23 +1680,14 @@
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
             list.innerHTML = '';
-
             const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
-
-            console.log('📥 Rendering deposits. Total users:', users.length, 'Pending:', pending.length);
-
-            if (pending.length === 0) {
-                list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>';
-                return;
-            }
-
+            if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>'; return; }
             pending.forEach(u => {
                 const d = u.pendingDeposit;
                 const imgUrl = resolveImageUrl(d.receiptFileId || d.screenshotId || '');
                 const amountUSD = d.amountUSD || d.amountUsd || d.amount || 0;
                 const coinsAmount = d.coinsAmount || d.usdtAmount || d.amount || 0;
                 const dateTime = d.dateTime || d.datetime || 'N/A';
-
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
                 card.innerHTML = `
@@ -1340,7 +1703,7 @@
                             <div class="text-[9px] text-rose-300/40">${dateTime}</div>
                         </div>
                     </div>
-                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : '<p class="text-[10px] text-rose-300/30 text-center py-2">📷 No screenshot</p>'}
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : ''}
                     <div class="flex gap-2">
                         <button onclick="approveDeposit('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Approve</button>
                         <button onclick="rejectDeposit('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
@@ -1367,7 +1730,6 @@
                 approved.push(tx);
                 const txs = parseJsonSafe(fresh.transactions, []);
                 txs.push({ type: 'deposit', amountUSD: amountUSD, coinsAmount: coinsAmount, receiptFileId: pending.receiptFileId || '', dateTime: pending.dateTime || '', status: 'Approved', receiptId: receiptId });
-
                 const oldTotal = parseFloat(fresh.totalPurchased || 0);
                 const newTotal = oldTotal + amountUSD;
                 const oldLevel = Math.floor(oldTotal / LEVEL_TARGET);
@@ -1387,15 +1749,11 @@
                 users[idx].transactions = txs;
                 users[idx].totalPurchased = newTotal;
 
-                if (fresh.referredBy) {
-                    await awardReferralBonus(fresh.referredBy, amountUSD, fresh);
-                }
+                if (fresh.referredBy) { await awardReferralBonus(fresh.referredBy, amountUSD, fresh); }
 
                 showToast(`✅ डिपॉजिट स्वीकृत! +${coinsAmount} USDT`, 'success');
                 if (voiceEnabled) speakHindi('डिपॉजिट सफलतापूर्वक स्वीकृत किया गया।');
-                if (newLevel > oldLevel) {
-                    localStorage.setItem('cx_pending_level_' + fresh.$id, newLevel);
-                }
+                if (newLevel > oldLevel) localStorage.setItem('cx_pending_level_' + fresh.$id, newLevel);
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
@@ -1427,7 +1785,6 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, referrer.$id, {
                     coins: newCoins, referrals: JSON.stringify(refs)
                 });
-                console.log(`✅ Referral bonus ${bonus} USDT awarded to ${referrer.email}`);
             } catch (e) { console.error('Referral bonus error:', e); }
         }
 
@@ -1637,7 +1994,6 @@
             if (idx === -1) { setButtonLoading(btn, false); showToast('यूजर नहीं मिला!', 'error'); return; }
             const u = users[idx];
             if (!u.staking || u.staking.length === 0) { setButtonLoading(btn, false); showToast('कोई स्टेकिंग नहीं!', 'info'); return; }
-
             let total = 0;
             const history = u.stakingHistory || [];
             for (const s of u.staking) {
@@ -1821,6 +2177,7 @@
             MIN_STAKE = s.MIN_STAKE;
             LEVEL_TARGET = s.LEVEL_TARGET;
             USDT_ADDRESS = s.USDT_ADDRESS;
+            populateLevelManagerDropdown();
             showToast('✅ Settings सेव!', 'success');
             if (voiceEnabled) speakHindi('सभी सेटिंग्स सेव कर दी गईं।');
         }
@@ -1860,6 +2217,7 @@
                 const displayUrl = savedLogo.startsWith('http') ? savedLogo : gdrive(savedLogo, 200);
                 document.getElementById('headerLogo').src = displayUrl;
             }
+            populateLevelManagerDropdown();
             showToast('🔐 एडमिन क्रेडेंशियल दर्ज करें', 'info');
         };
 
@@ -1897,6 +2255,16 @@
         window.openFullscreenImage = openFullscreenImage;
         window.closeFullscreenImage = closeFullscreenImage;
         window.closeReceipt = closeReceipt;
+        // New Level functions
+        window.quickUpdateLevel = quickUpdateLevel;
+        window.applyLevelFromManager = applyLevelFromManager;
+        window.filterLevelUserList = filterLevelUserList;
+        window.openLevelPicker = openLevelPicker;
+        window.selectPickerLevel = selectPickerLevel;
+        window.applyLevelFromPicker = applyLevelFromPicker;
+        window.closeLevelPicker = closeLevelPicker;
+        window.resetUserLevel = resetUserLevel;
+        window.setAllLevelsToZero = setAllLevelsToZero;
     </script>
 
 </body>
