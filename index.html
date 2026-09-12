@@ -2,285 +2,187 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SupriX Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SupriX Global – Admin Panel</title>
+    <meta name="google" content="notranslate" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2">
-    </script>
-    <!-- Cropper.js for image cropping -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --rose-primary: #ff0055;
+            --rose-glow: #ff00aa;
+            --bg-dark: #070104;
+            --card-bg: rgba(18, 4, 10, 0.78);
+            --cyan-accent: #00f0ff;
+            --green-accent: #22c55e;
+            --amber-accent: #f59e0b;
+            --usdt-green: #34d399;
+            --gold: #d4af37;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f5f0;
-            color: #1a1a2e;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 0%, #2b0010 0%, #070104 80%);
+            overflow-x: hidden;
+            user-select: none;
+            color: #ffffff;
+            min-height: 100vh;
+            position: relative;
         }
-        .glass-gold {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+
+        @keyframes rainbowBorder {
+            0%   { border-color: #ff0055; box-shadow: 0 0 15px #ff0055, inset 0 0 10px rgba(255,0,85,0.3); }
+            14%  { border-color: #ff00aa; box-shadow: 0 0 15px #ff00aa, inset 0 0 10px rgba(255,0,170,0.3); }
+            28%  { border-color: #00f0ff; box-shadow: 0 0 15px #00f0ff, inset 0 0 10px rgba(0,240,255,0.3); }
+            42%  { border-color: #22c55e; box-shadow: 0 0 15px #22c55e, inset 0 0 10px rgba(34,197,94,0.3); }
+            57%  { border-color: #f59e0b; box-shadow: 0 0 15px #f59e0b, inset 0 0 10px rgba(245,158,11,0.3); }
+            71%  { border-color: #8b5cf6; box-shadow: 0 0 15px #8b5cf6, inset 0 0 10px rgba(139,92,246,0.3); }
+            85%  { border-color: #ec4899; box-shadow: 0 0 15px #ec4899, inset 0 0 10px rgba(236,72,153,0.3); }
+            100% { border-color: #ff0055; box-shadow: 0 0 15px #ff0055, inset 0 0 10px rgba(255,0,85,0.3); }
         }
-        .btn-gold {
-            background: linear-gradient(145deg, #d4af37, #c9a030, #b8962a);
-            color: #1a1a2e;
-            font-weight: 700;
-            border: none;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+        @keyframes headerWobble {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            20%      { transform: translateY(-3px) rotate(-3deg) scale(1.03); }
+            40%      { transform: translateY(2px) rotate(3deg) scale(1.02); }
+            60%      { transform: translateY(-2px) rotate(-2deg) scale(1.03); }
+            80%      { transform: translateY(1px) rotate(1deg) scale(1.01); }
         }
-        .btn-gold:hover {
-            transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 8px 35px rgba(212, 175, 55, 0.5);
+        @keyframes floatButterfly {
+            0%   { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0.08; }
+            25%  { transform: translate(80px, -120px) rotate(12deg) scale(1.1); opacity: 0.3; }
+            50%  { transform: translate(-60px, -220px) rotate(-8deg) scale(0.9); opacity: 0.4; }
+            75%  { transform: translate(100px, -340px) rotate(15deg) scale(1.2); opacity: 0.25; }
+            100% { transform: translate(-20px, -480px) rotate(-5deg) scale(0.7); opacity: 0.06; }
         }
-        .btn-gold:active {
-            transform: scale(0.97);
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .admin-setting-card {
-            background: rgba(255,255,255,0.7);
-            border: 1px solid rgba(212,175,55,0.2);
-            border-radius: 14px;
-            padding: 14px 16px;
-            backdrop-filter: blur(6px);
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .admin-setting-card label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #6b4a7a;
-            display: block;
-            margin-bottom: 4px;
+        @keyframes rainbowText {
+            0%   { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055; }
+            14%  { color: #ff00aa; text-shadow: 0 0 15px #ff00aa, 0 0 30px #ff00aa; }
+            28%  { color: #00f0ff; text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
+            42%  { color: #22c55e; text-shadow: 0 0 15px #22c55e, 0 0 30px #22c55e; }
+            57%  { color: #f59e0b; text-shadow: 0 0 15px #f59e0b, 0 0 30px #f59e0b; }
+            71%  { color: #8b5cf6; text-shadow: 0 0 15px #8b5cf6, 0 0 30px #8b5cf6; }
+            85%  { color: #ec4899; text-shadow: 0 0 15px #ec4899, 0 0 30px #ec4899; }
+            100% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055; }
         }
-        .admin-setting-card input[type="number"],
-        .admin-setting-card input[type="text"] {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 10px;
-            font-size: 13px;
-            background: rgba(255,255,255,0.8);
-            color: #1a1a2e;
-        }
-        .admin-setting-card input:focus {
-            outline: none;
-            border-color: #d4af37;
-            box-shadow: 0 0 20px rgba(212,175,55,0.1);
-        }
-        .slider-image-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.6);
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(212,175,55,0.15);
-            margin-bottom: 6px;
-        }
-        .slider-image-item img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid rgba(212,175,55,0.2);
-        }
-        .slider-image-item .img-url {
-            flex: 1;
-            font-size: 10px;
-            color: #6b4a7a;
-            word-break: break-all;
-            font-family: monospace;
-        }
-        .slider-image-item .img-actions {
-            display: flex;
-            gap: 4px;
-        }
-        .slider-image-item .img-actions button {
-            background: none;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
-        }
-        .slider-image-item .img-actions .btn-edit {
-            background: rgba(212,175,55,0.15);
-            color: #d4af37;
-        }
-        .slider-image-item .img-actions .btn-edit:hover {
-            background: rgba(212,175,55,0.25);
-        }
-        .slider-image-item .img-actions .btn-delete {
-            background: rgba(185,28,28,0.1);
-            color: #b91c1c;
-        }
-        .slider-image-item .img-actions .btn-delete:hover {
-            background: rgba(185,28,28,0.2);
-        }
-        .slider-image-item .img-actions .btn-move {
-            background: rgba(0,0,0,0.05);
-            color: #4a3a4a;
-            font-size: 10px;
-        }
-        .slider-image-item .img-actions .btn-move:hover {
-            background: rgba(0,0,0,0.12);
-        }
-        /* Cropper modal */
-        .cropper-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-        .cropper-modal-overlay.show {
-            display: flex;
-        }
-        .cropper-modal-overlay .cropper-box {
-            background: #fff;
-            border-radius: 16px;
-            padding: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-container {
-            max-height: 60vh;
-            width: 100% !important;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-container img {
-            max-width: 100%;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions button {
-            padding: 8px 20px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions .btn-crop-confirm {
-            background: #d4af37;
-            color: #1a1a2e;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions .btn-crop-confirm:hover {
-            background: #c9a030;
-            transform: scale(1.02);
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions .btn-crop-cancel {
-            background: rgba(0,0,0,0.1);
-            color: #4a3a4a;
-        }
-        .cropper-modal-overlay .cropper-box .cropper-actions .btn-crop-cancel:hover {
-            background: rgba(0,0,0,0.2);
-        }
-        .admin-tab-btn {
-            transition: all 0.3s;
-        }
-        .admin-tab-btn.active {
-            background: #d4af37;
-            color: #1a1a2e !important;
-        }
-        .admin-tab-btn:not(.active) {
-            color: #a090a0 !important;
-        }
-        .admin-tab-btn:not(.active):hover {
-            background: rgba(212,175,55,0.1);
-        }
-        .admin-sec {
-            display: block;
-        }
-        .admin-sec.hidden {
-            display: none !important;
-        }
-        #toastNotification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            max-width: 400px;
-            width: 92%;
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #1a1a2e;
-            border-radius: 16px;
-            padding: 14px 20px;
-            box-shadow: 0 12px 60px rgba(0, 0, 0, 0.08);
-            z-index: 9999;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            opacity: 0;
-            pointer-events: none;
-        }
-        #toastNotification.show {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
-        }
-        #toastNotification button {
-            background: none;
-            border: none;
-            color: #6b4a7a;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .copy-btn-admin {
-            background: rgba(212, 175, 55, 0.12);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .copy-btn-admin:hover {
-            background: rgba(212, 175, 55, 0.25);
-        }
-        .currency-usdt {
-            color: #26A17B !important;
-        }
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #ede8e0;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d4af37;
+
+        .wobble-btn { animation: headerWobble 3.5s ease-in-out infinite; }
+        .rainbow-text { animation: rainbowText 3s linear infinite; }
+
+        .glass-rose {
+            background: var(--card-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 2px solid var(--rose-primary);
             border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 0, 85, 0.25);
+            animation: rainbowBorder 8s linear infinite;
         }
-        .loading-overlay {
+        .glass-rose-light {
+            background: rgba(18, 4, 10, 0.6);
+            backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 0, 85, 0.4);
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 85, 0.15);
+            animation: rainbowBorder 10s linear infinite;
+        }
+
+        .btn-3d-rose {
+            background: linear-gradient(145deg, #ff0055, #990033);
+            color: #ffffff !important;
+            font-weight: 800;
+            border: 2px solid #ff6699;
+            border-radius: 16px;
+            box-shadow: 0 6px 0 #59001a, 0 12px 20px rgba(255, 0, 85, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+        }
+        .btn-3d-rose:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #59001a, 0 4px 10px rgba(255, 0, 85, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-3d-green {
+            background: linear-gradient(145deg, #22c55e, #16a34a);
+            color: #ffffff !important;
+            font-weight: 800;
+            border: 2px solid #4ade80;
+            border-radius: 12px;
+            box-shadow: 0 4px 0 #14532d, 0 8px 15px rgba(34, 197, 94, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .btn-3d-green:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #14532d, 0 3px 8px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-3d-red {
+            background: linear-gradient(145deg, #ef4444, #b91c1c);
+            color: #ffffff !important;
+            font-weight: 800;
+            border: 2px solid #f87171;
+            border-radius: 12px;
+            box-shadow: 0 4px 0 #7f1d1d, 0 8px 15px rgba(239, 68, 68, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .btn-3d-red:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #7f1d1d, 0 3px 8px rgba(239, 68, 68, 0.4);
+        }
+
+        input, select, textarea {
+            background: rgba(0, 0, 0, 0.65) !important;
+            border: 2px solid rgba(255, 0, 85, 0.5) !important;
+            color: #ffffff !important;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.8) !important;
+            border-radius: 14px !important;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6) !important;
+            outline: none;
+        }
+        input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+        .butterfly-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .butterfly-bg .bfly {
+            position: absolute;
+            font-size: 22px;
+            opacity: 0.2;
+            animation: floatButterfly linear infinite;
+            will-change: transform;
+        }
+
+        #loadingOverlay {
             position: fixed;
             inset: 0;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(7, 1, 4, 0.9);
             backdrop-filter: blur(8px);
             z-index: 9999;
             display: none;
@@ -288,222 +190,512 @@
             justify-content: center;
             flex-direction: column;
         }
-        .loading-overlay.show {
-            display: flex;
-        }
-        .loading-overlay .spinner {
-            width: 48px;
-            height: 48px;
-            border: 5px solid rgba(212, 175, 55, 0.2);
-            border-top-color: #d4af37;
+        #loadingOverlay.show { display: flex; }
+        #loadingOverlay .spinner {
+            width: 48px; height: 48px;
+            border: 5px solid rgba(255, 0, 85, 0.2);
+            border-top-color: var(--rose-primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        #loadingOverlay p { margin-top: 12px; font-size: 13px; color: #ff99bb; font-weight: 500; }
+
+        .voice-toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            width: 92%;
+            background: rgba(18, 4, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--rose-primary);
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            z-index: 998;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+            display: none;
         }
-        .loading-overlay p {
-            margin-top: 12px;
-            font-size: 13px;
-            color: #6b4a7a;
-            font-weight: 500;
+        .voice-toast.show { display: block; }
+        .voice-toast .voice-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--rose-primary);
+        }
+        .voice-toast .voice-msg { font-size: 13px; font-weight: 500; color: #fff; }
+        .voice-toast .voice-close {
+            margin-top: 8px;
+            background: rgba(255, 0, 85, 0.15);
+            border: none;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #ff99bb;
+            cursor: pointer;
+        }
+
+        .admin-tab-btn {
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1.5px solid rgba(255, 0, 85, 0.25);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .admin-tab-btn.active {
+            background: linear-gradient(145deg, #ff0055, #990033);
+            border-color: #ff6699;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+        }
+        .admin-tab-btn:hover:not(.active) { border-color: rgba(255, 0, 85, 0.5); color: #ff6699; }
+
+        .item-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 0, 85, 0.15);
+            border-radius: 14px;
+            padding: 12px 14px;
+            transition: all 0.3s;
+        }
+        .item-card:hover { border-color: rgba(255, 0, 85, 0.4); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+        .status-approved { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-rejected { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-completed { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-blocked { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #ff0055, #990033);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+        }
+
+        .receipt-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .receipt-modal .receipt-card {
+            background: #0d0105;
+            border: 3px solid var(--rose-primary);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 0, 85, 0.6);
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px 24px;
+            color: #fff;
+            animation: rainbowBorder 8s linear infinite;
+        }
+
+        .currency-usdt { color: #34d399 !important; text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
+        .currency-inr { color: #22c55e !important; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+        .rose-text-gradient {
+            background: linear-gradient(135deg, #ff99bb, #ff0055, #00f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-1 { gap: 4px; }
+        .gap-2 { gap: 8px; }
+        .gap-3 { gap: 12px; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .rounded-lg { border-radius: 8px; }
+        .rounded-xl { border-radius: 12px; }
+        .rounded-2xl { border-radius: 16px; }
+        .rounded-3xl { border-radius: 24px; }
+        .rounded-full { border-radius: 9999px; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+        .text-xs { font-size: 12px; }
+        .text-sm { font-size: 14px; }
+        .text-md { font-size: 16px; }
+        .text-lg { font-size: 18px; }
+        .text-xl { font-size: 20px; }
+        .text-2xl { font-size: 24px; }
+        .text-3xl { font-size: 30px; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+        .font-mono { font-family: monospace; }
+        .cursor-pointer { cursor: pointer; }
+        .break-all { word-break: break-all; }
+        .shrink-0 { flex-shrink: 0; }
+        .flex-1 { flex: 1; }
+        .flex-wrap { flex-wrap: wrap; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: 1fr 1fr; }
+        .grid-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .grid-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+        .col-span-2 { grid-column: span 2; }
+        .col-span-3 { grid-column: span 3; }
+        .col-span-4 { grid-column: span 4; }
+        .p-2 { padding: 8px; }
+        .p-3 { padding: 12px; }
+        .p-4 { padding: 16px; }
+        .p-5 { padding: 20px; }
+        .px-2 { padding-left: 8px; padding-right: 8px; }
+        .px-3 { padding-left: 12px; padding-right: 12px; }
+        .px-4 { padding-left: 16px; padding-right: 16px; }
+        .py-1 { padding-top: 4px; padding-bottom: 4px; }
+        .py-2 { padding-top: 8px; padding-bottom: 8px; }
+        .py-3 { padding-top: 12px; padding-bottom: 12px; }
+        .py-4 { padding-top: 16px; padding-bottom: 16px; }
+        .mt-1 { margin-top: 4px; }
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mt-4 { margin-top: 16px; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .z-10 { z-index: 10; }
+        .z-20 { z-index: 20; }
+        .z-30 { z-index: 30; }
+        .z-40 { z-index: 40; }
+        .z-50 { z-index: 50; }
+
+        .copy-btn {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            color: #ff6699;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover { background: rgba(255, 0, 85, 0.3); }
+
+        @media (max-width: 440px) {
+            .receipt-modal .receipt-card { padding: 18px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay"><div class="spinner"></div><p>कृपया प्रतीक्षा करें...</p></div>
+    <div class="butterfly-bg" id="butterflyContainer"></div>
+    <div id="loadingOverlay"><div class="spinner"></div><p>कृपया प्रतीक्षा करें...</p></div>
 
-    <!-- Toast Notification -->
-    <div id="toastNotification"><span id="toastMessage"></span><button onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="appContainer" class="w-full max-w-md mx-auto relative z-10">
 
-    <!-- Cropper Modal -->
-    <div id="cropperModal" class="cropper-modal-overlay">
-        <div class="cropper-box">
-            <h4 class="text-sm font-bold text-amber-600 mb-2"><i class="fa-solid fa-crop mr-1"></i> इमेज क्रॉप करें</h4>
-            <div id="cropperImageContainer"></div>
-            <div class="cropper-actions">
-                <button class="btn-crop-confirm" onclick="confirmCrop()"><i class="fa-solid fa-check"></i> क्रॉप करें</button>
-                <button class="btn-crop-cancel" onclick="closeCropper()"><i class="fa-solid fa-xmark"></i> रद्द करें</button>
+        <header id="mainHeader" class="w-full glass-rose py-2 px-3 flex items-center justify-between sticky top-0 z-40 shadow-xl" style="border-radius: 0 0 20px 20px; min-height: 58px;">
+            <div class="flex items-center gap-2 flex-1 min-w-0">
+                <img id="headerLogo" src="https://lh3.googleusercontent.com/d/1SAozsk8oWOON2naYvGkFCUu85NRMXkJR=w200" alt="SupriX" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--rose-primary); object-fit: cover; flex-shrink: 0;" onerror="this.onerror=null;this.src='https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png';" />
+                <h1 id="headerTitle" class="rainbow-text font-extrabold tracking-wider leading-none truncate" style="font-size: 1.5rem;">SUPRIX ADMIN 🛡️</h1>
             </div>
-        </div>
-    </div>
-
-    <!-- Main Container -->
-    <div class="w-full max-w-4xl mx-auto px-4 py-6">
-
-        <!-- Header -->
-        <header class="glass-gold p-4 rounded-2xl border-amber-500/30 flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <img src="https://i.postimg.cc/8PrDtLc2/file-00000000e6508211a748edb691eaf455.png" alt="SupriX" class="w-10 h-10 rounded-full border-2 border-amber-500/50 object-cover" />
-                <div>
-                    <h1 class="font-extrabold text-lg tracking-wider gold-text-gradient">SUPRIX ADMIN</h1>
-                    <span class="text-[10px] text-amber-600/60">Premium Gold Edition</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] bg-amber-500/15 text-amber-700 border border-amber-500/30 px-3 py-1 rounded-full font-bold">ADMIN</span>
-                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-600 border border-red-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+            <div class="flex items-center gap-1 flex-shrink-0">
+                <button onclick="toggleVoice()" id="voiceToggleBtn" style="background: rgba(255,0,85,0.15); border: 1px solid rgba(255,0,85,0.4); color: #ff6699; padding: 3px 8px; border-radius: 30px; font-size: 8px; width: 26px; height: 26px; justify-content: center; display: flex; align-items: center; cursor: pointer;" title="वॉइस ऑन/ऑफ">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <span class="admin-badge"><i class="fa-solid fa-shield-halved mr-1"></i> ADMIN</span>
+                <button onclick="logoutAdmin()" style="background: rgba(255,0,85,0.15); border: 1px solid rgba(255,0,85,0.4); color: #ff6699; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" title="लॉगआउट">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Admin Dashboard -->
-        <div id="adminDashboard">
+        <main class="w-full px-4 pt-4 pb-10 flex-1 flex flex-col justify-start z-10">
 
-            <!-- Settings: Daily % & Referral Bonus -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="admin-setting-card">
-                    <label><i class="fa-solid fa-percent mr-1 text-amber-500"></i> डेली रिलीज परसेंटेज</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="adminDailyPercent" step="0.01" min="0" max="100" value="0.5" class="flex-1" />
-                        <button onclick="updateDailyPercent()" class="btn-gold px-4 py-2 rounded-lg text-xs font-bold">अपडेट</button>
+            <!-- ==================== ADMIN LOGIN ==================== -->
+            <section id="adminLoginPage" class="w-full space-y-6">
+                <div class="text-center space-y-2 py-6">
+                    <div class="w-20 h-20 rounded-full bg-black/60 text-rose-400 flex items-center justify-center text-3xl mx-auto border-2 border-rose-500 shadow-xl" style="box-shadow: 0 0 40px rgba(255,0,85,0.5);">
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <p class="text-[9px] text-amber-600/40 mt-1">यह % स्टेक्ड USDT पर डेली रिलीज होगा</p>
+                    <h2 class="text-2xl font-extrabold rainbow-text mt-2">SUPRIX GLOBAL</h2>
+                    <p class="text-xs text-rose-300/60">सुरक्षित एडमिन पैनल एक्सेस</p>
                 </div>
-                <div class="admin-setting-card">
-                    <label><i class="fa-solid fa-gift mr-1 text-amber-500"></i> डायरेक्ट रेफरल बोनस %</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="adminReferralPercent" step="0.01" min="0" max="100" value="2" class="flex-1" />
-                        <button onclick="updateReferralPercent()" class="btn-gold px-4 py-2 rounded-lg text-xs font-bold">अपडेट</button>
+                <div class="glass-rose p-6 rounded-3xl space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-rose-300/80 mb-1.5"><i class="fa-solid fa-envelope mr-1 text-rose-400"></i> एडमिन ईमेल</label>
+                        <input type="email" id="adminUsernameInput" placeholder="ईमेल दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="username">
                     </div>
-                    <p class="text-[9px] text-amber-600/40 mt-1">रेफरल द्वारा स्टेक करने पर मिलने वाला बोनस %</p>
-                </div>
-            </div>
-
-            <!-- Slider Images Management -->
-            <div class="admin-setting-card mb-6">
-                <label><i class="fa-solid fa-images mr-1 text-amber-500"></i> स्लाइडर इमेजेस मैनेज</label>
-                <div class="flex flex-wrap gap-2 mt-1">
-                    <input type="text" id="sliderImageUrlInput" placeholder="इमेज URL डालें (जैसे https://example.com/image.png)" class="flex-1 min-w-[200px] text-xs" />
-                    <button onclick="addSliderImage()" class="btn-gold px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-plus"></i> जोड़ें</button>
-                    <button onclick="document.getElementById('sliderImageFileInput').click()" class="btn-gold px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-upload"></i> अपलोड</button>
-                    <input type="file" id="sliderImageFileInput" class="hidden" accept="image/*" onchange="handleSliderImageUpload(event)" />
-                </div>
-                <div class="mt-3 max-h-[250px] overflow-y-auto" id="sliderImagesList"></div>
-                <div class="flex gap-2 mt-3">
-                    <button onclick="saveSliderImages()" class="btn-gold px-6 py-2 rounded-lg text-xs font-bold flex-1"><i class="fa-solid fa-save"></i> सभी बदलाव सेव करें</button>
-                    <button onclick="resetSliderImages()" class="bg-red-500/10 hover:bg-red-500/20 text-red-600 border border-red-500/30 px-4 py-2 rounded-lg text-xs font-bold">रीसेट</button>
-                </div>
-            </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6 text-center text-xs">
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Total Users</span><strong id="statTotalUsers" class="text-[#1a1a2e] text-lg">0</strong></div>
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Approved Dep.</span><strong id="statTotalDeposits" class="text-green-600 text-lg">$0</strong></div>
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Locked Staking</span><strong id="statTotalStaked" class="currency-usdt text-lg">0</strong></div>
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Pending Dep.</span><strong id="statPendingDep" class="text-yellow-600 text-lg">0</strong></div>
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Pending With.</span><strong id="statPendingWith" class="text-yellow-600 text-lg">0</strong></div>
-                <div class="bg-white/80 p-3 rounded-xl border border-amber-500/15"><span class="text-[8px] text-amber-600/30 block">Referral Bonus</span><strong id="statReferrals" class="text-blue-600 text-lg">0</strong></div>
-            </div>
-
-            <!-- Admin Tabs -->
-            <div class="flex bg-white/80 p-1 rounded-xl border border-amber-500/15 text-[10px] flex-wrap mb-4">
-                <button onclick="switchAdminTab('users')" id="adminTab-users" class="admin-tab-btn active flex-1 py-2 text-center font-semibold rounded transition-all">Users</button>
-                <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="admin-tab-btn flex-1 py-2 text-center font-semibold rounded transition-all">Deposits</button>
-                <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="admin-tab-btn flex-1 py-2 text-center font-semibold rounded transition-all">Withdrawals</button>
-                <button onclick="switchAdminTab('staking')" id="adminTab-staking" class="admin-tab-btn flex-1 py-2 text-center font-semibold rounded transition-all">Staking</button>
-                <button onclick="switchAdminTab('referrals')" id="adminTab-referrals" class="admin-tab-btn flex-1 py-2 text-center font-semibold rounded transition-all">Referrals</button>
-                <button onclick="switchAdminTab('transfer')" id="adminTab-transfer" class="admin-tab-btn flex-1 py-2 text-center font-semibold rounded transition-all">Transfer</button>
-            </div>
-
-            <!-- Tab Content -->
-            <div id="adminSection-users" class="admin-sec space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-3">यूजर USDT कस्टमाइज़ेशन (SPX ID से)</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                        <input type="text" id="adminCoinUserId" placeholder="SPX ID / ईमेल" class="col-span-1 md:col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs text-[#1a1a2e]" />
-                        <input type="number" id="adminCoinAmount" placeholder="USDT संख्या" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs" />
-                        <select id="adminCoinAction" class="bg-white/80 border border-amber-500/20 rounded-xl p-2 text-xs"><option value="add">जोड़ें (Credit)</option><option value="subtract">घटाएं (Debit)</option></select>
-                        <button onclick="updateUserCoinsManually(this)" class="col-span-1 md:col-span-2 btn-gold py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-floppy-disk"></i> अपडेट करें</button>
+                    <div>
+                        <label class="block text-xs font-semibold text-rose-300/80 mb-1.5"><i class="fa-solid fa-lock mr-1 text-rose-400"></i> एडमिन पासवर्ड</label>
+                        <input type="password" id="adminPasswordInput" placeholder="पासवर्ड दर्ज करें" class="w-full py-3 px-4 text-sm font-mono" autocomplete="current-password">
                     </div>
+                    <button id="btn-admin-login" onclick="submitAdminLogin(this)" class="w-full btn-3d-rose py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2">
+                        <span>एडमिन एक्सेस खोलें</span> <i class="fa-solid fa-unlock-keyhole"></i>
+                    </button>
+                    <p class="text-[10px] text-rose-300/40 text-center mt-1"><i class="fa-solid fa-info-circle mr-1"></i> सुरक्षित Appwrite Team verification</p>
                 </div>
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">सभी पंजीकृत यूज़र्स</h4>
-                    <div id="adminUserList" class="space-y-2 text-xs max-h-[300px] overflow-y-auto font-mono"></div>
-                </div>
-            </div>
+            </section>
 
-            <div id="adminSection-deposits" class="admin-sec hidden space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">पेंडिंग डिपॉजिट्स</h4>
-                    <div id="adminDepositsList" class="space-y-2 text-xs max-h-[350px] overflow-y-auto"></div>
-                </div>
-            </div>
+            <!-- ==================== ADMIN DASHBOARD ==================== -->
+            <section id="adminDashboardPage" class="w-full hidden space-y-4">
 
-            <div id="adminSection-withdrawals" class="admin-sec hidden space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">पेंडिंग विथड्रॉवल रिक्वेस्ट्स</h4>
-                    <div id="adminWithdrawalsList" class="space-y-2 text-xs max-h-[350px] overflow-y-auto"></div>
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Total Users</span><strong id="statTotalUsers" class="text-white text-md">0</strong></div>
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Approved Deposits</span><strong id="statTotalDeposits" class="text-green-400 text-md">$0</strong></div>
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Locked Staking</span><strong id="statTotalStaked" class="currency-usdt text-md">0 USDT</strong></div>
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Pending Dep.</span><strong id="statPendingDep" class="text-yellow-400 text-md">0</strong></div>
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Pending With.</span><strong id="statPendingWith" class="text-yellow-400 text-md">0</strong></div>
+                    <div class="glass-rose-light p-2.5 rounded-xl"><span class="text-[8px] text-rose-300/30 block mb-0.5">Total Referral</span><strong id="statReferrals" class="text-blue-400 text-md">0 USDT</strong></div>
                 </div>
-            </div>
 
-            <div id="adminSection-staking" class="admin-sec hidden space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <div class="flex justify-between items-center border-b border-amber-500/15 pb-2 mb-3">
-                        <h4 class="text-xs font-bold text-amber-700/70">स्टेकिंग ग्लोबल कॉन्फ़िगरेशन</h4>
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] text-amber-600/40">स्टेकिंग सक्षम:</span>
-                            <input type="checkbox" id="adminStakingGloballyEnabled" checked onchange="toggleGlobalStakingState(this.checked)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer" />
+                <div class="flex bg-black/40 p-1 rounded-xl border border-rose-500/15 text-[10px] flex-wrap gap-1 overflow-x-auto">
+                    <button onclick="switchAdminTab('users')" id="adminTab-users" class="admin-tab-btn active">👥 Users</button>
+                    <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="admin-tab-btn">📥 Deposits</button>
+                    <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="admin-tab-btn">📤 Withdrawals</button>
+                    <button onclick="switchAdminTab('staking')" id="adminTab-staking" class="admin-tab-btn">🔒 Staking</button>
+                    <button onclick="switchAdminTab('referrals')" id="adminTab-referrals" class="admin-tab-btn">🎁 Referrals</button>
+                    <button onclick="switchAdminTab('transfer')" id="adminTab-transfer" class="admin-tab-btn">💸 Transfer</button>
+                    <button onclick="switchAdminTab('settings')" id="adminTab-settings" class="admin-tab-btn">⚙️ Settings</button>
+                </div>
+
+                <!-- USERS -->
+                <div id="adminSection-users" class="admin-sec space-y-3">
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-coins mr-1 text-rose-400"></i> यूजर USDT कस्टमाइज़ेशन</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <input type="text" id="adminCoinUserId" placeholder="SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
+                            <input type="number" id="adminCoinAmount" placeholder="USDT संख्या" class="p-2 text-xs">
+                            <select id="adminCoinAction" class="p-2 text-xs">
+                                <option value="add">➕ जोड़ें</option>
+                                <option value="subtract">➖ घटाएं</option>
+                            </select>
+                            <button id="btn-admin-coin" onclick="updateUserCoinsManually(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">अपडेट करें</button>
                         </div>
                     </div>
-                    <div class="space-y-2">
-                        <span class="text-[10px] text-amber-600/40 block">सक्रिय प्लान्स सिलेक्ट करें:</span>
-                        <div id="adminStakingPlansConfig" class="grid grid-cols-3 gap-2 text-xs"></div>
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-users mr-1 text-rose-400"></i> सभी यूज़र्स</h4>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="userSearchInput" oninput="filterUsers()" placeholder="🔍 खोजें" class="text-[10px] py-1 px-2 rounded-lg w-24">
+                                <button onclick="exportAllUserData()" class="bg-rose-500 hover:bg-rose-600 text-white text-[9px] font-bold px-2 py-1 rounded">📥 CSV</button>
+                            </div>
+                        </div>
+                        <div id="adminUserList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto font-mono"></div>
                     </div>
                 </div>
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">सभी एक्टिव स्टेकिंग रिकॉर्ड्स</h4>
-                    <div id="adminStakingList" class="space-y-2 text-xs max-h-[300px] overflow-y-auto"></div>
-                </div>
-            </div>
 
-            <div id="adminSection-referrals" class="admin-sec hidden space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">रेफ़रल रिकॉर्ड ट्रैकर</h4>
-                    <div id="adminReferralsList" class="space-y-2 text-xs max-h-[350px] overflow-y-auto"></div>
-                </div>
-            </div>
-
-            <div id="adminSection-transfer" class="admin-sec hidden space-y-4">
-                <div class="glass-gold p-4 rounded-2xl border-amber-500/30">
-                    <h4 class="text-xs font-bold text-amber-700/70 mb-2">USDT (BEP20) ट्रांसफर (SPX ID से)</h4>
-                    <p class="text-[9px] text-amber-600/40 mb-3">SPX ID के माध्यम से किसी भी यूजर को USDT भेजें</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                        <input type="text" id="adminTransferFrom" placeholder="स्रोत SPX ID" class="col-span-1 md:col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2" />
-                        <input type="text" id="adminTransferTo" placeholder="लक्ष्य SPX ID" class="col-span-1 md:col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2" />
-                        <input type="number" id="adminTransferAmount" placeholder="USDT संख्या" class="col-span-1 md:col-span-2 bg-white/80 border border-amber-500/20 rounded-xl p-2" />
-                        <button onclick="adminTransferUSDT(this)" class="col-span-1 md:col-span-2 btn-gold py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-arrow-right-arrow-left"></i> USDT ट्रांसफर करें</button>
-                    </div>
-                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center mt-2">
-                        <span class="text-[9px] text-amber-600/60"><i class="fa-solid fa-info-circle mr-1"></i> SPX ID का उपयोग करें (जैसे SPX100001)</span>
+                <!-- DEPOSITS -->
+                <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग डिपॉजिट्स</h4>
+                        <div id="adminDepositsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
-            </div>
 
+                <!-- WITHDRAWALS -->
+                <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग विथड्रॉवल</h4>
+                        <div id="adminWithdrawalsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- STAKING -->
+                <div id="adminSection-staking" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center border-b border-rose-500/15 pb-2">
+                            <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-cog mr-1 text-rose-400"></i> स्टेकिंग कॉन्फ़िगरेशन</h4>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] text-rose-300/40">सक्षम:</span>
+                                <input type="checkbox" id="adminStakingGloballyEnabled" checked onchange="toggleGlobalStakingState(this.checked)" class="w-4 h-4 accent-rose-500 rounded">
+                            </div>
+                        </div>
+                        <div id="adminStakingPlansConfig" class="grid grid-cols-4 gap-2 text-xs"></div>
+                    </div>
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-lock mr-1 text-rose-400"></i> सभी एक्टिव स्टेकिंग</h4>
+                        <div id="adminStakingList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- REFERRALS -->
+                <div id="adminSection-referrals" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-2">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-tree mr-1 text-blue-400"></i> रेफ़रल ट्रैकर</h4>
+                        <div id="adminReferralsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- TRANSFER -->
+                <div id="adminSection-transfer" class="admin-sec space-y-3 hidden">
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-arrow-right-arrow-left mr-1 text-rose-400"></i> यूजर-टू-यूजर USDT ट्रांसफर</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <input type="text" id="adminTransferFrom" placeholder="स्रोत SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
+                            <input type="text" id="adminTransferTo" placeholder="लक्ष्य SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
+                            <input type="number" id="adminTransferAmount" placeholder="USDT संख्या" class="col-span-2 p-2 text-xs">
+                            <button id="btn-admin-transfer" onclick="adminTransferUSDT(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">💸 USDT ट्रांसफर करें</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-wallet mr-1 text-rose-400"></i> स्टेकिंग फ़ोर्स अनलॉक</h4>
+                        <p class="text-[10px] text-rose-300/60">किसी भी यूजर की सभी स्टेकिंग तुरंत अनलॉक करें।</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <input type="text" id="adminForceUnlockId" placeholder="SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
+                            <button onclick="adminForceUnlockAllStakes(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">🔓 सभी स्टेकिंग अनलॉक करें</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div id="adminSection-settings" class="admin-sec space-y-3 hidden">
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-images mr-1 text-rose-400"></i> स्लाइडर इमेज कंट्रोल</h4>
+                        <p class="text-[10px] text-rose-300/60">Drive Image ID या पूरा URL। एक लाइन में एक।</p>
+                        <textarea id="adminSliderImages" rows="8" placeholder="1tMFYEsmqHYhHGEPuOWZYxN3Uvc-fPIms&#10;https://example.com/image.jpg" class="w-full p-2 text-xs font-mono"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="saveSliderImages(this)" class="btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
+                            <button onclick="resetSliderImages()" class="btn-3d-rose py-2 rounded-xl text-xs" style="background: linear-gradient(145deg, #6b7280, #374151);">🔄 Reset</button>
+                        </div>
+                        <div id="sliderPreviewGrid" class="grid grid-cols-4 gap-2 mt-2"></div>
+                    </div>
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-image mr-1 text-rose-400"></i> App Logo URL</h4>
+                        <input type="text" id="adminLogoUrl" placeholder="Logo URL या Drive ID" class="w-full p-2 text-xs font-mono">
+                        <button onclick="saveLogoUrl(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 लोगो सेव</button>
+                        <div class="flex justify-center mt-2">
+                            <img id="logoPreview" src="https://lh3.googleusercontent.com/d/1SAozsk8oWOON2naYvGkFCUu85NRMXkJR=w200" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--rose-primary); object-fit: cover;" onerror="this.src='https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png';">
+                        </div>
+                    </div>
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-percent mr-1 text-rose-400"></i> Exchange Rate & Fees</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">$1 USDT = ₹ INR</label>
+                                <input type="number" id="adminExchangeRate" placeholder="100" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Withdraw Fee %</label>
+                                <input type="number" id="adminWithdrawFee" placeholder="10" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Referral Bonus %</label>
+                                <input type="number" id="adminReferralBonus" placeholder="2" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Daily Reward %</label>
+                                <input type="number" id="adminDailyReward" placeholder="0.5" class="w-full p-2 text-xs">
+                            </div>
+                        </div>
+                        <button onclick="saveGlobalSettings(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
+                    </div>
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-sliders mr-1 text-rose-400"></i> Limits</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Deposit (USDT)</label>
+                                <input type="number" id="adminMinDeposit" placeholder="10" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Withdrawal (USDT)</label>
+                                <input type="number" id="adminMinWithdrawal" placeholder="2" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Staking (USDT)</label>
+                                <input type="number" id="adminMinStake" placeholder="10" class="w-full p-2 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-rose-300/50 mb-1">Level Target (USDT)</label>
+                                <input type="number" id="adminLevelTarget" placeholder="1000" class="w-full p-2 text-xs">
+                            </div>
+                        </div>
+                        <button onclick="saveGlobalSettings(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
+                    </div>
+
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-qrcode mr-1 text-rose-400"></i> Payment USDT Address</h4>
+                        <input type="text" id="adminUsdtAddress" placeholder="0x..." class="w-full p-2 text-xs font-mono">
+                        <button onclick="saveUsdtAddress(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 एड्रेस सेव</button>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- RECEIPT MODAL -->
+        <div id="receiptModal" class="receipt-modal hidden">
+            <div class="receipt-card" id="receiptCard">
+                <div style="text-align: center; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,0,85,0.1);">
+                    <img id="receiptLogoImg" src="https://lh3.googleusercontent.com/d/1SAozsk8oWOON2naYvGkFCUu85NRMXkJR=w200" alt="SupriX" style="height: 32px; width: 32px; object-fit: cover; border-radius: 50%; display: inline-block; border: 2px solid var(--rose-primary);" onerror="this.src='https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png';" />
+                    <small style="display: block; font-size: 9px; color: #ff99bb; letter-spacing: 2px;">Premium • Gold Edition</small>
+                </div>
+                <div class="flex items-center justify-between border-b border-rose-500/20 pb-3 mb-3">
+                    <h3 class="text-sm font-bold text-rose-400"><i class="fa-solid fa-receipt mr-2"></i> Official Receipt</h3>
+                    <button onclick="closeReceipt()" class="text-rose-300/40 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="receiptContent"></div>
+            </div>
         </div>
 
-        <!-- Admin Login (hidden initially) -->
-        <div id="adminLoginPage" class="hidden">
-            <div class="text-center space-y-4 py-10">
-                <div class="w-20 h-20 rounded-full bg-white/90 text-amber-500 flex items-center justify-center text-3xl mx-auto border border-amber-500 shadow-xl"><i class="fa-solid fa-lock"></i></div>
-                <h2 class="text-2xl font-bold text-amber-600">एडमिन लॉगिन</h2>
-                <p class="text-xs text-amber-600/40">सुरक्षित प्रशासनिक पैनल एक्सेस करें</p>
+        <!-- FULLSCREEN IMAGE MODAL -->
+        <div id="fullscreenImageModal" class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50 p-4 hidden">
+            <div class="absolute top-4 right-4 z-50">
+                <button onclick="closeFullscreenImage()" class="bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white w-10 h-10 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-            <div class="glass-gold p-6 rounded-2xl border-amber-500/30 space-y-4 shadow-xl max-w-md mx-auto">
-                <div><label class="block text-xs font-semibold text-amber-700/70 mb-1.5">एडमिन ईमेल</label><input type="email" id="adminUsernameInput" placeholder="एडमिन ईमेल" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-3 px-4 text-sm" /></div>
-                <div><label class="block text-xs font-semibold text-amber-700/70 mb-1.5">एडमिन पासवर्ड</label><input type="password" id="adminPasswordInput" placeholder="पासवर्ड" class="w-full bg-white/80 border border-amber-500/20 rounded-xl py-3 px-4 text-sm" /></div>
-                <button onclick="submitAdminLogin(this)" class="w-full btn-gold py-3.5 rounded-xl shadow-lg transition-all text-sm mt-2 font-bold">एडमिन एक्सेस खोलें</button>
-            </div>
+            <img id="fullscreenImgTarget" src="" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+        </div>
+
+        <!-- TOAST -->
+        <div id="toastNotification" style="background: rgba(18, 4, 10, 0.95); border: 2px solid var(--rose-primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 0, 85, 0.5); color: white; border-radius: 16px; position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px); z-index: 9999; opacity: 0; pointer-events: none; transition: all 0.4s; padding: 12px 20px; font-size: 13px; width: 90%; max-width: 400px; text-align: center;">
+            <span id="toastMessage"></span>
+            <button onclick="hideToast()" style="background: none; border: none; color: #ff6699; cursor: pointer; margin-left: 8px;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- VOICE TOAST -->
+        <div id="voiceToast" class="voice-toast">
+            <span class="voice-icon"><i class="fa-solid fa-circle-check"></i></span>
+            <p class="voice-msg" id="voiceToastMsg"></p>
+            <button class="voice-close" onclick="closeVoiceToast()">ठीक है</button>
         </div>
 
     </div>
 
     <script>
         // ============================================================
-        // APPWRITE CONFIGURATION - YOUR PROVIDED VALUES
+        // CONFIGURATION
         // ============================================================
         const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1";
         const APPWRITE_PROJECT_ID = "6a43cbf70027f5ff8960";
@@ -512,7 +704,55 @@
         const STAKING_SETTINGS_COLLECTION_ID = "staking_plan_settings";
         const SCREENSHOT_BUCKET_ID = "6a47d26c00001f17b543";
         const STAKING_SETTINGS_DOC_ID = "global_config";
-        const ADMIN_TEAM_ID = "6a9508a4002c7bb3b799";
+
+        // ⚠️ अपनी Appwrite Team ID यहाँ डालें
+        // Appwrite Console → Auth → Teams → अपनी Admin Team का ID copy करें
+        const ADMIN_TEAM_ID = "YOUR_ADMIN_TEAM_ID_HERE";
+
+        let EXCHANGE_RATE = 100;
+        let WITHDRAW_FEE_PCT = 10;
+        let REFERRAL_BONUS_PCT = 2;
+        let DAILY_REWARD_PCT = 0.5;
+        let MIN_DEPOSIT = 10;
+        let MIN_WITHDRAWAL = 2;
+        let MIN_STAKE = 10;
+        let LEVEL_TARGET = 1000;
+        let USDT_ADDRESS = "0x7be243182b7442D17a13e2C019f0d0174F196817";
+
+        function gdrive(id, size) {
+            size = size || 1200;
+            return "https://lh3.googleusercontent.com/d/" + id + "=w" + size;
+        }
+
+        const FALLBACK_IMG = "https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png";
+        const DEFAULT_LOGO = gdrive("1SAozsk8oWOON2naYvGkFCUu85NRMXkJR", 400);
+
+        const DEFAULT_SLIDER_IDS = [
+            "1tMFYEsmqHYhHGEPuOWZYxN3Uvc-fPIms",
+            "1ZTphMUqbqdg6rnJHo-cANP1dI7CatFJY",
+            "1H8IpmKgrZ1w2_0eeihLKJnKbmMQqSCYx",
+            "1nvnVYmmBFm5nz70lu-VYraOqCYM9nc8g",
+            "1diX9lFaPttIDlc4raTZbDxtoDZSqIpEr",
+            "1KdEpzSxcPwQUQnxj9Tb3B_0HQXyPUS4T",
+            "1H2OYhHKYqlni-rCfJYZ2wOQd22SUtyq9",
+            "1_OtKPZVqjU1FO6Ieh-nmFNbF0Ts7mJXU",
+            "1bt8ww38Sde73gcqgXVBR2p5s1Hb4qPbt",
+            "18G1FM5yI7CIqdoeVNrcUq9onKuR4zBBO",
+            "1bzY8FJUbLi2VZodZY-rewlZBJ45GsdKG",
+            "1eUZKi4feh5YnOk_qqnYxxZ8h0AFz_1Eb",
+            "10fx4aUjwmH4zblZKyAiuZBh1ak2cBZ-W",
+            "1bSPmRRpAmn7erYhGCFjGC3nQOWvG209N",
+            "1kpAKSldSqDfLPlDluliHzrIU_RH920Zo",
+            "1c-_wmM5EqIww0E_MiiyVvbSRfYrY0HrM",
+            "1WVKVQfvXmcpIzADoFREOZUGDAuYR5LL_",
+            "1FGIZulpAAbL6_i0crlrV5uGAXv1tZ_0x",
+            "1mLdGrjpgQu62NSjfzNcHNccBbei496MB",
+            "1bdizOzWqEFBIKFU_yExIaUF-1XrkjVJR",
+            "1fvlPulALOU4EEaVUHELQhFkeXiO5x760",
+            "1SKGy8B8zGLq9iIB9cmwgl78jCdtkmDD4",
+            "1MBf_VbO3LVvCAKVPM6qPeOFWuTLshYrm",
+            "19zV3C_5v0UF0nCdtzb0GPa8t4pMgaqTA"
+        ];
 
         const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
@@ -527,18 +767,19 @@
         let users = [];
         let adminStakingSettings = {
             globallyEnabled: true,
-            plans: [{ days: 7, enabled: true }, { days: 15, enabled: true }, { days: 30, enabled: true },
-                { days: 120, enabled: true }, { days: 240, enabled: true }, { days: 480, enabled: true }
+            plans: [
+                { days: 7, enabled: true }, { days: 15, enabled: true }, { days: 30, enabled: true },
+                { days: 60, enabled: true }, { days: 120, enabled: true }, { days: 240, enabled: true },
+                { days: 480, enabled: true }
             ]
         };
         let currentAdminTab = 'users';
-        let sliderImages = [];
         let isAdminMode = false;
-        let cropperInstance = null;
-        let cropTargetIndex = null;
+        let voiceEnabled = true;
+        let filteredUsers = [];
 
         // ============================================================
-        // UTILITY FUNCTIONS
+        // UTILS
         // ============================================================
         function parseJsonSafe(value, fallback) {
             if (!value) return fallback;
@@ -549,13 +790,7 @@
         function resolveImageUrl(value) {
             if (!value) return '';
             if (value.startsWith('http://') || value.startsWith('https://')) return value;
-            try { return storage.getFileView(SCREENSHOT_BUCKET_ID, value).href; } catch (e) { return ''; }
-        }
-
-        function generateCoinXId() {
-            const prefix = 'SPX';
-            const num = String(Math.floor(100000 + Math.random() * 900000));
-            return prefix + num;
+            return gdrive(value, 600);
         }
 
         function generateReceiptId() {
@@ -567,44 +802,21 @@
             return 'SPX-' + d + '-' + num;
         }
 
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = msg;
-            const colors = { success: 'rgba(34,197,94,0.3)', error: 'rgba(185,28,28,0.2)', info: 'rgba(212,175,55,0.25)' };
-            toast.style.borderColor = colors[type] || colors.info;
-            toast.classList.add('show');
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
-        }
-
-        function hideToast() { document.getElementById('toastNotification').classList.remove('show'); }
-
-        function copyToClipboard(elementId, successText) {
-            const elem = document.getElementById(elementId);
-            if (!elem) return;
-            const text = elem.innerText.trim();
-            if (!text) return;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text)
-                    .then(() => showToast(successText || '✅ कॉपी हो गया!'))
-                    .catch(() => legacyCopyFallback(text, successText));
+        function setButtonLoading(btn, isLoading) {
+            if (!btn) return;
+            if (isLoading) {
+                btn.disabled = true;
+                btn.setAttribute('data-original', btn.innerHTML);
+                btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Wait...';
             } else {
-                legacyCopyFallback(text, successText);
+                btn.disabled = false;
+                const orig = btn.getAttribute('data-original');
+                if (orig) btn.innerHTML = orig;
             }
         }
 
-        function legacyCopyFallback(text, msg) {
-            const inp = document.createElement('input');
-            inp.value = text;
-            document.body.appendChild(inp);
-            inp.select();
-            document.execCommand('copy');
-            document.body.removeChild(inp);
-            showToast(msg || '✅ कॉपी हो गया!');
-        }
-
         function mapUserDoc(doc) {
-            let cid = doc.coinxId || doc.coinxid || generateCoinXId();
+            let cid = doc.coinxId || doc.coinxid || 'SPX000000';
             cid = cid.replace(/^CoinX/, 'SPX');
             return {
                 ...doc,
@@ -618,87 +830,203 @@
                 referrals: parseJsonSafe(doc.referrals, []),
                 transactions: parseJsonSafe(doc.transactions, []),
                 coins: parseFloat(doc.coins || 0),
-                staked: parseFloat(doc.staked || 0),
                 tradeWallet: parseFloat(doc.tradeWallet || 0),
                 coinxId: cid,
-                coinxWalletSC: doc.coinxWalletSC || ''
+                coinxWalletSC: doc.coinxWalletSC || '',
+                profilePhoto: doc.profilePhoto || '',
+                totalPurchased: parseFloat(doc.totalPurchased || 0)
             };
         }
 
-        function setButtonLoading(btn, isLoading) {
-            if (!btn) return;
-            if (isLoading) {
-                btn.disabled = true;
-                btn.setAttribute('data-original', btn.innerHTML);
-                btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Processing...';
-            } else {
-                btn.disabled = false;
-                const orig = btn.getAttribute('data-original');
-                if (orig) btn.innerHTML = orig;
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = msg;
+            const colors = { success: 'rgba(34,197,94,0.6)', error: 'rgba(239,68,68,0.6)', info: 'rgba(255,0,85,0.5)' };
+            toast.style.borderColor = colors[type] || colors.info;
+            toast.style.opacity = '1';
+            toast.style.pointerEvents = 'auto';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.pointerEvents = 'none';
+                toast.style.transform = 'translateX(-50%) translateY(-20px)';
+            }, 4000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toastNotification');
+            toast.style.opacity = '0';
+            toast.style.pointerEvents = 'none';
+        }
+
+        function showVoiceToast(msg) {
+            const el = document.getElementById('voiceToast');
+            document.getElementById('voiceToastMsg').innerText = msg;
+            el.classList.add('show');
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => el.classList.remove('show'), 6000);
+        }
+        function closeVoiceToast() { document.getElementById('voiceToast').classList.remove('show'); }
+
+        function speakHindi(text) {
+            if (!voiceEnabled) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'hi-IN';
+                utterance.pitch = 1.0;
+                utterance.rate = 0.95;
+                const voices = window.speechSynthesis.getVoices();
+                const gv = voices.find(v => v.lang.startsWith('hi') && v.name.includes('Google'));
+                if (gv) utterance.voice = gv;
+                window.speechSynthesis.speak(utterance);
             }
         }
 
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('show', show);
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            const btn = document.getElementById('voiceToggleBtn');
+            if (voiceEnabled) {
+                btn.style.color = '#ff6699';
+                btn.style.background = 'rgba(255,0,85,0.15)';
+                showToast('🔊 वॉइस सक्रिय', 'info');
+                speakHindi('वॉइस सक्रिय हो गया।');
+            } else {
+                btn.style.color = 'rgba(255,255,255,0.3)';
+                btn.style.background = 'rgba(255,255,255,0.05)';
+                showToast('🔇 वॉइस बंद', 'info');
+            }
+        }
+
+        function copyText(text, successText) {
+            if (!text) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast(successText || '✅ कॉपी!')).catch(() => legacyCopyFallback(text, successText));
+            } else {
+                legacyCopyFallback(text, successText);
+            }
+        }
+
+        function legacyCopyFallback(text, msg) {
+            const inp = document.createElement('input');
+            inp.value = text;
+            document.body.appendChild(inp);
+            inp.select();
+            document.execCommand('copy');
+            document.body.removeChild(inp);
+            showToast(msg || '✅ कॉपी!');
         }
 
         // ============================================================
-        // ADMIN LOGIN
+        // BUTTERFLIES
+        // ============================================================
+        function createButterflies() {
+            const container = document.getElementById('butterflyContainer');
+            const emojis = ['🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋'];
+            const colors = ['#ff0055', '#ff00aa', '#00f0ff', '#22c55e', '#f59e0b', '#34d399', '#ec4899', '#8b5cf6'];
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('span');
+                el.className = 'bfly';
+                el.textContent = emojis[i % emojis.length];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = (Math.random() * 80 + 10) + '%';
+                el.style.fontSize = (Math.random() * 18 + 14) + 'px';
+                el.style.animationDuration = (Math.random() * 22 + 14) + 's';
+                el.style.animationDelay = (Math.random() * 14) + 's';
+                el.style.opacity = (Math.random() * 0.25 + 0.10);
+                el.style.color = colors[Math.floor(Math.random() * colors.length)];
+                el.style.filter = `drop-shadow(0 0 10px ${el.style.color})`;
+                container.appendChild(el);
+            }
+        }
+
+        // ============================================================
+        // ADMIN LOGIN (Appwrite Team-based verification)
         // ============================================================
         async function submitAdminLogin(btn) {
-            const username = document.getElementById('adminUsernameInput').value.trim();
+            const email = document.getElementById('adminUsernameInput').value.trim();
             const password = document.getElementById('adminPasswordInput').value.trim();
-            if (!username || !password) { showToast('एडमिन ईमेल और पासवर्ड दर्ज करें।', 'error'); return; }
+            if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
+
+            if (ADMIN_TEAM_ID === "YOUR_ADMIN_TEAM_ID_HERE") {
+                showToast('⚠️ पहले code में ADMIN_TEAM_ID अपडेट करें!', 'error');
+                return;
+            }
+
             setButtonLoading(btn, true);
-            showLoading(true);
+            document.getElementById('loadingOverlay').classList.add('show');
+
             try {
                 try { await account.get(); await account.deleteSession('current'); } catch (e) {}
-                await account.createEmailPasswordSession(username, password);
+                await account.createEmailPasswordSession(email, password);
                 const acc = await account.get();
+
+                // Verify team membership
+                let isAdmin = false;
                 try {
                     const teamList = await teams.list();
-                    const isAdmin = teamList.teams.some(t => t.$id === ADMIN_TEAM_ID);
-                    if (!isAdmin) { showToast('आप एडमिन नहीं हैं!', 'error'); await account.deleteSession('current'); return; }
-                } catch (e) { showToast('एडमिन वेरिफिकेशन में त्रुटि!', 'error'); await account.deleteSession('current'); return; }
+                    isAdmin = teamList.teams.some(t => t.$id === ADMIN_TEAM_ID);
+                } catch (teamErr) {
+                    console.warn('Team check failed:', teamErr);
+                }
+
+                if (!isAdmin) {
+                    await account.deleteSession('current');
+                    showToast('❌ आप एडमिन नहीं हैं!', 'error');
+                    return;
+                }
+
                 isAdminMode = true;
                 document.getElementById('adminLoginPage').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
+                document.getElementById('adminDashboardPage').classList.remove('hidden');
                 await loadAllData();
-                await loadSliderImages();
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
+                if (voiceEnabled) speakHindi('एडमिन पैनल में आपका स्वागत है।');
             } catch (e) {
-                let msg = '❌ गलत एडमिन क्रेडेंशियल!';
+                console.error('Admin login error:', e);
+                let msg = '❌ गलत क्रेडेंशियल!';
                 if (e.code === 401) msg = '❌ गलत ईमेल या पासवर्ड';
                 else if (e.message) msg = '❌ ' + e.message;
                 showToast(msg, 'error');
             } finally {
-                showLoading(false);
+                document.getElementById('loadingOverlay').classList.remove('show');
                 setButtonLoading(btn, false);
             }
         }
 
-        function logoutAdmin() {
+        async function logoutAdmin() {
             isAdminMode = false;
+            try { await account.deleteSession('current'); } catch (e) {}
             document.getElementById('adminLoginPage').classList.remove('hidden');
-            document.getElementById('adminDashboard').classList.add('hidden');
-            showToast('लॉगआउट हो गया', 'info');
+            document.getElementById('adminDashboardPage').classList.add('hidden');
+            document.getElementById('adminUsernameInput').value = '';
+            document.getElementById('adminPasswordInput').value = '';
+            showToast('एडमिन लॉगआउट', 'info');
         }
 
         // ============================================================
         // LOAD DATA
         // ============================================================
         async function loadAllData() {
+            if (!isAdminMode) return;
             try {
                 const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
                 users = res.documents.map(mapUserDoc);
+                filteredUsers = [...users];
                 await loadStakingSettings();
+                await loadGlobalSettings();
                 updateAdminStats();
                 renderAdminUsers();
                 renderAdminDeposits();
                 renderAdminWithdrawals();
                 renderAdminStaking();
                 renderAdminReferrals();
-            } catch (e) { showToast('डेटा लोड नहीं हो सका', 'error'); }
+                loadSettingsTab();
+            } catch (e) {
+                console.error('Load error:', e);
+                showToast('डेटा लोड नहीं हो सका', 'error');
+            }
         }
 
         async function loadStakingSettings() {
@@ -706,25 +1034,88 @@
                 const doc = await databases.getDocument(DATABASE_ID, STAKING_SETTINGS_COLLECTION_ID, STAKING_SETTINGS_DOC_ID);
                 adminStakingSettings.globallyEnabled = !!doc.globallyEnabled;
                 adminStakingSettings.plans = parseJsonSafe(doc.plans, adminStakingSettings.plans);
-            } catch (e) { /* use defaults */ }
+            } catch (e) {}
         }
 
+        async function loadGlobalSettings() {
+            try {
+                const saved = localStorage.getItem('suprix_global_settings');
+                if (saved) {
+                    const s = JSON.parse(saved);
+                    EXCHANGE_RATE = s.EXCHANGE_RATE || 100;
+                    WITHDRAW_FEE_PCT = s.WITHDRAW_FEE_PCT || 10;
+                    REFERRAL_BONUS_PCT = s.REFERRAL_BONUS_PCT || 2;
+                    DAILY_REWARD_PCT = s.DAILY_REWARD_PCT || 0.5;
+                    MIN_DEPOSIT = s.MIN_DEPOSIT || 10;
+                    MIN_WITHDRAWAL = s.MIN_WITHDRAWAL || 2;
+                    MIN_STAKE = s.MIN_STAKE || 10;
+                    LEVEL_TARGET = s.LEVEL_TARGET || 1000;
+                    USDT_ADDRESS = s.USDT_ADDRESS || USDT_ADDRESS;
+                }
+            } catch(e) {}
+        }
+
+        function loadSettingsTab() {
+            const saved = localStorage.getItem('suprix_global_settings');
+            const s = saved ? JSON.parse(saved) : {};
+            const sliderImages = localStorage.getItem('suprix_slider_images');
+            const sliderIds = sliderImages ? JSON.parse(sliderImages) : DEFAULT_SLIDER_IDS;
+
+            document.getElementById('adminSliderImages').value = sliderIds.join('\n');
+            renderSliderPreview(sliderIds);
+
+            const logo = localStorage.getItem('suprix_logo_url') || '';
+            document.getElementById('adminLogoUrl').value = logo;
+            if (logo) {
+                const displayUrl = logo.startsWith('http') ? logo : gdrive(logo, 200);
+                document.getElementById('logoPreview').src = displayUrl;
+                document.getElementById('headerLogo').src = displayUrl;
+            }
+
+            document.getElementById('adminExchangeRate').value = s.EXCHANGE_RATE || 100;
+            document.getElementById('adminWithdrawFee').value = s.WITHDRAW_FEE_PCT || 10;
+            document.getElementById('adminReferralBonus').value = s.REFERRAL_BONUS_PCT || 2;
+            document.getElementById('adminDailyReward').value = s.DAILY_REWARD_PCT || 0.5;
+            document.getElementById('adminMinDeposit').value = s.MIN_DEPOSIT || 10;
+            document.getElementById('adminMinWithdrawal').value = s.MIN_WITHDRAWAL || 2;
+            document.getElementById('adminMinStake').value = s.MIN_STAKE || 10;
+            document.getElementById('adminLevelTarget').value = s.LEVEL_TARGET || 1000;
+            document.getElementById('adminUsdtAddress').value = s.USDT_ADDRESS || USDT_ADDRESS;
+        }
+
+        function renderSliderPreview(ids) {
+            const grid = document.getElementById('sliderPreviewGrid');
+            grid.innerHTML = '';
+            ids.slice(0, 12).forEach(id => {
+                const url = id.startsWith('http') ? id : gdrive(id, 200);
+                const div = document.createElement('div');
+                div.style.cssText = 'width:100%;aspect-ratio:1;background:rgba(0,0,0,0.4);border-radius:8px;overflow:hidden;border:1px solid rgba(255,0,85,0.2);';
+                div.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:#ff6699;font-size:14px\\'>❌</div>';">`;
+                grid.appendChild(div);
+            });
+        }
+
+        // ============================================================
+        // STATS
+        // ============================================================
         function updateAdminStats() {
+            if (!isAdminMode) return;
             document.getElementById('statTotalUsers').innerText = users.length;
             const totalDep = users.reduce((a, u) => a + u.approvedDeposits.reduce((s, d) => s + parseFloat(d.amountUSD || 0), 0), 0);
             document.getElementById('statTotalDeposits').innerText = `$${totalDep.toFixed(0)}`;
             const totalStaked = users.reduce((a, u) => a + parseFloat(u.staked || 0), 0);
-            document.getElementById('statTotalStaked').innerText = `${totalStaked.toFixed(0)}`;
+            document.getElementById('statTotalStaked').innerText = `${totalStaked.toFixed(0)} USDT`;
             document.getElementById('statPendingDep').innerText = users.filter(u => u.pendingDeposit).length;
             document.getElementById('statPendingWith').innerText = users.filter(u => u.pendingWithdrawal).length;
             const totalRefBonus = users.reduce((a, u) => a + u.referrals.reduce((s, r) => s + parseFloat(r.bonusReceived || 0), 0), 0);
-            document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(0)}`;
+            document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(0)} USDT`;
         }
 
         // ============================================================
-        // ADMIN TABS
+        // TABS
         // ============================================================
         function switchAdminTab(tab) {
+            if (!isAdminMode) return;
             currentAdminTab = tab;
             document.querySelectorAll('.admin-sec').forEach(s => s.classList.add('hidden'));
             document.getElementById('adminSection-' + tab).classList.remove('hidden');
@@ -736,57 +1127,87 @@
             if (tab === 'withdrawals') renderAdminWithdrawals();
             if (tab === 'staking') renderAdminStaking();
             if (tab === 'referrals') renderAdminReferrals();
+            if (tab === 'settings') loadSettingsTab();
         }
 
         // ============================================================
-        // ADMIN USERS
+        // USERS
         // ============================================================
+        function filterUsers() {
+            const q = document.getElementById('userSearchInput').value.trim().toLowerCase();
+            if (!q) { filteredUsers = [...users]; }
+            else {
+                filteredUsers = users.filter(u =>
+                    (u.name || '').toLowerCase().includes(q) ||
+                    (u.email || '').toLowerCase().includes(q) ||
+                    (u.coinxId || '').toLowerCase().includes(q) ||
+                    (u.phone || '').toLowerCase().includes(q)
+                );
+            }
+            renderAdminUsers();
+        }
+
         function renderAdminUsers() {
+            if (!isAdminMode) return;
             const list = document.getElementById('adminUserList');
+            const display = filteredUsers.length ? filteredUsers : users;
             list.innerHTML = '';
-            if (users.length === 0) { list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई यूजर नहीं</p>'; return; }
-            users.forEach(u => {
-                const emailId = 'aemail' + u.$id, phoneId = 'aphone' + u.$id, coinxId = 'acoinx' + u.$id, refId = 'aref' + u.$id;
+            if (display.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-2">कोई यूजर नहीं</p>'; return; }
+            display.forEach(u => {
+                const level = Math.floor(parseFloat(u.totalPurchased || 0) / LEVEL_TARGET);
                 const card = document.createElement('div');
-                card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-1';
+                card.className = 'item-card space-y-2';
                 card.innerHTML = `
-                    <div class="flex justify-between font-bold text-amber-600"><span>${u.name||'N/A'}</span><span class="text-[#1a1a2e]">${parseFloat(u.coins||0).toFixed(2)} USDT</span></div>
-                    <div class="text-[10px] text-amber-600/30 grid grid-cols-2 gap-1 pb-1">
-                        <span>ईमेल: ${u.email||'N/A'} <button onclick="copyToClipboard('${emailId}','✅ Email कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                        <span>मोबाइल: ${u.phone||'N/A'} <button onclick="copyToClipboard('${phoneId}','✅ Phone कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                        <span class="col-span-2 font-bold text-amber-600">SPX ID: ${u.coinxId||'N/A'} <button onclick="copyToClipboard('${coinxId}','✅ SPX ID कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
-                        <span class="col-span-2">रेफरल: ${u.$id||'N/A'} <button onclick="copyToClipboard('${refId}','✅ रेफरल कॉपी!')" class="copy-btn-admin"><i class="fa-solid fa-copy"></i></button></span>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-bold text-rose-400 text-xs">${u.name||'N/A'}</div>
+                            <div class="text-[9px] text-rose-300/40">📅 ${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-white font-bold text-xs">${u.coins.toFixed(2)} USDT</div>
+                            <div class="text-[9px] text-rose-300/40">L${level} • ₹${(u.coins*EXCHANGE_RATE).toFixed(0)}</div>
+                        </div>
                     </div>
-                    <div class="flex justify-between items-center pt-1 border-t border-amber-500/10 text-[10px] text-amber-600/30">
-                        <span>${u.$createdAt ? new Date(u.$createdAt).toLocaleDateString('hi-IN') : 'N/A'}</span>
-                        <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2.5 py-0.5 rounded font-bold ${u.isBlocked?'bg-green-500/20 text-green-600':'bg-red-500/20 text-red-600'}">${u.isBlocked?'Unblock':'Block'}</button>
+                    <div class="text-[10px] text-rose-300/40 grid grid-cols-1 gap-1 pb-1 border-b border-rose-500/10">
+                        <span>📧 ${u.email||'N/A'} <button onclick="copyText('${u.email||''}','✅ Email कॉपी!')" class="copy-btn">📋</button></span>
+                        <span>🆔 SPX: ${u.coinxId||'N/A'} <button onclick="copyText('${u.coinxId||''}','✅ SPX कॉपी!')" class="copy-btn">📋</button></span>
+                        <span>📱 ${u.phone||'N/A'}</span>
+                        <span>🔒 Staked: ${parseFloat(u.staked||0).toFixed(2)} USDT | 🛒 Total: $${u.totalPurchased.toFixed(2)}</span>
                     </div>
-                    <span id="${emailId}" class="hidden">${u.email||''}</span>
-                    <span id="${phoneId}" class="hidden">${u.phone||''}</span>
-                    <span id="${coinxId}" class="hidden">${u.coinxId||''}</span>
-                    <span id="${refId}" class="hidden">${u.$id||''}</span>
+                    <div class="flex justify-between items-center gap-1 flex-wrap">
+                        <span class="status-badge ${u.isBlocked?'status-blocked':'status-approved'}">${u.isBlocked?'🚫 Blocked':'✅ Active'}</span>
+                        <div class="flex gap-1 flex-wrap">
+                            <button onclick="viewUserReceipt('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/25">🧾</button>
+                            <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded ${u.isBlocked?'bg-green-500/20 text-green-400':'bg-red-500/20 text-red-400'} border border-rose-500/25">${u.isBlocked?'Unblock':'Block'}</button>
+                        </div>
+                    </div>
                 `;
                 list.appendChild(card);
             });
         }
 
         async function toggleBlock(id) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === id);
             if (idx === -1) return;
             const newStatus = !users[idx].isBlocked;
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { isBlocked: newStatus });
                 users[idx].isBlocked = newStatus;
-                showToast(`यूजर ${newStatus?'ब्लॉक':'अनब्लॉक'} किया गया`, 'success');
+                const fidx = filteredUsers.findIndex(u => u.$id === id);
+                if (fidx !== -1) filteredUsers[fidx].isBlocked = newStatus;
+                showToast(`यूजर ${newStatus?'ब्लॉक':'अनब्लॉक'}!`, 'success');
+                if (voiceEnabled) speakHindi(`यूजर ${newStatus?'ब्लॉक':'अनब्लॉक'} कर दिया गया।`);
                 renderAdminUsers();
             } catch (e) { showToast('त्रुटि!', 'error'); }
         }
 
         async function updateUserCoinsManually(btn) {
+            if (!isAdminMode) return;
             const targetId = document.getElementById('adminCoinUserId').value.trim();
             const coinAmount = parseFloat(document.getElementById('adminCoinAmount').value);
             const action = document.getElementById('adminCoinAction').value;
-            if (!targetId || !coinAmount || coinAmount <= 0) { showToast('सही SPX ID/ईमेल और मान्य USDT संख्या भरें।', 'error'); return; }
+            if (!targetId || !coinAmount || coinAmount <= 0) { showToast('सही जानकारी भरें।', 'error'); return; }
             setButtonLoading(btn, true);
             const idx = users.findIndex(u => u.coinxId === targetId || u.email === targetId || u.$id === targetId);
             if (idx === -1) { setButtonLoading(btn, false); showToast('यूजर नहीं मिला!', 'error'); return; }
@@ -795,38 +1216,81 @@
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { coins: newBal });
                 users[idx].coins = newBal;
-                showToast(action === 'add' ? `${coinAmount} USDT क्रेडिट!` : `${coinAmount} USDT डेबिट!`, 'success');
+                showToast(action === 'add' ? `+${coinAmount} USDT क्रेडिट!` : `-${coinAmount} USDT डेबिट!`, 'success');
+                if (voiceEnabled) speakHindi(`${coinAmount} यूएसडीटी ${action === 'add' ? 'जोड़े' : 'घटाए'} गए।`);
                 document.getElementById('adminCoinUserId').value = '';
                 document.getElementById('adminCoinAmount').value = '';
                 updateAdminStats();
                 renderAdminUsers();
-            } catch (e) { showToast('बैलेंस अपडेट में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
+            } catch (e) { showToast('त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
+        }
+
+        function viewUserReceipt(userId) {
+            const u = users.find(usr => usr.$id === userId);
+            if (!u) { showToast('यूजर नहीं मिला', 'error'); return; }
+            const totalDep = u.approvedDeposits.reduce((s, d) => s + parseFloat(d.coinsAmount || 0), 0);
+            const totalStaked = parseFloat(u.staked || 0);
+            const totalWithdrawn = parseFloat(u.withdrawal || 0);
+            const totalRef = u.referrals.reduce((s, r) => s + parseFloat(r.bonusReceived || 0), 0);
+            const balance = u.coins;
+
+            const html = `
+                <div style="font-size:11px;color:#fff;">
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">👤 नाम</span><span>${u.name||'N/A'}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📧 ईमेल</span><span style="font-family:monospace;font-size:10px;">${u.email||'N/A'}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🆔 SPX ID</span><span style="font-family:monospace;color:#ff6699;">${u.coinxId||'N/A'}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📱 मोबाइल</span><span>${u.phone||'N/A'}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">💰 मुख्य बैलेंस</span><span style="color:#34d399;font-weight:700;">${balance.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🔒 Staked</span><span style="color:#f59e0b;font-weight:700;">${totalStaked.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📥 कुल डिपॉजिट</span><span style="color:#22c55e;">${totalDep.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📤 कुल विथड्रॉवल</span><span style="color:#ef4444;">${totalWithdrawn.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🎁 रेफरल बोनस</span><span style="color:#34d399;">${totalRef.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;"><span style="color:#ff99bb;">🛒 Total Purchased</span><span>$${u.totalPurchased.toFixed(2)}</span></div>
+                </div>
+            `;
+            document.getElementById('receiptContent').innerHTML = html;
+            document.getElementById('receiptModal').classList.remove('hidden');
         }
 
         // ============================================================
-        // ADMIN DEPOSITS
+        // DEPOSITS
         // ============================================================
         function renderAdminDeposits() {
+            if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
             list.innerHTML = '';
             const pending = users.filter(u => u.pendingDeposit && u.pendingDeposit.type === 'user');
-            if (pending.length === 0) { list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई पेंडिंग डिपॉजिट नहीं</p>'; return; }
+            if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>'; return; }
             pending.forEach(u => {
                 const d = u.pendingDeposit;
+                const imgUrl = resolveImageUrl(d.receiptFileId);
                 const card = document.createElement('div');
-                card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
+                card.className = 'item-card space-y-2';
                 card.innerHTML = `
-                    <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="text-green-600">$${d.amountUSD}</span></div>
-                    <div class="text-[10px] text-amber-600/30">USDT: ${d.coinsAmount} USDT | ${d.dateTime}</div>
-                    <div class="text-[10px] text-amber-600/30 font-mono">SPX: ${u.coinxId||'N/A'}</div>
-                    ${d.receiptFileId?`<div class="mt-1"><img src="${resolveImageUrl(d.receiptFileId)}" class="w-16 h-16 object-contain cursor-pointer" onclick="window.open('${resolveImageUrl(d.receiptFileId)}','_blank')"></div>`:''}
-                    <div class="flex gap-2 justify-end"><button onclick="approveDeposit('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Approve</button><button onclick="rejectDeposit('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                    <div class="flex justify-between">
+                        <div>
+                            <div class="font-bold text-rose-400 text-xs">${u.name}</div>
+                            <div class="text-[9px] text-rose-300/40">📧 ${u.email}</div>
+                            <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-green-400 font-bold">$${d.amountUSD}</div>
+                            <div class="text-[9px] text-rose-300/40">${d.coinsAmount} USDT</div>
+                            <div class="text-[9px] text-rose-300/40">${d.dateTime}</div>
+                        </div>
+                    </div>
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')">` : ''}
+                    <div class="flex gap-2">
+                        <button onclick="approveDeposit('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Approve</button>
+                        <button onclick="rejectDeposit('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
+                    </div>
                 `;
                 list.appendChild(card);
             });
         }
 
         async function approveDeposit(id) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === id);
             if (idx === -1) return;
             try {
@@ -839,56 +1303,137 @@
                 const tx = { ...pending, approvedAt: new Date().toISOString(), receiptId: receiptId };
                 approved.push(tx);
                 const txs = parseJsonSafe(fresh.transactions, []);
-                txs.push({ type: 'deposit', amountUSD: pending.amountUSD, coinsAmount: pending.coinsAmount,
-                    receiptFileId: pending.receiptFileId, dateTime: pending.dateTime, status: 'Approved', receiptId: receiptId });
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { coins: newCoins,
-                    approved_deposit: JSON.stringify(approved), pending_deposit: '', transactions: JSON.stringify(txs) });
+                txs.push({ type: 'deposit', amountUSD: pending.amountUSD, coinsAmount: pending.coinsAmount, receiptFileId: pending.receiptFileId, dateTime: pending.dateTime, status: 'Approved', receiptId: receiptId });
+
+                const oldTotal = parseFloat(fresh.totalPurchased || 0);
+                const newTotal = oldTotal + parseFloat(pending.amountUSD || 0);
+                const oldLevel = Math.floor(oldTotal / LEVEL_TARGET);
+                const newLevel = Math.floor(newTotal / LEVEL_TARGET);
+
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, {
+                    coins: newCoins,
+                    approved_deposit: JSON.stringify(approved),
+                    pending_deposit: '',
+                    transactions: JSON.stringify(txs),
+                    totalPurchased: newTotal
+                });
+
                 users[idx].coins = newCoins;
                 users[idx].approvedDeposits = approved;
                 users[idx].pendingDeposit = null;
                 users[idx].transactions = txs;
+                users[idx].totalPurchased = newTotal;
+
+                if (fresh.referredBy) {
+                    await awardReferralBonus(fresh.referredBy, parseFloat(pending.amountUSD || 0), fresh);
+                }
+
                 showToast('✅ डिपॉजिट स्वीकृत', 'success');
+                if (voiceEnabled) speakHindi('डिपॉजिट सफलतापूर्वक स्वीकृत किया गया।');
+                if (newLevel > oldLevel) {
+                    localStorage.setItem('cx_pending_level_' + fresh.$id, newLevel);
+                }
                 updateAdminStats();
                 renderAdminDeposits();
-            } catch (e) { showToast('त्रुटि', 'error'); }
+                renderAdminUsers();
+            } catch (e) { console.error(e); showToast('त्रुटि', 'error'); }
+        }
+
+        async function awardReferralBonus(referrerId, purchaseAmount, referredUserDoc) {
+            try {
+                let referrer = null;
+                try { referrer = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, referrerId); }
+                catch (e) {
+                    const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.equal('email', referrerId)]);
+                    if (res.documents.length) referrer = res.documents[0];
+                }
+                if (!referrer) return;
+                const bonus = purchaseAmount * (REFERRAL_BONUS_PCT / 100);
+                const newCoins = parseFloat(referrer.coins || 0) + bonus;
+                const refs = parseJsonSafe(referrer.referrals, []);
+                refs.push({
+                    referredId: referredUserDoc.$id,
+                    referredName: referredUserDoc.name || 'N/A',
+                    referredEmail: referredUserDoc.email || 'N/A',
+                    stakedAmount: purchaseAmount,
+                    bonusReceived: bonus,
+                    type: 'purchase',
+                    dateTime: new Date().toLocaleString('hi-IN'),
+                    timestamp: Date.now()
+                });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, referrer.$id, {
+                    coins: newCoins, referrals: JSON.stringify(refs)
+                });
+                console.log(`✅ Referral bonus ${bonus} USDT awarded to ${referrer.email}`);
+            } catch (e) { console.error('Referral bonus error:', e); }
         }
 
         async function rejectDeposit(id) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === id);
             if (idx === -1) return;
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { pending_deposit: '' });
+                const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
+                const pending = parseJsonSafe(fresh.pending_deposit, null);
+                const refundAmount = pending ? parseFloat(pending.amountUSD || 0) : 0;
+                const oldTotal = parseFloat(fresh.totalPurchased || 0);
+                const newTotal = Math.max(0, oldTotal - refundAmount);
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { pending_deposit: '', totalPurchased: newTotal });
                 users[idx].pendingDeposit = null;
+                users[idx].totalPurchased = newTotal;
                 showToast('❌ डिपॉजिट अस्वीकृत', 'info');
+                if (voiceEnabled) speakHindi('डिपॉजिट अस्वीकृत कर दिया गया।');
                 updateAdminStats();
                 renderAdminDeposits();
+                renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
         // ============================================================
-        // ADMIN WITHDRAWALS
+        // WITHDRAWALS
         // ============================================================
         function renderAdminWithdrawals() {
+            if (!isAdminMode) return;
             const list = document.getElementById('adminWithdrawalsList');
             list.innerHTML = '';
             const pending = users.filter(u => u.pendingWithdrawal);
-            if (pending.length === 0) { list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई पेंडिंग विथड्रॉवल नहीं</p>'; return; }
+            if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग विथड्रॉवल नहीं</p>'; return; }
             pending.forEach(u => {
                 const w = u.pendingWithdrawal;
+                const inrAmount = (parseFloat(w.coinsAmount || 0) * (1 - WITHDRAW_FEE_PCT/100) * EXCHANGE_RATE).toFixed(2);
+                const netUsdt = (parseFloat(w.coinsAmount || 0) * (1 - WITHDRAW_FEE_PCT/100)).toFixed(2);
+                const imgUrl = resolveImageUrl(u.withdrawal_screenshot || '');
                 const card = document.createElement('div');
-                card.className = 'bg-white/80 p-3 rounded-xl border border-amber-500/15 space-y-2';
+                card.className = 'item-card space-y-2';
                 card.innerHTML = `
-                    <div class="flex justify-between font-bold text-xs"><span class="text-[#1a1a2e]">${u.name} (${u.email})</span><span class="currency-usdt">${w.coinsAmount} USDT</span></div>
-                    <div class="text-[10px] text-amber-600/30">Address: ${u.withdrawal_address||'N/A'} | ${w.dateTime}</div>
-                    <div class="text-[10px] text-amber-600/30 font-mono">SPX: ${u.coinxId||'N/A'}</div>
-                    ${u.withdrawal_screenshot?`<div class="mt-1"><img src="${resolveImageUrl(u.withdrawal_screenshot)}" class="w-16 h-16 object-contain cursor-pointer" onclick="window.open('${resolveImageUrl(u.withdrawal_screenshot)}','_blank')"></div>`:''}
-                    <div class="flex gap-2 justify-end"><button onclick="approveWithdrawal('${u.$id}')" class="bg-green-500 text-[#1a1a2e] px-3 py-1 rounded text-[10px]">Complete</button><button onclick="rejectWithdrawal('${u.$id}')" class="bg-red-500 text-white px-3 py-1 rounded text-[10px]">Reject</button></div>
+                    <div class="flex justify-between">
+                        <div>
+                            <div class="font-bold text-rose-400 text-xs">${u.name}</div>
+                            <div class="text-[9px] text-rose-300/40">📧 ${u.email}</div>
+                            <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="currency-usdt font-bold">${w.coinsAmount} USDT</div>
+                            <div class="text-[9px] text-rose-300/40">${w.dateTime}</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] bg-black/30 p-2 rounded-lg border border-rose-500/15 space-y-1">
+                        <div>💳 <span class="text-rose-300/50">Address:</span> <span class="font-mono text-rose-400 break-all">${u.withdrawal_address||'N/A'}</span></div>
+                        <div>💰 <span class="text-rose-300/50">Net USDT (${100-WITHDRAW_FEE_PCT}%):</span> <span class="currency-usdt">${netUsdt} USDT</span></div>
+                        <div>💵 <span class="text-rose-300/50">INR:</span> <span class="currency-inr">₹${inrAmount}</span></div>
+                    </div>
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')">` : ''}
+                    <div class="flex gap-2">
+                        <button onclick="approveWithdrawal('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Complete</button>
+                        <button onclick="rejectWithdrawal('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
+                    </div>
                 `;
                 list.appendChild(card);
             });
         }
 
         async function approveWithdrawal(id) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === id);
             if (idx === -1) return;
             try {
@@ -903,20 +1448,25 @@
                 const txs = parseJsonSafe(fresh.transactions, []);
                 txs.push({ type: 'withdrawal', coinsAmount: pending.coinsAmount, dateTime: pending.dateTime, status: 'Completed', receiptId: receiptId });
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, {
-                    approved_withdrawal: JSON.stringify(approved), withdrawal: newWithdrawn,
-                    pending_withdrawal: '', transactions: JSON.stringify(txs)
+                    approved_withdrawal: JSON.stringify(approved),
+                    withdrawal: newWithdrawn,
+                    pending_withdrawal: '',
+                    transactions: JSON.stringify(txs)
                 });
                 users[idx].approvedWithdrawals = approved;
                 users[idx].withdrawal = newWithdrawn;
                 users[idx].pendingWithdrawal = null;
                 users[idx].transactions = txs;
                 showToast('✅ विथड्रॉवल पूरा', 'success');
+                if (voiceEnabled) speakHindi('विथड्रॉवल सफलतापूर्वक पूरा किया गया।');
                 updateAdminStats();
                 renderAdminWithdrawals();
+                renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
         async function rejectWithdrawal(id) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === id);
             if (idx === -1) return;
             try {
@@ -927,23 +1477,26 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { coins: refund, pending_withdrawal: '' });
                 users[idx].coins = refund;
                 users[idx].pendingWithdrawal = null;
-                showToast('❌ अस्वीकृत, USDT रिफंड', 'info');
+                showToast('❌ अस्वीकृत, रिफंड', 'info');
+                if (voiceEnabled) speakHindi('विथड्रॉवल अस्वीकृत कर दिया गया, राशि रिफंड कर दी गई।');
                 updateAdminStats();
                 renderAdminWithdrawals();
+                renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
         // ============================================================
-        // ADMIN STAKING
+        // STAKING
         // ============================================================
         function renderAdminStaking() {
+            if (!isAdminMode) return;
             const plansConfig = document.getElementById('adminStakingPlansConfig');
             plansConfig.innerHTML = '';
             adminStakingSettings.plans.forEach(p => {
                 plansConfig.innerHTML += `
-                    <label class="flex items-center justify-between bg-white/80 p-2 rounded border border-amber-500/15">
-                        <span class="text-amber-600/50">${p.days} दिन</span>
-                        <input type="checkbox" ${p.enabled?'checked':''} onchange="togglePlanState(${p.days},this.checked)" class="accent-amber-500 w-3.5 h-3.5">
+                    <label class="flex items-center justify-between bg-black/40 p-2 rounded border border-rose-500/15">
+                        <span class="text-rose-300/50 text-[10px]">${p.days}D</span>
+                        <input type="checkbox" ${p.enabled?'checked':''} onchange="togglePlanState(${p.days},this.checked)" class="accent-rose-500 w-3.5 h-3.5">
                     </label>
                 `;
             });
@@ -958,23 +1511,29 @@
                         found = true;
                         const now = Date.now();
                         const isUnlockable = s.lockUntil <= now;
+                        const daysLeft = Math.ceil((s.lockUntil - now) / (1000 * 60 * 60 * 24));
                         const div = document.createElement('div');
-                        div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 flex justify-between items-center';
+                        div.className = 'item-card flex justify-between items-center';
                         div.innerHTML = `
-                            <div><div class="text-amber-600 text-xs font-bold">${u.name} (${u.coinxId||'N/A'})</div>
-                            <div class="text-[9px] text-amber-600/30">${s.amount} USDT | ${s.days} days</div>
-                            <div class="text-[9px] text-amber-600/30">Stake: ${s.startDate || 'N/A'} | Unlock: ${new Date(s.lockUntil).toLocaleDateString('hi-IN')}</div></div>
-                            <div class="text-right"><span class="text-[10px] ${isUnlockable ? 'text-green-600' : 'text-yellow-600'}">${isUnlockable ? '🔓 Ready' : '🔒 Locked'}</span>
-                            ${isUnlockable ? `<button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-amber-500 text-[#1a1a2e] px-2 py-0.5 rounded text-[9px] mt-1 block">Unlock</button>` : ''}</div>
+                            <div>
+                                <div class="text-rose-400 text-xs font-bold">${u.name} (${u.coinxId||'N/A'})</div>
+                                <div class="text-[9px] text-rose-300/40">💰 ${s.amount} USDT | 📅 ${s.days} दिन</div>
+                                <div class="text-[9px] text-rose-300/40">🔓 ${new Date(s.lockUntil).toLocaleDateString('hi-IN')} ${daysLeft > 0 ? `(${daysLeft} दिन बाकी)` : '(तैयार)'}</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="status-badge ${isUnlockable ? 'status-approved' : 'status-pending'}">${isUnlockable ? '🔓 Ready' : '🔒 Locked'}</span>
+                                <button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] mt-1 block w-full">🔓 Force Unlock</button>
+                            </div>
                         `;
                         list.appendChild(div);
                     });
                 }
             });
-            if (!found) list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई स्टेकिंग नहीं</p>';
+            if (!found) list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई स्टेकिंग नहीं</p>';
         }
 
         async function adminUnlockStake(userId, stakeId) {
+            if (!isAdminMode) return;
             const idx = users.findIndex(u => u.$id === userId);
             if (idx === -1) return;
             const stakeIdx = users[idx].staking.findIndex(s => s.stakeId === stakeId);
@@ -987,46 +1546,84 @@
             history.push({ ...stake, unlockedAt: new Date().toISOString(), unlockedBy: 'admin' });
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-                    coins: newCoins, staked: newStaked, staking: JSON.stringify(remaining), stakingHistory: JSON.stringify(history)
+                    coins: newCoins, staked: newStaked,
+                    staking: JSON.stringify(remaining),
+                    stakingHistory: JSON.stringify(history)
                 });
                 users[idx].coins = newCoins;
                 users[idx].staked = newStaked;
                 users[idx].staking = remaining;
                 users[idx].stakingHistory = history;
-                showToast(`✅ ${stake.amount} USDT अनलॉक कर दिया गया`, 'success');
+                showToast(`✅ ${stake.amount} USDT अनलॉक!`, 'success');
+                if (voiceEnabled) speakHindi(`${stake.amount} यूएसडीटी अनलॉक कर दिया गया।`);
                 renderAdminStaking();
                 updateAdminStats();
+                renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
+        async function adminForceUnlockAllStakes(btn) {
+            if (!isAdminMode) return;
+            const identifier = document.getElementById('adminForceUnlockId').value.trim();
+            if (!identifier) { showToast('SPX ID / ईमेल दर्ज करें', 'error'); return; }
+            setButtonLoading(btn, true);
+            const idx = users.findIndex(u => u.coinxId === identifier || u.email === identifier || u.$id === identifier);
+            if (idx === -1) { setButtonLoading(btn, false); showToast('यूजर नहीं मिला!', 'error'); return; }
+            const u = users[idx];
+            if (!u.staking || u.staking.length === 0) { setButtonLoading(btn, false); showToast('कोई स्टेकिंग नहीं!', 'info'); return; }
+
+            let total = 0;
+            const history = u.stakingHistory || [];
+            for (const s of u.staking) {
+                total += parseFloat(s.amount);
+                history.push({ ...s, unlockedAt: new Date().toISOString(), unlockedBy: 'admin_forced' });
+            }
+            const newCoins = parseFloat(u.coins) + total;
+            try {
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, u.$id, {
+                    coins: newCoins, staked: 0,
+                    staking: JSON.stringify([]),
+                    stakingHistory: JSON.stringify(history)
+                });
+                users[idx].coins = newCoins;
+                users[idx].staked = 0;
+                users[idx].staking = [];
+                users[idx].stakingHistory = history;
+                showToast(`✅ ${total.toFixed(2)} USDT अनलॉक (${u.name})`, 'success');
+                if (voiceEnabled) speakHindi(`${total.toFixed(2)} यूएसडीटी की सभी स्टेकिंग अनलॉक कर दी गई।`);
+                document.getElementById('adminForceUnlockId').value = '';
+                renderAdminStaking();
+                updateAdminStats();
+                renderAdminUsers();
+            } catch (e) { showToast('त्रुटि', 'error'); } finally { setButtonLoading(btn, false); }
+        }
+
         async function toggleGlobalStakingState(enabled) {
-            const prev = adminStakingSettings.globallyEnabled;
+            if (!isAdminMode) return;
             adminStakingSettings.globallyEnabled = enabled;
             try {
                 await databases.updateDocument(DATABASE_ID, STAKING_SETTINGS_COLLECTION_ID, STAKING_SETTINGS_DOC_ID, { globallyEnabled: enabled });
                 showToast(`स्टेकिंग ${enabled?'सक्षम':'अक्षम'}`, 'success');
-            } catch (e) {
-                adminStakingSettings.globallyEnabled = prev;
-                document.getElementById('adminStakingGloballyEnabled').checked = prev;
-                showToast('सेटिंग सेव नहीं हुई', 'error');
-            }
+                if (voiceEnabled) speakHindi(`स्टेकिंग ${enabled?'सक्षम':'अक्षम'} कर दी गई।`);
+            } catch (e) { showToast('सेटिंग सेव नहीं हुई', 'error'); }
         }
 
         async function togglePlanState(days, enabled) {
+            if (!isAdminMode) return;
             const plan = adminStakingSettings.plans.find(p => p.days === days);
             if (!plan) return;
-            const prev = plan.enabled;
             plan.enabled = enabled;
             try {
                 await databases.updateDocument(DATABASE_ID, STAKING_SETTINGS_COLLECTION_ID, STAKING_SETTINGS_DOC_ID, { plans: JSON.stringify(adminStakingSettings.plans) });
                 showToast(`${days} दिन ${enabled?'सक्रिय':'निष्क्रिय'}`, 'success');
-            } catch (e) { plan.enabled = prev; showToast('त्रुटि', 'error'); renderAdminStaking(); }
+            } catch (e) { showToast('त्रुटि', 'error'); renderAdminStaking(); }
         }
 
         // ============================================================
-        // ADMIN REFERRALS
+        // REFERRALS
         // ============================================================
         function renderAdminReferrals() {
+            if (!isAdminMode) return;
             const list = document.getElementById('adminReferralsList');
             list.innerHTML = '';
             const all = [];
@@ -1035,319 +1632,203 @@
                     all.push({ ...r, referrer: u.name, referrerEmail: u.email, referrerSPX: u.coinxId || 'N/A' });
                 });
             });
-            if (all.length === 0) { list.innerHTML = '<p class="text-amber-600/30 text-center py-2">कोई रेफरल नहीं</p>'; return; }
+            if (all.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई रेफरल नहीं</p>'; return; }
             all.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             all.forEach(r => {
                 const div = document.createElement('div');
-                div.className = 'bg-white/80 p-2.5 rounded-xl border border-amber-500/15 space-y-1';
+                div.className = 'item-card space-y-1';
                 div.innerHTML = `
-                    <div class="flex justify-between text-xs"><span class="font-bold text-amber-600">${r.referrer} (${r.referrerSPX})</span><span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span></div>
-                    <div class="text-[10px] text-amber-600/30">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'}) | स्टेक: ${Number(r.stakedAmount||0).toFixed(2)} USDT | ${r.dateTime||''}</div>
+                    <div class="flex justify-between text-xs">
+                        <span class="font-bold text-rose-400">${r.referrer} (${r.referrerSPX})</span>
+                        <span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span>
+                    </div>
+                    <div class="text-[10px] text-rose-300/40">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'})</div>
+                    <div class="text-[10px] text-rose-300/40">इन्वेस्ट: ${Number(r.stakedAmount||0).toFixed(2)} USDT | 📅 ${r.dateTime||''}</div>
                 `;
                 list.appendChild(div);
             });
         }
 
         // ============================================================
-        // ADMIN TRANSFER
+        // TRANSFER
         // ============================================================
         async function adminTransferUSDT(btn) {
+            if (!isAdminMode) return;
             const fromId = document.getElementById('adminTransferFrom').value.trim();
             const toId = document.getElementById('adminTransferTo').value.trim();
             const amount = parseFloat(document.getElementById('adminTransferAmount').value);
-            if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें और मान्य USDT संख्या डालें।', 'error'); return; }
-            if (fromId === toId) { showToast('खुद को ट्रांसफर नहीं कर सकते!', 'error'); return; }
+            if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें।', 'error'); return; }
+            if (fromId === toId) { showToast('खुद को ट्रांसफर नहीं!', 'error'); return; }
             setButtonLoading(btn, true);
             const fromIdx = users.findIndex(u => u.coinxId === fromId || u.email === fromId || u.$id === fromId);
             const toIdx = users.findIndex(u => u.coinxId === toId || u.email === toId || u.$id === toId);
             if (fromIdx === -1 || toIdx === -1) { setButtonLoading(btn, false); showToast('SPX ID नहीं मिली!', 'error'); return; }
             const fromBal = parseFloat(users[fromIdx].coins || 0);
-            if (fromBal < amount) { setButtonLoading(btn, false); showToast('स्रोत के पास पर्याप्त USDT नहीं!', 'error'); return; }
+            if (fromBal < amount) { setButtonLoading(btn, false); showToast('पर्याप्त USDT नहीं!', 'error'); return; }
             const newFrom = fromBal - amount;
             const newTo = parseFloat(users[toIdx].coins || 0) + amount;
-            const tx = { type: 'admin_transfer', from: users[fromIdx].coinxId, to: users[toIdx].coinxId, amount: amount,
-                dateTime: new Date().toLocaleString('hi-IN'), status: 'Completed', network: 'USDT BEP20' };
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[fromIdx].docId, { coins: newFrom });
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[toIdx].docId, { coins: newTo });
                 users[fromIdx].coins = newFrom;
                 users[toIdx].coins = newTo;
-                const txsFrom = [...(users[fromIdx].transactions || []), { ...tx, type: 'admin_sent' }];
-                const txsTo = [...(users[toIdx].transactions || []), { ...tx, type: 'admin_received' }];
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[fromIdx].docId, { transactions: JSON.stringify(txsFrom) });
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[toIdx].docId, { transactions: JSON.stringify(txsTo) });
-                users[fromIdx].transactions = txsFrom;
-                users[toIdx].transactions = txsTo;
-                showToast(`✅ ${amount} USDT ${users[fromIdx].coinxId} से ${users[toIdx].coinxId} को भेजे गए!`, 'success');
+                showToast(`✅ ${amount} USDT ट्रांसफर!`, 'success');
+                if (voiceEnabled) speakHindi(`${amount} यूएसडीटी ट्रांसफर कर दिए गए।`);
                 document.getElementById('adminTransferFrom').value = '';
                 document.getElementById('adminTransferTo').value = '';
                 document.getElementById('adminTransferAmount').value = '';
                 updateAdminStats();
                 renderAdminUsers();
-            } catch (e) { showToast('ट्रांसफर में त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
+            } catch (e) { showToast('त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
         // ============================================================
-        // SLIDER IMAGES MANAGEMENT (LocalStorage based for now, can be moved to Appwrite)
+        // EXPORT CSV
         // ============================================================
-        function loadSliderImages() {
-            try {
-                const data = localStorage.getItem('suprix_slider_images');
-                if (data) {
-                    sliderImages = JSON.parse(data);
-                } else {
-                    // Default images - mix of user provided and Picsum
-                    sliderImages = [
-                        "https://i.postimg.cc/0jWfTn08/file-00000000988c82119a7866f30faba9c2.png",
-                        "https://i.postimg.cc/N0BHxTRP/IMG-20260830-154634.png",
-                        "https://i.postimg.cc/C1tshNQ9/1786547570648.png",
-                        "https://i.postimg.cc/Fz339Qcz/file-000000004eb88208adec4dca08b66c57.png",
-                        "https://i.postimg.cc/QMC7F71L/file-0000000090f08211bbcf36b0be85016d.png",
-                        "https://i.postimg.cc/FHRzp4Rr/file-000000002878820b8b1bdec0b2578d5d.png",
-                        "https://i.postimg.cc/FzpFbWXP/1786547008768.png",
-                        "https://i.postimg.cc/vmnQ2Hd6/file-00000000020c820b91c52e506903a683.png",
-                        "https://i.postimg.cc/7ZRxHJN9/1788087971847.png",
-                        "https://picsum.photos/seed/gold1/800/400",
-                        "https://picsum.photos/seed/gold2/800/400",
-                        "https://picsum.photos/seed/gold3/800/400",
-                        "https://picsum.photos/seed/gold4/800/400",
-                        "https://picsum.photos/seed/gold5/800/400",
-                        "https://picsum.photos/seed/gold6/800/400",
-                        "https://picsum.photos/seed/gold7/800/400",
-                        "https://picsum.photos/seed/gold8/800/400",
-                        "https://picsum.photos/seed/gold9/800/400",
-                        "https://picsum.photos/seed/gold10/800/400",
-                        "https://picsum.photos/seed/gold11/800/400",
-                        "https://picsum.photos/seed/gold12/800/400",
-                        "https://picsum.photos/seed/gold13/800/400",
-                        "https://picsum.photos/seed/gold14/800/400",
-                        "https://picsum.photos/seed/gold15/800/400"
-                    ];
-                    saveSliderImagesToStorage();
-                }
-                renderSliderImages();
-            } catch (e) { sliderImages = []; }
-        }
-
-        function saveSliderImagesToStorage() {
-            try {
-                localStorage.setItem('suprix_slider_images', JSON.stringify(sliderImages));
-            } catch (e) {}
-        }
-
-        function renderSliderImages() {
-            const list = document.getElementById('sliderImagesList');
-            list.innerHTML = '';
-            if (!sliderImages || sliderImages.length === 0) {
-                list.innerHTML = '<p class="text-amber-600/30 text-center py-2 text-xs">कोई इमेज नहीं</p>';
-                return;
-            }
-            sliderImages.forEach((url, index) => {
-                const div = document.createElement('div');
-                div.className = 'slider-image-item';
-                div.innerHTML = `
-                    <img src="${url}" alt="Slide ${index+1}" onerror="this.src='https://via.placeholder.com/50/ccc?text=Error'" />
-                    <span class="img-url">${url.substring(0, 50)}${url.length>50?'...':''}</span>
-                    <div class="img-actions">
-                        <button class="btn-edit" onclick="editSliderImage(${index})" title="क्रॉप/एडिट"><i class="fa-solid fa-crop"></i></button>
-                        <button class="btn-move" onclick="moveSliderImage(${index}, -1)" title="ऊपर ले जाएं"><i class="fa-solid fa-arrow-up"></i></button>
-                        <button class="btn-move" onclick="moveSliderImage(${index}, 1)" title="नीचे ले जाएं"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button class="btn-delete" onclick="deleteSliderImage(${index})" title="हटाएं"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-                list.appendChild(div);
+        function exportAllUserData() {
+            if (!isAdminMode || users.length === 0) { showToast('कोई डेटा नहीं', 'error'); return; }
+            let csv = "Name,Email,Phone,SPX_ID,USDT_Balance,Staked_USDT,Withdrawn_USDT,TotalPurchased,Level,Blocked\n";
+            users.forEach(u => {
+                const level = Math.floor(parseFloat(u.totalPurchased||0)/LEVEL_TARGET);
+                csv += `"${u.name||''}","${u.email||''}","${u.phone||''}","${u.coinxId||''}",${parseFloat(u.coins||0).toFixed(2)},${parseFloat(u.staked||0).toFixed(2)},${parseFloat(u.withdrawal||0).toFixed(2)},${parseFloat(u.totalPurchased||0).toFixed(2)},L${level},${u.isBlocked?'Yes':'No'}\n`;
             });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `suprix_users_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ CSV डाउनलोड!', 'success');
         }
 
-        function addSliderImage() {
-            const url = document.getElementById('sliderImageUrlInput').value.trim();
-            if (!url) { showToast('कृपया इमेज URL डालें', 'error'); return; }
-            sliderImages.push(url);
-            document.getElementById('sliderImageUrlInput').value = '';
-            renderSliderImages();
-            showToast('✅ इमेज जोड़ी गई', 'success');
-        }
-
-        function deleteSliderImage(index) {
-            sliderImages.splice(index, 1);
-            renderSliderImages();
-            showToast('✅ इमेज हटा दी गई', 'info');
-        }
-
-        function moveSliderImage(index, direction) {
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= sliderImages.length) return;
-            [sliderImages[index], sliderImages[newIndex]] = [sliderImages[newIndex], sliderImages[index]];
-            renderSliderImages();
-        }
-
-        function editSliderImage(index) {
-            cropTargetIndex = index;
-            const url = sliderImages[index];
-            const container = document.getElementById('cropperImageContainer');
-            container.innerHTML = `<img id="cropImageElement" src="${url}" />`;
-            document.getElementById('cropperModal').classList.add('show');
-            setTimeout(() => {
-                const img = document.getElementById('cropImageElement');
-                if (img) {
-                    if (cropperInstance) cropperInstance.destroy();
-                    cropperInstance = new Cropper(img, {
-                        aspectRatio: 16 / 9,
-                        viewMode: 1,
-                        autoCropArea: 0.8,
-                        dragMode: 'move',
-                    });
-                }
-            }, 100);
-        }
-
-        function closeCropper() {
-            document.getElementById('cropperModal').classList.remove('show');
-            if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-            cropTargetIndex = null;
-        }
-
-        function confirmCrop() {
-            if (!cropperInstance || cropTargetIndex === null) { showToast('क्रॉप नहीं किया जा सका', 'error'); return; }
-            const canvas = cropperInstance.getCroppedCanvas({
-                width: 800,
-                height: 450,
-                imageSmoothingQuality: 'high',
-            });
-            if (!canvas) { showToast('क्रॉप विफल', 'error'); return; }
-            const croppedDataUrl = canvas.toDataURL('image/png');
-            sliderImages[cropTargetIndex] = croppedDataUrl;
-            closeCropper();
-            renderSliderImages();
-            saveSliderImagesToStorage();
-            showToast('✅ इमेज क्रॉप हो गई!', 'success');
-        }
-
-        async function handleSliderImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.size > 5 * 1024 * 1024) { showToast('फ़ाइल 5MB से बड़ी!', 'error'); return; }
-            try {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const dataUrl = e.target.result;
-                    sliderImages.push(dataUrl);
-                    renderSliderImages();
-                    saveSliderImagesToStorage();
-                    showToast('✅ इमेज अपलोड हो गई!', 'success');
-                };
-                reader.readAsDataURL(file);
-            } catch (err) { showToast('अपलोड त्रुटि!', 'error'); }
-            event.target.value = '';
-        }
-
-        function saveSliderImages() {
-            saveSliderImagesToStorage();
-            showToast('✅ सभी बदलाव सेव हो गए!', 'success');
+        // ============================================================
+        // SETTINGS
+        // ============================================================
+        function saveSliderImages(btn) {
+            const raw = document.getElementById('adminSliderImages').value.trim();
+            if (!raw) { showToast('कम से कम एक image ID दर्ज करें', 'error'); return; }
+            const ids = raw.split('\n').map(s => s.trim()).filter(Boolean);
+            localStorage.setItem('suprix_slider_images', JSON.stringify(ids));
+            renderSliderPreview(ids);
+            showToast(`✅ ${ids.length} images सेव!`, 'success');
+            if (voiceEnabled) speakHindi(`${ids.length} स्लाइडर इमेज सेव कर दी गईं।`);
         }
 
         function resetSliderImages() {
-            const defaultImages = [
-                "https://i.postimg.cc/0jWfTn08/file-00000000988c82119a7866f30faba9c2.png",
-                "https://i.postimg.cc/N0BHxTRP/IMG-20260830-154634.png",
-                "https://i.postimg.cc/C1tshNQ9/1786547570648.png",
-                "https://i.postimg.cc/Fz339Qcz/file-000000004eb88208adec4dca08b66c57.png",
-                "https://i.postimg.cc/QMC7F71L/file-0000000090f08211bbcf36b0be85016d.png",
-                "https://i.postimg.cc/FHRzp4Rr/file-000000002878820b8b1bdec0b2578d5d.png",
-                "https://i.postimg.cc/FzpFbWXP/1786547008768.png",
-                "https://i.postimg.cc/vmnQ2Hd6/file-00000000020c820b91c52e506903a683.png",
-                "https://i.postimg.cc/7ZRxHJN9/1788087971847.png",
-                "https://picsum.photos/seed/gold1/800/400",
-                "https://picsum.photos/seed/gold2/800/400",
-                "https://picsum.photos/seed/gold3/800/400",
-                "https://picsum.photos/seed/gold4/800/400",
-                "https://picsum.photos/seed/gold5/800/400",
-                "https://picsum.photos/seed/gold6/800/400",
-                "https://picsum.photos/seed/gold7/800/400",
-                "https://picsum.photos/seed/gold8/800/400",
-                "https://picsum.photos/seed/gold9/800/400",
-                "https://picsum.photos/seed/gold10/800/400",
-                "https://picsum.photos/seed/gold11/800/400",
-                "https://picsum.photos/seed/gold12/800/400",
-                "https://picsum.photos/seed/gold13/800/400",
-                "https://picsum.photos/seed/gold14/800/400",
-                "https://picsum.photos/seed/gold15/800/400"
-            ];
-            sliderImages = defaultImages;
-            renderSliderImages();
-            saveSliderImagesToStorage();
-            showToast('✅ डिफ़ॉल्ट इमेजेस रिस्टोर हो गईं', 'success');
+            localStorage.removeItem('suprix_slider_images');
+            document.getElementById('adminSliderImages').value = DEFAULT_SLIDER_IDS.join('\n');
+            renderSliderPreview(DEFAULT_SLIDER_IDS);
+            showToast('🔄 Slider reset!', 'success');
+        }
+
+        function saveLogoUrl(btn) {
+            const url = document.getElementById('adminLogoUrl').value.trim();
+            if (!url) { showToast('Logo URL दर्ज करें', 'error'); return; }
+            localStorage.setItem('suprix_logo_url', url);
+            const displayUrl = url.startsWith('http') ? url : gdrive(url, 200);
+            document.getElementById('logoPreview').src = displayUrl;
+            document.getElementById('headerLogo').src = displayUrl;
+            showToast('✅ Logo सेव!', 'success');
+            if (voiceEnabled) speakHindi('लोगो सेव कर दिया गया।');
+        }
+
+        function saveGlobalSettings(btn) {
+            const s = {
+                EXCHANGE_RATE: parseFloat(document.getElementById('adminExchangeRate').value) || 100,
+                WITHDRAW_FEE_PCT: parseFloat(document.getElementById('adminWithdrawFee').value) || 10,
+                REFERRAL_BONUS_PCT: parseFloat(document.getElementById('adminReferralBonus').value) || 2,
+                DAILY_REWARD_PCT: parseFloat(document.getElementById('adminDailyReward').value) || 0.5,
+                MIN_DEPOSIT: parseFloat(document.getElementById('adminMinDeposit').value) || 10,
+                MIN_WITHDRAWAL: parseFloat(document.getElementById('adminMinWithdrawal').value) || 2,
+                MIN_STAKE: parseFloat(document.getElementById('adminMinStake').value) || 10,
+                LEVEL_TARGET: parseFloat(document.getElementById('adminLevelTarget').value) || 1000,
+                USDT_ADDRESS: document.getElementById('adminUsdtAddress').value.trim() || USDT_ADDRESS
+            };
+            localStorage.setItem('suprix_global_settings', JSON.stringify(s));
+            EXCHANGE_RATE = s.EXCHANGE_RATE;
+            WITHDRAW_FEE_PCT = s.WITHDRAW_FEE_PCT;
+            REFERRAL_BONUS_PCT = s.REFERRAL_BONUS_PCT;
+            DAILY_REWARD_PCT = s.DAILY_REWARD_PCT;
+            MIN_DEPOSIT = s.MIN_DEPOSIT;
+            MIN_WITHDRAWAL = s.MIN_WITHDRAWAL;
+            MIN_STAKE = s.MIN_STAKE;
+            LEVEL_TARGET = s.LEVEL_TARGET;
+            USDT_ADDRESS = s.USDT_ADDRESS;
+            showToast('✅ Settings सेव!', 'success');
+            if (voiceEnabled) speakHindi('सभी सेटिंग्स सेव कर दी गईं।');
+        }
+
+        function saveUsdtAddress(btn) {
+            const addr = document.getElementById('adminUsdtAddress').value.trim();
+            if (!addr) { showToast('एड्रेस दर्ज करें', 'error'); return; }
+            const saved = localStorage.getItem('suprix_global_settings');
+            const s = saved ? JSON.parse(saved) : {};
+            s.USDT_ADDRESS = addr;
+            localStorage.setItem('suprix_global_settings', JSON.stringify(s));
+            USDT_ADDRESS = addr;
+            showToast('✅ USDT Address सेव!', 'success');
         }
 
         // ============================================================
-        // UPDATE DAILY PERCENT & REFERRAL BONUS (LocalStorage)
+        // FULLSCREEN / RECEIPT
         // ============================================================
-        function updateDailyPercent() {
-            const val = parseFloat(document.getElementById('adminDailyPercent').value);
-            if (isNaN(val) || val < 0 || val > 100) { showToast('0 से 100 के बीच मान डालें', 'error'); return; }
-            try {
-                localStorage.setItem('suprix_daily_percent', String(val));
-                showToast(`✅ डेली रिलीज ${val}% सेट हो गया`, 'success');
-            } catch (e) { showToast('त्रुटि!', 'error'); }
+        function openFullscreenImage(src) {
+            document.getElementById('fullscreenImgTarget').src = src;
+            document.getElementById('fullscreenImageModal').classList.remove('hidden');
         }
-
-        function updateReferralPercent() {
-            const val = parseFloat(document.getElementById('adminReferralPercent').value);
-            if (isNaN(val) || val < 0 || val > 100) { showToast('0 से 100 के बीच मान डालें', 'error'); return; }
-            try {
-                localStorage.setItem('suprix_referral_percent', String(val));
-                showToast(`✅ रेफरल बोनस ${val}% सेट हो गया`, 'success');
-            } catch (e) { showToast('त्रुटि!', 'error'); }
+        function closeFullscreenImage() {
+            document.getElementById('fullscreenImageModal').classList.add('hidden');
+        }
+        function closeReceipt() {
+            document.getElementById('receiptModal').classList.add('hidden');
         }
 
         // ============================================================
         // INIT
         // ============================================================
         window.onload = function() {
-            // Check if already logged in
-            document.getElementById('adminLoginPage').classList.remove('hidden');
-            document.getElementById('adminDashboard').classList.add('hidden');
-
-            // Load saved settings
-            try {
-                const daily = localStorage.getItem('suprix_daily_percent');
-                if (daily) document.getElementById('adminDailyPercent').value = daily;
-                const ref = localStorage.getItem('suprix_referral_percent');
-                if (ref) document.getElementById('adminReferralPercent').value = ref;
-            } catch (e) {}
-
-            // Load slider images
-            loadSliderImages();
+            createButterflies();
+            const savedLogo = localStorage.getItem('suprix_logo_url');
+            if (savedLogo) {
+                const displayUrl = savedLogo.startsWith('http') ? savedLogo : gdrive(savedLogo, 200);
+                document.getElementById('headerLogo').src = displayUrl;
+            }
+            showToast('🔐 एडमिन क्रेडेंशियल दर्ज करें', 'info');
         };
 
-        // Global functions
+        // ============================================================
+        // GLOBAL EXPORTS
+        // ============================================================
+        window.submitAdminLogin = submitAdminLogin;
+        window.logoutAdmin = logoutAdmin;
         window.switchAdminTab = switchAdminTab;
+        window.toggleVoice = toggleVoice;
+        window.copyText = copyText;
+        window.hideToast = hideToast;
+        window.closeVoiceToast = closeVoiceToast;
         window.toggleBlock = toggleBlock;
         window.updateUserCoinsManually = updateUserCoinsManually;
+        window.viewUserReceipt = viewUserReceipt;
         window.approveDeposit = approveDeposit;
         window.rejectDeposit = rejectDeposit;
         window.approveWithdrawal = approveWithdrawal;
         window.rejectWithdrawal = rejectWithdrawal;
         window.adminUnlockStake = adminUnlockStake;
+        window.adminForceUnlockAllStakes = adminForceUnlockAllStakes;
         window.toggleGlobalStakingState = toggleGlobalStakingState;
         window.togglePlanState = togglePlanState;
         window.adminTransferUSDT = adminTransferUSDT;
-        window.submitAdminLogin = submitAdminLogin;
-        window.logoutAdmin = logoutAdmin;
-        window.copyToClipboard = copyToClipboard;
-        window.showToast = showToast;
-        window.hideToast = hideToast;
-        window.addSliderImage = addSliderImage;
-        window.deleteSliderImage = deleteSliderImage;
-        window.moveSliderImage = moveSliderImage;
-        window.editSliderImage = editSliderImage;
-        window.closeCropper = closeCropper;
-        window.confirmCrop = confirmCrop;
-        window.handleSliderImageUpload = handleSliderImageUpload;
+        window.exportAllUserData = exportAllUserData;
+        window.filterUsers = filterUsers;
         window.saveSliderImages = saveSliderImages;
         window.resetSliderImages = resetSliderImages;
-        window.updateDailyPercent = updateDailyPercent;
-        window.updateReferralPercent = updateReferralPercent;
+        window.saveLogoUrl = saveLogoUrl;
+        window.saveGlobalSettings = saveGlobalSettings;
+        window.saveUsdtAddress = saveUsdtAddress;
+        window.openFullscreenImage = openFullscreenImage;
+        window.closeFullscreenImage = closeFullscreenImage;
+        window.closeReceipt = closeReceipt;
     </script>
 
 </body>
