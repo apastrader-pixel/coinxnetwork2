@@ -311,7 +311,6 @@
             color: #fff;
         }
 
-        /* Level Modal */
         .level-modal {
             position: fixed;
             inset: 0;
@@ -541,7 +540,6 @@
                         </div>
                     </div>
 
-                    <!-- ⚡ NEW: Quick Level Update Box -->
                     <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
                         <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Quick Update (Email / SPX ID se)</h4>
                         <p class="text-[10px] text-rose-300/50">किसी भी user का Level तुरंत सेट करें — User Panel में Green Tick दिखेगा</p>
@@ -565,12 +563,11 @@
                     </div>
                 </div>
 
-                <!-- ============ LEVELS TAB (NEW) ============ -->
+                <!-- ============ LEVELS ============ -->
                 <div id="adminSection-levels" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
                         <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Manager (Advanced)</h4>
                         <p class="text-[10px] text-rose-300/60">Email या SPX ID से किसी भी user का Level manually set करें। User Panel में Green Tick automatic दिखेगा।</p>
-
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <input type="text" id="levelManagerIdentifier" placeholder="Email / SPX ID" class="col-span-2 p-2 text-xs">
                             <select id="levelManagerSelect" class="col-span-2 p-2 text-xs">
@@ -578,9 +575,7 @@
                             </select>
                             <input type="text" id="levelManagerSearch" oninput="filterLevelUserList()" placeholder="🔍 Search user" class="col-span-2 p-2 text-xs">
                         </div>
-
                         <button onclick="applyLevelFromManager(this)" class="w-full btn-3d-gold py-2.5 rounded-xl text-xs">🎯 Level Apply करें</button>
-
                         <div class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 space-y-1">
                             <p class="text-[10px] text-yellow-300 font-bold"><i class="fa-solid fa-info-circle mr-1"></i> कैसे काम करता है:</p>
                             <p class="text-[9px] text-rose-300/50">• L1 = $1000 total purchased</p>
@@ -589,8 +584,6 @@
                             <p class="text-[9px] text-rose-300/50">• Admin manually set करेगा → User Panel में Green Tick आएगा</p>
                         </div>
                     </div>
-
-                    <!-- Users List for Level -->
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
                         <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-users mr-1" style="color: #d4af37;"></i> Users — Level Status</h4>
                         <div id="levelManagerUserList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto font-mono"></div>
@@ -656,7 +649,6 @@
                             <button id="btn-admin-transfer" onclick="adminTransferUSDT(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">💸 USDT ट्रांसफर करें</button>
                         </div>
                     </div>
-
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-wallet mr-1 text-rose-400"></i> स्टेकिंग फ़ोर्स अनलॉक</h4>
                         <p class="text-[10px] text-rose-300/60">किसी भी यूजर की सभी स्टेकिंग तुरंत अनलॉक करें।</p>
@@ -687,6 +679,29 @@
                         <button onclick="saveLogoUrl(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 लोगो सेव</button>
                         <div class="flex justify-center mt-2">
                             <img id="logoPreview" src="https://lh3.googleusercontent.com/d/1SAozsk8oWOON2naYvGkFCUu85NRMXkJR=w200" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--rose-primary); object-fit: cover;" onerror="this.src='https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png';">
+                        </div>
+                    </div>
+
+                    <!-- ⚡ NEW: Referral Base URL -->
+                    <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-link mr-1" style="color: #d4af37;"></i> Referral Base URL (असली Website Link)</h4>
+                        <p class="text-[10px] text-rose-300/60">यहाँ अपनी hosted website का पूरा URL डालें। QR scan करने पर यही URL खुलेगा।</p>
+                        <input type="text" id="adminReferralBaseUrl" placeholder="https://suprixglobal.online/index.html" class="w-full p-2 text-xs font-mono">
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="saveReferralBaseUrl(this)" class="btn-3d-gold py-2 rounded-xl text-xs">💾 URL सेव</button>
+                            <button onclick="testReferralLink()" class="btn-3d-rose py-2 rounded-xl text-xs">🧪 Test QR</button>
+                        </div>
+                        <div class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 space-y-1">
+                            <p class="text-[10px] text-yellow-300 font-bold"><i class="fa-solid fa-info-circle mr-1"></i> उदाहरण:</p>
+                            <p class="text-[9px] text-rose-300/50">• GitHub Pages: <code>https://yourname.github.io/suprix/</code></p>
+                            <p class="text-[9px] text-rose-300/50">• Custom Domain: <code>https://suprixglobal.online/</code></p>
+                            <p class="text-[9px] text-rose-300/50">• Netlify: <code>https://suprix-global.netlify.app/</code></p>
+                            <p class="text-[9px] text-rose-300/50">• अंत में <code>?ref=SPX123456</code> अपने आप जुड़ जाएगा</p>
+                        </div>
+                        <div id="referralUrlPreview" class="bg-black/40 border border-green-500/30 rounded-xl p-3 hidden">
+                            <p class="text-[10px] text-green-400 font-bold mb-2">✅ Final Test URL:</p>
+                            <p id="finalReferralUrl" class="text-[9px] text-white font-mono break-all"></p>
+                            <div id="testQrBox" style="display: flex; justify-content: center; padding: 8px 0;"></div>
                         </div>
                     </div>
 
@@ -1186,6 +1201,7 @@
             document.getElementById('adminMinStake').value = s.MIN_STAKE || 10;
             document.getElementById('adminLevelTarget').value = s.LEVEL_TARGET || 1000;
             document.getElementById('adminUsdtAddress').value = s.USDT_ADDRESS || USDT_ADDRESS;
+            loadReferralBaseUrl();
         }
 
         function renderSliderPreview(ids) {
@@ -1237,7 +1253,7 @@
         }
 
         // ============================================================
-        // ⚡ LEVEL MANAGEMENT (NEW)
+        // LEVEL MANAGEMENT
         // ============================================================
         function populateLevelManagerDropdown() {
             const sel = document.getElementById('levelManagerSelect');
@@ -1251,7 +1267,6 @@
             }
         }
 
-        // Find user by email or SPX ID
         function findUserByIdentifier(identifier) {
             if (!identifier) return null;
             const id = identifier.trim().toLowerCase();
@@ -1262,81 +1277,58 @@
             );
         }
 
-        // ⚡ Quick Level Update (Users tab)
         async function quickUpdateLevel(btn) {
             if (!isAdminMode) return;
             const identifier = document.getElementById('quickLevelIdentifier').value.trim();
             const levelNum = parseInt(document.getElementById('quickLevelNumber').value);
-
             if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
             if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level 1-100 के बीच होना चाहिए', 'error'); return; }
-
             const user = findUserByIdentifier(identifier);
             if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
-
             setButtonLoading(btn, true);
             try {
                 const newTotal = levelNum * LEVEL_TARGET;
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
-                    totalPurchased: newTotal
-                });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
-
                 showToast(`✅ ${user.name} का Level L${levelNum} सेट हो गया!`, 'success');
                 if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} सेट कर दिया गया।`);
-
                 document.getElementById('quickLevelIdentifier').value = '';
                 document.getElementById('quickLevelNumber').value = '';
-
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
             } catch (e) {
                 console.error(e);
                 showToast('त्रुटि: ' + e.message, 'error');
-            } finally {
-                setButtonLoading(btn, false);
-            }
+            } finally { setButtonLoading(btn, false); }
         }
 
-        // ⚡ Apply Level from Level Manager tab
         async function applyLevelFromManager(btn) {
             if (!isAdminMode) return;
             const identifier = document.getElementById('levelManagerIdentifier').value.trim();
             const levelNum = parseInt(document.getElementById('levelManagerSelect').value);
-
             if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
             if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level चुनें (1-100)', 'error'); return; }
-
             const user = findUserByIdentifier(identifier);
             if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
-
             setButtonLoading(btn, true);
             try {
                 const newTotal = levelNum * LEVEL_TARGET;
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
-                    totalPurchased: newTotal
-                });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
-
                 showToast(`✅ ${user.name} का Level L${levelNum} Apply हो गया!`, 'success');
                 if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} अप्लाई कर दिया गया।`);
-
                 document.getElementById('levelManagerIdentifier').value = '';
                 document.getElementById('levelManagerSelect').value = '';
-
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
             } catch (e) {
                 console.error(e);
                 showToast('त्रुटि: ' + e.message, 'error');
-            } finally {
-                setButtonLoading(btn, false);
-            }
+            } finally { setButtonLoading(btn, false); }
         }
 
-        // ⚡ Filter in Level Manager tab
         function filterLevelUserList() {
             const q = document.getElementById('levelManagerSearch').value.trim().toLowerCase();
             if (!q) { levelManagerFiltered = [...users]; }
@@ -1350,7 +1342,6 @@
             renderLevelManagerList();
         }
 
-        // ⚡ Render Level Manager user list
         function renderLevelManagerList() {
             if (!isAdminMode) return;
             const list = document.getElementById('levelManagerUserList');
@@ -1387,7 +1378,6 @@
             });
         }
 
-        // ⚡ Open Level Picker Modal
         function openLevelPicker(userId) {
             const user = users.find(u => u.$id === userId);
             if (!user) { showToast('यूजर नहीं मिला', 'error'); return; }
@@ -1396,12 +1386,8 @@
 
             document.getElementById('levelPickerUserInfo').innerHTML = `
                 <div class="flex justify-between">
-                    <div>
-                        <span class="text-rose-300/60">नाम:</span> <strong class="text-white">${user.name}</strong>
-                    </div>
-                    <div>
-                        <span class="text-rose-300/60">अभी:</span> <strong class="text-green-400">L${pickerSelectedLevel}</strong>
-                    </div>
+                    <div><span class="text-rose-300/60">नाम:</span> <strong class="text-white">${user.name}</strong></div>
+                    <div><span class="text-rose-300/60">अभी:</span> <strong class="text-green-400">L${pickerSelectedLevel}</strong></div>
                 </div>
                 <div class="text-[10px] text-rose-300/50 mt-1">📧 ${user.email}</div>
                 <div class="text-[10px] text-rose-300/50">🆔 ${user.coinxId}</div>
@@ -1416,7 +1402,6 @@
                 div.onclick = () => selectPickerLevel(i);
                 grid.appendChild(div);
             }
-
             document.getElementById('levelPickerModal').classList.remove('hidden');
         }
 
@@ -1424,9 +1409,7 @@
             pickerSelectedLevel = level;
             document.querySelectorAll('#levelPickerGrid .level-opt').forEach(el => {
                 el.classList.remove('selected');
-                if (parseInt(el.textContent.replace('L','')) === level) {
-                    el.classList.add('selected');
-                }
+                if (parseInt(el.textContent.replace('L','')) === level) el.classList.add('selected');
             });
         }
 
@@ -1434,18 +1417,13 @@
             if (!pickerUserId || !pickerSelectedLevel) { showToast('Level चुनें', 'error'); return; }
             const user = users.find(u => u.$id === pickerUserId);
             if (!user) return;
-
             setButtonLoading(btn, true);
             try {
                 const newTotal = pickerSelectedLevel * LEVEL_TARGET;
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
-                    totalPurchased: newTotal
-                });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
-
                 showToast(`✅ ${user.name} → L${pickerSelectedLevel}`, 'success');
                 if (voiceEnabled) speakHindi(`${user.name} का लेवल ${pickerSelectedLevel} सेट कर दिया गया।`);
-
                 closeLevelPicker();
                 renderAdminUsers();
                 renderLevelManagerList();
@@ -1453,9 +1431,7 @@
             } catch (e) {
                 console.error(e);
                 showToast('त्रुटि: ' + e.message, 'error');
-            } finally {
-                setButtonLoading(btn, false);
-            }
+            } finally { setButtonLoading(btn, false); }
         }
 
         function closeLevelPicker() {
@@ -1464,27 +1440,21 @@
             pickerUserId = '';
         }
 
-        // ⚡ Reset single user level
         async function resetUserLevel(userId) {
             if (!confirm('इस यूजर का Level L0 करना है?')) return;
             const user = users.find(u => u.$id === userId);
             if (!user) return;
             try {
-                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, {
-                    totalPurchased: 0
-                });
+                await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: 0 });
                 user.totalPurchased = 0;
                 showToast(`✅ ${user.name} का Level Reset (L0)`, 'info');
                 if (voiceEnabled) speakHindi(`${user.name} का लेवल रीसेट कर दिया गया।`);
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
-            } catch (e) {
-                showToast('त्रुटि: ' + e.message, 'error');
-            }
+            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
         }
 
-        // ⚡ Reset ALL users levels
         async function setAllLevelsToZero() {
             if (!confirm('⚠️ सभी Users का Level L0 करना है? यह वापस नहीं होगा!')) return;
             if (!confirm('पक्का? सभी users का totalPurchased 0 हो जाएगा!')) return;
@@ -1492,9 +1462,7 @@
                 let count = 0;
                 for (const u of users) {
                     if (parseFloat(u.totalPurchased || 0) > 0) {
-                        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, u.docId, {
-                            totalPurchased: 0
-                        });
+                        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, u.docId, { totalPurchased: 0 });
                         u.totalPurchased = 0;
                         count++;
                     }
@@ -1504,9 +1472,56 @@
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
-            } catch (e) {
-                showToast('त्रुटि: ' + e.message, 'error');
+            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
+        }
+
+        // ============================================================
+        // REFERRAL BASE URL
+        // ============================================================
+        function saveReferralBaseUrl(btn) {
+            let url = document.getElementById('adminReferralBaseUrl').value.trim();
+            if (!url) { showToast('URL दर्ज करें', 'error'); return; }
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+            url = url.split('?')[0];
+            localStorage.setItem('suprix_referral_base_url', url);
+            showToast('✅ Referral URL सेव!', 'success');
+            if (voiceEnabled) speakHindi('रेफरल यूआरएल सेव कर दिया गया।');
+            testReferralLink();
+        }
+
+        function testReferralLink() {
+            const baseUrl = localStorage.getItem('suprix_referral_base_url') || '';
+            const previewBox = document.getElementById('referralUrlPreview');
+            const urlText = document.getElementById('finalReferralUrl');
+            const qrBox = document.getElementById('testQrBox');
+
+            if (!baseUrl) {
+                showToast('पहले Referral Base URL सेव करें', 'error');
+                previewBox.classList.add('hidden');
+                return;
             }
+
+            const sampleRef = users.length > 0 ? users[0].$id : 'demo-ref-id';
+            const finalUrl = baseUrl + '?ref=' + sampleRef;
+
+            urlText.textContent = finalUrl;
+            previewBox.classList.remove('hidden');
+
+            qrBox.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                try {
+                    new QRCode(qrBox, { text: finalUrl, width: 140, height: 140, colorDark: '#ff0055', colorLight: '#ffffff' });
+                } catch (e) {
+                    qrBox.innerHTML = '<p class="text-[8px] text-rose-300/30">QR error</p>';
+                }
+            }
+            showToast('✅ Test URL तैयार!', 'success');
+        }
+
+        function loadReferralBaseUrl() {
+            const saved = localStorage.getItem('suprix_referral_base_url') || '';
+            const input = document.getElementById('adminReferralBaseUrl');
+            if (input) input.value = saved;
         }
 
         // ============================================================
@@ -2218,6 +2233,7 @@
                 document.getElementById('headerLogo').src = displayUrl;
             }
             populateLevelManagerDropdown();
+            loadReferralBaseUrl();
             showToast('🔐 एडमिन क्रेडेंशियल दर्ज करें', 'info');
         };
 
@@ -2255,7 +2271,6 @@
         window.openFullscreenImage = openFullscreenImage;
         window.closeFullscreenImage = closeFullscreenImage;
         window.closeReceipt = closeReceipt;
-        // New Level functions
         window.quickUpdateLevel = quickUpdateLevel;
         window.applyLevelFromManager = applyLevelFromManager;
         window.filterLevelUserList = filterLevelUserList;
@@ -2265,6 +2280,8 @@
         window.closeLevelPicker = closeLevelPicker;
         window.resetUserLevel = resetUserLevel;
         window.setAllLevelsToZero = setAllLevelsToZero;
+        window.saveReferralBaseUrl = saveReferralBaseUrl;
+        window.testReferralLink = testReferralLink;
     </script>
 
 </body>
