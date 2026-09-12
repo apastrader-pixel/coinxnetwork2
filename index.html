@@ -21,7 +21,6 @@
             --green-accent: #22c55e;
             --amber-accent: #f59e0b;
             --usdt-green: #34d399;
-            --gold: #d4af37;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -47,13 +46,6 @@
             85%  { border-color: #ec4899; box-shadow: 0 0 15px #ec4899, inset 0 0 10px rgba(236,72,153,0.3); }
             100% { border-color: #ff0055; box-shadow: 0 0 15px #ff0055, inset 0 0 10px rgba(255,0,85,0.3); }
         }
-        @keyframes headerWobble {
-            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-            20%      { transform: translateY(-3px) rotate(-3deg) scale(1.03); }
-            40%      { transform: translateY(2px) rotate(3deg) scale(1.02); }
-            60%      { transform: translateY(-2px) rotate(-2deg) scale(1.03); }
-            80%      { transform: translateY(1px) rotate(1deg) scale(1.01); }
-        }
         @keyframes floatButterfly {
             0%   { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0.08; }
             25%  { transform: translate(80px, -120px) rotate(12deg) scale(1.1); opacity: 0.3; }
@@ -66,11 +58,6 @@
             from { opacity: 0; transform: scale(0.95) translateY(10px); }
             to   { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            60% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
         @keyframes rainbowText {
             0%   { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055; }
             14%  { color: #ff00aa; text-shadow: 0 0 15px #ff00aa, 0 0 30px #ff00aa; }
@@ -82,7 +69,6 @@
             100% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055; }
         }
 
-        .wobble-btn { animation: headerWobble 3.5s ease-in-out infinite; }
         .rainbow-text { animation: rainbowText 3s linear infinite; }
 
         .glass-rose {
@@ -276,7 +262,6 @@
         .status-approved { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
         .status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
         .status-rejected { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .status-completed { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
         .status-blocked { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
         .admin-badge {
@@ -317,16 +302,9 @@
 
         .currency-usdt { color: #34d399 !important; text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
         .currency-inr { color: #22c55e !important; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
-        .rose-text-gradient {
-            background: linear-gradient(135deg, #ff99bb, #ff0055, #00f0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
 
         .hidden { display: none !important; }
         .flex { display: flex; }
-        .flex-col { flex-direction: column; }
         .items-center { align-items: center; }
         .justify-center { justify-content: center; }
         .justify-between { justify-content: space-between; }
@@ -352,11 +330,9 @@
         .text-lg { font-size: 18px; }
         .text-xl { font-size: 20px; }
         .text-2xl { font-size: 24px; }
-        .text-3xl { font-size: 30px; }
         .font-bold { font-weight: 700; }
         .font-extrabold { font-weight: 800; }
         .font-semibold { font-weight: 600; }
-        .font-medium { font-weight: 500; }
         .font-mono { font-family: monospace; }
         .cursor-pointer { cursor: pointer; }
         .break-all { word-break: break-all; }
@@ -368,8 +344,6 @@
         .grid-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
         .grid-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
         .col-span-2 { grid-column: span 2; }
-        .col-span-3 { grid-column: span 3; }
-        .col-span-4 { grid-column: span 4; }
         .p-2 { padding: 8px; }
         .p-3 { padding: 12px; }
         .p-4 { padding: 16px; }
@@ -389,8 +363,6 @@
         .mb-2 { margin-bottom: 8px; }
         .mb-3 { margin-bottom: 12px; }
         .z-10 { z-index: 10; }
-        .z-20 { z-index: 20; }
-        .z-30 { z-index: 30; }
         .z-40 { z-index: 40; }
         .z-50 { z-index: 50; }
 
@@ -457,7 +429,7 @@
                     <button id="btn-admin-login" onclick="submitAdminLogin(this)" class="w-full btn-3d-rose py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2">
                         <span>एडमिन एक्सेस खोलें</span> <i class="fa-solid fa-unlock-keyhole"></i>
                     </button>
-                    <p class="text-[10px] text-rose-300/40 text-center mt-1"><i class="fa-solid fa-lock mr-1"></i> सुरक्षित Appwrite लॉगिन</p>
+                    <p class="text-[10px] text-rose-300/40 text-center mt-1"><i class="fa-solid fa-lock mr-1"></i> सुरक्षित लॉगिन</p>
                 </div>
             </section>
 
@@ -511,16 +483,22 @@
 
                 <!-- DEPOSITS -->
                 <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
-                    <div class="glass-rose p-4 rounded-2xl space-y-2">
-                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग डिपॉजिट्स</h4>
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग डिपॉजिट्स</h4>
+                            <button onclick="refreshDeposits(this)" class="bg-rose-500 hover:bg-rose-600 text-white text-[9px] font-bold px-2 py-1 rounded">🔄 Refresh</button>
+                        </div>
                         <div id="adminDepositsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
 
                 <!-- WITHDRAWALS -->
                 <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
-                    <div class="glass-rose p-4 rounded-2xl space-y-2">
-                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग विथड्रॉवल</h4>
+                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग विथड्रॉवल</h4>
+                            <button onclick="refreshWithdrawals(this)" class="bg-rose-500 hover:bg-rose-600 text-white text-[9px] font-bold px-2 py-1 rounded">🔄 Refresh</button>
+                        </div>
                         <div id="adminWithdrawalsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
@@ -706,11 +684,22 @@
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
         // ============================================================
-        // ADMIN EMAIL ALLOWED (Appwrite me यही user मौजूद है)
-        // सिर्फ यही email Login कर सकता है — कोई और email/मोबाइल नहीं
+        // 🔐 ADMIN CREDENTIALS (Base64 Encoded — Code me plain nahi dikhega)
         // ============================================================
-        const ADMIN_ALLOWED_EMAIL = "yadavsurajkumar014@gmail.com";
+        // Decoded email: admin2@coinx.com
+        // Decoded password: Admin@2025
+        // ============================================================
+        const _AUTH_E = "YWRtaW4yQGNvaW54LmNvbQ==";
+        const _AUTH_P = "QWRtaW5AMjAyNQ==";
 
+        // Decode function (obfuscated name)
+        function _dk(x) {
+            try { return atob(x); } catch (e) { return ''; }
+        }
+
+        // ============================================================
+        // Global settings
+        // ============================================================
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
         let REFERRAL_BONUS_PCT = 2;
@@ -788,6 +777,15 @@
             try { return JSON.parse(value); } catch (e) { return fallback; }
         }
 
+        function parseJsonStrong(value) {
+            if (!value) return null;
+            if (typeof value === 'object') return value;
+            if (typeof value !== 'string') return null;
+            const trimmed = value.trim();
+            if (!trimmed || trimmed === 'null' || trimmed === 'undefined' || trimmed === '') return null;
+            try { return JSON.parse(trimmed); } catch (e) { return null; }
+        }
+
         function resolveImageUrl(value) {
             if (!value) return '';
             if (value.startsWith('http://') || value.startsWith('https://')) return value;
@@ -824,9 +822,9 @@
                 docId: doc.$id,
                 staking: parseJsonSafe(doc.staking, []),
                 stakingHistory: parseJsonSafe(doc.stakingHistory, []),
-                pendingDeposit: parseJsonSafe(doc.pending_deposit, null),
+                pendingDeposit: parseJsonStrong(doc.pending_deposit),
                 approvedDeposits: parseJsonSafe(doc.approved_deposit, []),
-                pendingWithdrawal: parseJsonSafe(doc.pending_withdrawal, null),
+                pendingWithdrawal: parseJsonStrong(doc.pending_withdrawal),
                 approvedWithdrawals: parseJsonSafe(doc.approved_withdrawal, []),
                 referrals: parseJsonSafe(doc.referrals, []),
                 transactions: parseJsonSafe(doc.transactions, []),
@@ -943,61 +941,54 @@
         }
 
         // ============================================================
-        // ADMIN LOGIN (Appwrite se verify, sirf ek hi email allowed)
+        // ADMIN LOGIN — Base64 decoded email/password verify
         // ============================================================
         async function submitAdminLogin(btn) {
             const email = document.getElementById('adminUsernameInput').value.trim();
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            // Only allow this specific email
-            if (email.toLowerCase() !== ADMIN_ALLOWED_EMAIL.toLowerCase()) {
-                showToast('❌ यह एडमिन अकाउंट नहीं है!', 'error');
-                if (voiceEnabled) speakHindi('यह एडमिन अकाउंट नहीं है।');
-                return;
-            }
+            // Decode stored credentials
+            const correctEmail = _dk(_AUTH_E);
+            const correctPassword = _dk(_AUTH_P);
 
             setButtonLoading(btn, true);
             document.getElementById('loadingOverlay').classList.add('show');
 
-            try {
-                // Appwrite se login
-                try { await account.get(); await account.deleteSession('current'); } catch (e) {}
-                await account.createEmailPasswordSession(email, password);
-                const acc = await account.get();
+            // Small delay for UX
+            await new Promise(r => setTimeout(r, 600));
 
-                // Double-check: logged-in user ka email wahi hona chahiye
-                if (acc.email.toLowerCase() !== ADMIN_ALLOWED_EMAIL.toLowerCase()) {
-                    await account.deleteSession('current');
-                    showToast('❌ अनऑथराइज़्ड एक्सेस!', 'error');
-                    return;
-                }
-
+            // Verify credentials locally
+            if (email.toLowerCase() === correctEmail.toLowerCase() && password === correctPassword) {
                 isAdminMode = true;
                 document.getElementById('loadingOverlay').classList.remove('show');
                 document.getElementById('adminLoginPage').classList.add('hidden');
                 document.getElementById('adminDashboardPage').classList.remove('hidden');
                 document.getElementById('adminUsernameInput').value = '';
                 document.getElementById('adminPasswordInput').value = '';
-                await loadAllData();
+
+                // Load data from Appwrite
+                try {
+                    await loadAllData();
+                } catch (e) {
+                    console.error('Data load error:', e);
+                    showToast('डेटा लोड नहीं हो सका, फिर भी लॉगिन सफल', 'info');
+                }
+
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
                 if (voiceEnabled) speakHindi('एडमिन पैनल में आपका स्वागत है।');
-            } catch (e) {
-                console.error('Admin login error:', e);
-                let msg = '❌ गलत ईमेल या पासवर्ड!';
-                if (e.code === 401) msg = '❌ गलत ईमेल या पासवर्ड';
-                else if (e.message) msg = '❌ ' + e.message;
-                showToast(msg, 'error');
-                if (voiceEnabled) speakHindi('गलत ईमेल या पासवर्ड। कृपया दोबारा प्रयास करें।');
-            } finally {
+            } else {
                 document.getElementById('loadingOverlay').classList.remove('show');
-                setButtonLoading(btn, false);
+                showToast('❌ गलत ईमेल या पासवर्ड!', 'error');
+                if (voiceEnabled) speakHindi('गलत ईमेल या पासवर्ड। कृपया दोबारा प्रयास करें।');
             }
+
+            setButtonLoading(btn, false);
         }
 
-        async function logoutAdmin() {
+        function logoutAdmin() {
             isAdminMode = false;
-            try { await account.deleteSession('current'); } catch (e) {}
+            try { account.deleteSession('current'); } catch (e) {}
             document.getElementById('adminLoginPage').classList.remove('hidden');
             document.getElementById('adminDashboardPage').classList.add('hidden');
             document.getElementById('adminUsernameInput').value = '';
@@ -1012,8 +1003,19 @@
             if (!isAdminMode) return;
             try {
                 const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                console.log('📊 Loaded users:', res.documents.length);
                 users = res.documents.map(mapUserDoc);
                 filteredUsers = [...users];
+
+                const debugPendingDep = users.filter(u => u.pendingDeposit);
+                console.log('📥 Users with pending deposit:', debugPendingDep.length);
+                debugPendingDep.forEach(u => {
+                    console.log(`  → ${u.name} (${u.email}):`, u.pendingDeposit);
+                });
+
+                const debugPendingWith = users.filter(u => u.pendingWithdrawal);
+                console.log('📤 Users with pending withdrawal:', debugPendingWith.length);
+
                 await loadStakingSettings();
                 await loadGlobalSettings();
                 updateAdminStats();
@@ -1131,6 +1133,51 @@
         }
 
         // ============================================================
+        // DEPOSITS REFRESH
+        // ============================================================
+        async function refreshDeposits(btn) {
+            if (!isAdminMode) return;
+            setButtonLoading(btn, true);
+            try {
+                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                users = res.documents.map(mapUserDoc);
+                filteredUsers = [...users];
+                const pending = users.filter(u => u.pendingDeposit);
+                console.log('🔄 Refreshed. Pending deposits:', pending.length);
+                updateAdminStats();
+                renderAdminDeposits();
+                renderAdminUsers();
+                showToast(`🔄 रिफ्रेश! ${pending.length} पेंडिंग डिपॉजिट`, 'success');
+            } catch (e) {
+                console.error('Refresh error:', e);
+                showToast('रिफ्रेश नहीं हो सका', 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+
+        async function refreshWithdrawals(btn) {
+            if (!isAdminMode) return;
+            setButtonLoading(btn, true);
+            try {
+                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                users = res.documents.map(mapUserDoc);
+                filteredUsers = [...users];
+                const pending = users.filter(u => u.pendingWithdrawal);
+                console.log('🔄 Refreshed. Pending withdrawals:', pending.length);
+                updateAdminStats();
+                renderAdminWithdrawals();
+                renderAdminUsers();
+                showToast(`🔄 रिफ्रेश! ${pending.length} पेंडिंग विथड्रॉवल`, 'success');
+            } catch (e) {
+                console.error('Refresh error:', e);
+                showToast('रिफ्रेश नहीं हो सका', 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+
+        // ============================================================
         // USERS
         // ============================================================
         function filterUsers() {
@@ -1173,6 +1220,8 @@
                         <span>🆔 SPX: ${u.coinxId||'N/A'} <button onclick="copyText('${u.coinxId||''}','✅ SPX कॉपी!')" class="copy-btn">📋</button></span>
                         <span>📱 ${u.phone||'N/A'}</span>
                         <span>🔒 Staked: ${parseFloat(u.staked||0).toFixed(2)} USDT | 🛒 Total: $${u.totalPurchased.toFixed(2)}</span>
+                        ${u.pendingDeposit ? `<span class="text-yellow-400">⏳ पेंडिंग डिपॉजिट: $${u.pendingDeposit.amountUSD || 0}</span>` : ''}
+                        ${u.pendingWithdrawal ? `<span class="text-yellow-400">⏳ पेंडिंग विथड्रॉवल: ${u.pendingWithdrawal.coinsAmount || 0} USDT</span>` : ''}
                     </div>
                     <div class="flex justify-between items-center gap-1 flex-wrap">
                         <span class="status-badge ${u.isBlocked?'status-blocked':'status-approved'}">${u.isBlocked?'🚫 Blocked':'✅ Active'}</span>
@@ -1259,27 +1308,39 @@
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
             list.innerHTML = '';
-            const pending = users.filter(u => u.pendingDeposit && u.pendingDeposit.type === 'user');
-            if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>'; return; }
+
+            const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
+
+            console.log('📥 Rendering deposits. Total users:', users.length, 'Pending:', pending.length);
+
+            if (pending.length === 0) {
+                list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>';
+                return;
+            }
+
             pending.forEach(u => {
                 const d = u.pendingDeposit;
-                const imgUrl = resolveImageUrl(d.receiptFileId);
+                const imgUrl = resolveImageUrl(d.receiptFileId || d.screenshotId || '');
+                const amountUSD = d.amountUSD || d.amountUsd || d.amount || 0;
+                const coinsAmount = d.coinsAmount || d.usdtAmount || d.amount || 0;
+                const dateTime = d.dateTime || d.datetime || 'N/A';
+
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
                 card.innerHTML = `
                     <div class="flex justify-between">
                         <div>
-                            <div class="font-bold text-rose-400 text-xs">${u.name}</div>
-                            <div class="text-[9px] text-rose-300/40">📧 ${u.email}</div>
+                            <div class="font-bold text-rose-400 text-xs">${u.name||'N/A'}</div>
+                            <div class="text-[9px] text-rose-300/40">📧 ${u.email||'N/A'}</div>
                             <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-green-400 font-bold">$${d.amountUSD}</div>
-                            <div class="text-[9px] text-rose-300/40">${d.coinsAmount} USDT</div>
-                            <div class="text-[9px] text-rose-300/40">${d.dateTime}</div>
+                            <div class="text-green-400 font-bold">$${amountUSD}</div>
+                            <div class="text-[9px] text-rose-300/40">${coinsAmount} USDT</div>
+                            <div class="text-[9px] text-rose-300/40">${dateTime}</div>
                         </div>
                     </div>
-                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')">` : ''}
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : '<p class="text-[10px] text-rose-300/30 text-center py-2">📷 No screenshot</p>'}
                     <div class="flex gap-2">
                         <button onclick="approveDeposit('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Approve</button>
                         <button onclick="rejectDeposit('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
@@ -1295,18 +1356,20 @@
             if (idx === -1) return;
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
-                const pending = parseJsonSafe(fresh.pending_deposit, null);
+                const pending = parseJsonStrong(fresh.pending_deposit);
                 if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingDeposit = null; renderAdminDeposits(); return; }
-                const newCoins = parseFloat(fresh.coins || 0) + parseFloat(pending.coinsAmount || 0);
+                const coinsAmount = parseFloat(pending.coinsAmount || pending.usdtAmount || pending.amount || 0);
+                const amountUSD = parseFloat(pending.amountUSD || pending.amountUsd || pending.amount || 0);
+                const newCoins = parseFloat(fresh.coins || 0) + coinsAmount;
                 const approved = parseJsonSafe(fresh.approved_deposit, []);
                 const receiptId = generateReceiptId();
                 const tx = { ...pending, approvedAt: new Date().toISOString(), receiptId: receiptId };
                 approved.push(tx);
                 const txs = parseJsonSafe(fresh.transactions, []);
-                txs.push({ type: 'deposit', amountUSD: pending.amountUSD, coinsAmount: pending.coinsAmount, receiptFileId: pending.receiptFileId, dateTime: pending.dateTime, status: 'Approved', receiptId: receiptId });
+                txs.push({ type: 'deposit', amountUSD: amountUSD, coinsAmount: coinsAmount, receiptFileId: pending.receiptFileId || '', dateTime: pending.dateTime || '', status: 'Approved', receiptId: receiptId });
 
                 const oldTotal = parseFloat(fresh.totalPurchased || 0);
-                const newTotal = oldTotal + parseFloat(pending.amountUSD || 0);
+                const newTotal = oldTotal + amountUSD;
                 const oldLevel = Math.floor(oldTotal / LEVEL_TARGET);
                 const newLevel = Math.floor(newTotal / LEVEL_TARGET);
 
@@ -1325,10 +1388,10 @@
                 users[idx].totalPurchased = newTotal;
 
                 if (fresh.referredBy) {
-                    await awardReferralBonus(fresh.referredBy, parseFloat(pending.amountUSD || 0), fresh);
+                    await awardReferralBonus(fresh.referredBy, amountUSD, fresh);
                 }
 
-                showToast('✅ डिपॉजिट स्वीकृत', 'success');
+                showToast(`✅ डिपॉजिट स्वीकृत! +${coinsAmount} USDT`, 'success');
                 if (voiceEnabled) speakHindi('डिपॉजिट सफलतापूर्वक स्वीकृत किया गया।');
                 if (newLevel > oldLevel) {
                     localStorage.setItem('cx_pending_level_' + fresh.$id, newLevel);
@@ -1336,7 +1399,7 @@
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
-            } catch (e) { console.error(e); showToast('त्रुटि', 'error'); }
+            } catch (e) { console.error(e); showToast('त्रुटि: ' + e.message, 'error'); }
         }
 
         async function awardReferralBonus(referrerId, purchaseAmount, referredUserDoc) {
@@ -1374,8 +1437,8 @@
             if (idx === -1) return;
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
-                const pending = parseJsonSafe(fresh.pending_deposit, null);
-                const refundAmount = pending ? parseFloat(pending.amountUSD || 0) : 0;
+                const pending = parseJsonStrong(fresh.pending_deposit);
+                const refundAmount = pending ? parseFloat(pending.amountUSD || pending.amountUsd || pending.amount || 0) : 0;
                 const oldTotal = parseFloat(fresh.totalPurchased || 0);
                 const newTotal = Math.max(0, oldTotal - refundAmount);
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { pending_deposit: '', totalPurchased: newTotal });
@@ -1396,13 +1459,14 @@
             if (!isAdminMode) return;
             const list = document.getElementById('adminWithdrawalsList');
             list.innerHTML = '';
-            const pending = users.filter(u => u.pendingWithdrawal);
+            const pending = users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object');
             if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग विथड्रॉवल नहीं</p>'; return; }
             pending.forEach(u => {
                 const w = u.pendingWithdrawal;
-                const inrAmount = (parseFloat(w.coinsAmount || 0) * (1 - WITHDRAW_FEE_PCT/100) * EXCHANGE_RATE).toFixed(2);
-                const netUsdt = (parseFloat(w.coinsAmount || 0) * (1 - WITHDRAW_FEE_PCT/100)).toFixed(2);
-                const imgUrl = resolveImageUrl(u.withdrawal_screenshot || '');
+                const coinsAmount = parseFloat(w.coinsAmount || w.amount || 0);
+                const inrAmount = (coinsAmount * (1 - WITHDRAW_FEE_PCT/100) * EXCHANGE_RATE).toFixed(2);
+                const netUsdt = (coinsAmount * (1 - WITHDRAW_FEE_PCT/100)).toFixed(2);
+                const imgUrl = resolveImageUrl(u.withdrawal_screenshot || w.screenshotId || '');
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
                 card.innerHTML = `
@@ -1413,8 +1477,8 @@
                             <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
                         </div>
                         <div class="text-right">
-                            <div class="currency-usdt font-bold">${w.coinsAmount} USDT</div>
-                            <div class="text-[9px] text-rose-300/40">${w.dateTime}</div>
+                            <div class="currency-usdt font-bold">${coinsAmount} USDT</div>
+                            <div class="text-[9px] text-rose-300/40">${w.dateTime||'N/A'}</div>
                         </div>
                     </div>
                     <div class="text-[10px] bg-black/30 p-2 rounded-lg border border-rose-500/15 space-y-1">
@@ -1422,7 +1486,7 @@
                         <div>💰 <span class="text-rose-300/50">Net USDT (${100-WITHDRAW_FEE_PCT}%):</span> <span class="currency-usdt">${netUsdt} USDT</span></div>
                         <div>💵 <span class="text-rose-300/50">INR:</span> <span class="currency-inr">₹${inrAmount}</span></div>
                     </div>
-                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')">` : ''}
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : ''}
                     <div class="flex gap-2">
                         <button onclick="approveWithdrawal('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Complete</button>
                         <button onclick="rejectWithdrawal('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
@@ -1438,15 +1502,16 @@
             if (idx === -1) return;
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
-                const pending = parseJsonSafe(fresh.pending_withdrawal, null);
+                const pending = parseJsonStrong(fresh.pending_withdrawal);
                 if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
+                const coinsAmount = parseFloat(pending.coinsAmount || pending.amount || 0);
                 const approved = parseJsonSafe(fresh.approved_withdrawal, []);
                 const receiptId = generateReceiptId();
                 const tx = { ...pending, completedAt: new Date().toISOString(), receiptId: receiptId };
                 approved.push(tx);
-                const newWithdrawn = parseFloat(fresh.withdrawal || 0) + parseFloat(pending.coinsAmount || 0);
+                const newWithdrawn = parseFloat(fresh.withdrawal || 0) + coinsAmount;
                 const txs = parseJsonSafe(fresh.transactions, []);
-                txs.push({ type: 'withdrawal', coinsAmount: pending.coinsAmount, dateTime: pending.dateTime, status: 'Completed', receiptId: receiptId });
+                txs.push({ type: 'withdrawal', coinsAmount: coinsAmount, dateTime: pending.dateTime, status: 'Completed', receiptId: receiptId });
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, {
                     approved_withdrawal: JSON.stringify(approved),
                     withdrawal: newWithdrawn,
@@ -1471,9 +1536,10 @@
             if (idx === -1) return;
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
-                const pending = parseJsonSafe(fresh.pending_withdrawal, null);
+                const pending = parseJsonStrong(fresh.pending_withdrawal);
                 if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingWithdrawal = null; renderAdminWithdrawals(); return; }
-                const refund = parseFloat(fresh.coins || 0) + parseFloat(pending.coinsAmount || 0);
+                const coinsAmount = parseFloat(pending.coinsAmount || pending.amount || 0);
+                const refund = parseFloat(fresh.coins || 0) + coinsAmount;
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { coins: refund, pending_withdrawal: '' });
                 users[idx].coins = refund;
                 users[idx].pendingWithdrawal = null;
@@ -1803,6 +1869,8 @@
         window.submitAdminLogin = submitAdminLogin;
         window.logoutAdmin = logoutAdmin;
         window.switchAdminTab = switchAdminTab;
+        window.refreshDeposits = refreshDeposits;
+        window.refreshWithdrawals = refreshWithdrawals;
         window.toggleVoice = toggleVoice;
         window.copyText = copyText;
         window.hideToast = hideToast;
