@@ -246,6 +246,7 @@
             font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
+            position: relative;
         }
         .admin-tab-btn.active {
             background: linear-gradient(145deg, #ff0055, #990033);
@@ -254,6 +255,22 @@
             box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
         }
         .admin-tab-btn:hover:not(.active) { border-color: rgba(255, 0, 85, 0.5); color: #ff6699; }
+        
+        .admin-tab-btn .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #f59e0b;
+            color: #1a1a2e;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+            display: none;
+        }
+        .admin-tab-btn .badge-count.show { display: inline-block; }
 
         .item-card {
             background: rgba(0, 0, 0, 0.4);
@@ -517,8 +534,8 @@
                 <div class="flex bg-black/40 p-1 rounded-xl border border-rose-500/15 text-[10px] flex-wrap gap-1 overflow-x-auto">
                     <button onclick="switchAdminTab('users')" id="adminTab-users" class="admin-tab-btn active">👥 Users</button>
                     <button onclick="switchAdminTab('levels')" id="adminTab-levels" class="admin-tab-btn">🎯 Levels</button>
-                    <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="admin-tab-btn">📥 Deposits</button>
-                    <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="admin-tab-btn">📤 Withdrawals</button>
+                    <button onclick="switchAdminTab('deposits')" id="adminTab-deposits" class="admin-tab-btn">📥 Deposits <span id="depTabBadge" class="badge-count">0</span></button>
+                    <button onclick="switchAdminTab('withdrawals')" id="adminTab-withdrawals" class="admin-tab-btn">📤 Withdrawals <span id="withTabBadge" class="badge-count">0</span></button>
                     <button onclick="switchAdminTab('staking')" id="adminTab-staking" class="admin-tab-btn">🔒 Staking</button>
                     <button onclick="switchAdminTab('referrals')" id="adminTab-referrals" class="admin-tab-btn">🎁 Referrals</button>
                     <button onclick="switchAdminTab('transfer')" id="adminTab-transfer" class="admin-tab-btn">💸 Transfer</button>
@@ -579,7 +596,7 @@
 
                 <!-- DEPOSITS -->
                 <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
-                    <div class="glass-rose p-4 rounded-2xl space-y-3">
+                    <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #f59e0b !important;">
                         <div class="flex justify-between items-center">
                             <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग डिपॉजिट्स</h4>
                             <div class="flex gap-1.5">
@@ -783,11 +800,9 @@
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
         // ============================================================
-        // HIDDEN CREDENTIALS (Base64 Encoded)
+        // ADMIN TEAM ID (Appwrite Console → Auth → Teams)
         // ============================================================
-        const _0xE = "YWRtaW4yQGNvaW54LmNvbQ==";
-        const _0xP = "QWRtaW5AMjAyNQ==";
-        function _dx(x) { try { return atob(x); } catch (e) { return ''; } }
+        const _TID = "YOUR_TEAM_ID_HERE";
 
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
@@ -831,11 +846,12 @@
             "19zV3C_5v0UF0nCdtzb0GPa8t4pMgaqTA"
         ];
 
-        const { Client, Databases, Storage, Account, Query, ID } = Appwrite;
+        const { Client, Databases, Storage, Account, Teams, Query, ID } = Appwrite;
         const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
         const databases = new Databases(client);
         const storage = new Storage(client);
         const account = new Account(client);
+        const teams = new Teams(client);
 
         let users = [];
         let adminStakingSettings = {
@@ -853,6 +869,7 @@
         let pickerSelectedLevel = 0;
         let pickerUserId = '';
         let levelManagerFiltered = [];
+        let autoRefreshTimer = null;
 
         function parseJsonSafe(value, fallback) {
             if (!value) return fallback;
@@ -1024,21 +1041,42 @@
         }
 
         // ============================================================
-        // ADMIN LOGIN
+        // ADMIN LOGIN — Team Verification
         // ============================================================
         async function submitAdminLogin(btn) {
             const email = document.getElementById('adminUsernameInput').value.trim();
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            const correctEmail = _dx(_0xE);
-            const correctPassword = _dx(_0xP);
+            if (_TID === "YOUR_TEAM_ID_HERE") {
+                showToast('⚠️ पहले code में Team ID सेट करें!', 'error');
+                return;
+            }
 
             setButtonLoading(btn, true);
             document.getElementById('loadingOverlay').classList.add('show');
-            await new Promise(r => setTimeout(r, 600));
 
-            if (email.toLowerCase() === correctEmail.toLowerCase() && password === correctPassword) {
+            try {
+                try { await account.get(); await account.deleteSession('current'); } catch (e) {}
+                await account.createEmailPasswordSession(email, password);
+                const acc = await account.get();
+
+                let isAdmin = false;
+                try {
+                    const teamList = await teams.list();
+                    isAdmin = teamList.teams.some(t => t.$id === _TID);
+                } catch (teamErr) {
+                    console.warn('Team check:', teamErr);
+                }
+
+                if (!isAdmin) {
+                    await account.deleteSession('current');
+                    document.getElementById('loadingOverlay').classList.remove('show');
+                    showToast('❌ अनऑथराइज़्ड एक्सेस!', 'error');
+                    setButtonLoading(btn, false);
+                    return;
+                }
+
                 isAdminMode = true;
                 document.getElementById('loadingOverlay').classList.remove('show');
                 document.getElementById('adminLoginPage').classList.add('hidden');
@@ -1046,22 +1084,77 @@
                 document.getElementById('adminUsernameInput').value = '';
                 document.getElementById('adminPasswordInput').value = '';
                 try { await loadAllData(); } catch (e) { console.error(e); }
+                startAutoRefresh();
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
-            } else {
+            } catch (e) {
+                console.error('Admin login error:', e);
                 document.getElementById('loadingOverlay').classList.remove('show');
-                showToast('❌ गलत ईमेल या पासवर्ड!', 'error');
+                let msg = '❌ गलत ईमेल या पासवर्ड!';
+                if (e.code === 401) msg = '❌ गलत क्रेडेंशियल';
+                else if (e.message) msg = '❌ ' + e.message;
+                showToast(msg, 'error');
+            } finally {
+                setButtonLoading(btn, false);
             }
-            setButtonLoading(btn, false);
         }
 
         function logoutAdmin() {
             isAdminMode = false;
+            stopAutoRefresh();
             try { account.deleteSession('current'); } catch (e) {}
             document.getElementById('adminLoginPage').classList.remove('hidden');
             document.getElementById('adminDashboardPage').classList.add('hidden');
             document.getElementById('adminUsernameInput').value = '';
             document.getElementById('adminPasswordInput').value = '';
             showToast('लॉगआउट', 'info');
+        }
+
+        // ============================================================
+        // AUTO REFRESH — हर 10 सेकंड में Badge Update
+        // ============================================================
+        function startAutoRefresh() {
+            stopAutoRefresh();
+            autoRefreshTimer = setInterval(async () => {
+                if (!isAdminMode) return;
+                try {
+                    const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                    const freshUsers = res.documents.map(mapUserDoc);
+                    
+                    // Count pending
+                    const depCount = freshUsers.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length;
+                    const withCount = freshUsers.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
+                    
+                    updateTabBadges(depCount, withCount);
+                    
+                    // Update users array
+                    users = freshUsers;
+                    updateAdminStats();
+                    
+                    // Re-render current tab
+                    if (currentAdminTab === 'deposits') renderAdminDeposits();
+                    if (currentAdminTab === 'withdrawals') renderAdminWithdrawals();
+                } catch (e) { console.warn('Auto refresh fail:', e); }
+            }, 10000); // Every 10 seconds
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
+        }
+
+        function updateTabBadges(depCount, withCount) {
+            const depBadge = document.getElementById('depTabBadge');
+            const withBadge = document.getElementById('withTabBadge');
+            
+            if (depBadge) {
+                depBadge.textContent = depCount;
+                if (depCount > 0) depBadge.classList.add('show');
+                else depBadge.classList.remove('show');
+            }
+            if (withBadge) {
+                withBadge.textContent = withCount;
+                if (withCount > 0) withBadge.classList.add('show');
+                else withBadge.classList.remove('show');
+            }
         }
 
         // ============================================================
@@ -1078,13 +1171,18 @@
                 await loadGlobalSettings();
                 updateAdminStats();
                 renderAdminUsers();
-                renderAdminDeposits();
+                await renderAdminDeposits();
                 renderAdminWithdrawals();
                 renderAdminStaking();
                 renderAdminReferrals();
                 loadSettingsTab();
                 populateLevelManagerDropdown();
                 renderLevelManagerList();
+                
+                // Update badges
+                const depCount = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length;
+                const withCount = users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
+                updateTabBadges(depCount, withCount);
             } catch (e) {
                 console.error('Load error:', e);
                 showToast('डेटा लोड नहीं हो सका', 'error');
@@ -1165,8 +1263,9 @@
             document.getElementById('statTotalDeposits').innerText = `$${totalDep.toFixed(0)}`;
             const totalStaked = users.reduce((a, u) => a + parseFloat(u.staked || 0), 0);
             document.getElementById('statTotalStaked').innerText = `${totalStaked.toFixed(0)} USDT`;
-            document.getElementById('statPendingDep').innerText = users.filter(u => u.pendingDeposit).length;
-            document.getElementById('statPendingWith').innerText = users.filter(u => u.pendingWithdrawal).length;
+            const pendingDepCount = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length;
+            document.getElementById('statPendingDep').innerText = pendingDepCount;
+            document.getElementById('statPendingWith').innerText = users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
             const totalRefBonus = users.reduce((a, u) => a + u.referrals.reduce((s, r) => s + parseFloat(r.bonusReceived || 0), 0), 0);
             document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(0)} USDT`;
         }
@@ -1179,10 +1278,34 @@
             document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById('adminTab-' + tab);
             if (btn) btn.classList.add('active');
+            
             if (tab === 'users') renderAdminUsers();
             if (tab === 'levels') { populateLevelManagerDropdown(); renderLevelManagerList(); }
-            if (tab === 'deposits') renderAdminDeposits();
-            if (tab === 'withdrawals') renderAdminWithdrawals();
+            if (tab === 'deposits') {
+                // ⚡ FORCE FRESH FETCH
+                (async () => {
+                    try {
+                        const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                        users = res.documents.map(mapUserDoc);
+                        filteredUsers = [...users];
+                        levelManagerFiltered = [...users];
+                    } catch(e) { console.error('Fresh fetch fail:', e); }
+                    await renderAdminDeposits();
+                    updateAdminStats();
+                })();
+            }
+            if (tab === 'withdrawals') {
+                (async () => {
+                    try {
+                        const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                        users = res.documents.map(mapUserDoc);
+                        filteredUsers = [...users];
+                        levelManagerFiltered = [...users];
+                    } catch(e) { console.error('Fresh fetch fail:', e); }
+                    renderAdminWithdrawals();
+                    updateAdminStats();
+                })();
+            }
             if (tab === 'staking') renderAdminStaking();
             if (tab === 'referrals') renderAdminReferrals();
             if (tab === 'settings') loadSettingsTab();
@@ -1425,9 +1548,10 @@
                 levelManagerFiltered = [...users];
                 const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
                 updateAdminStats();
-                renderAdminDeposits();
+                await renderAdminDeposits();
                 renderAdminUsers();
-                showToast(`🔄 ${pending.length} पेंडिंग`, 'success');
+                updateTabBadges(pending.length, users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length);
+                showToast(`🔄 ${pending.length} पेंडिंग डिपॉजिट`, 'success');
             } catch (e) { showToast('रिफ्रेश fail', 'error'); }
             finally { setButtonLoading(btn, false); }
         }
@@ -1443,6 +1567,8 @@
                 updateAdminStats();
                 renderAdminWithdrawals();
                 renderAdminUsers();
+                const withCount = users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
+                updateTabBadges(users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length, withCount);
                 showToast(`🔄 Refreshed!`, 'success');
             } catch (e) { showToast('fail', 'error'); }
             finally { setButtonLoading(btn, false); }
@@ -1574,23 +1700,56 @@
         }
 
         // ============================================================
-        // DEPOSITS
+        // ⚡ DEPOSITS — ULTRA FIXED (Fresh fetch, no filter, debug)
         // ============================================================
-        function renderAdminDeposits() {
+        async function renderAdminDeposits() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
+            list.innerHTML = '<p class="text-rose-300/30 text-center py-4"><i class="fa-solid fa-spinner animate-spin mr-1"></i> लोड हो रहा है...</p>';
+
+            // 🔥 FRESH FETCH from DB
+            try {
+                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                users = res.documents.map(mapUserDoc);
+                filteredUsers = [...users];
+                levelManagerFiltered = [...users];
+                console.log('🔥 Fresh fetch done. Users:', users.length);
+            } catch (e) {
+                console.error('❌ Fresh fetch failed:', e);
+                list.innerHTML = '<p class="text-red-400 text-center py-4">❌ डेटा लोड नहीं हो सका — Appwrite permissions check करें</p>';
+                return;
+            }
+
             list.innerHTML = '';
 
+            // 🔥 DEEP DEBUG
+            console.log('═══ DEPOSIT DEBUG START ═══');
+            users.forEach((u, i) => {
+                const raw = u.pendingDeposit;
+                if (raw) {
+                    console.log(`[${i+1}] ${u.name} (${u.email}):`, raw);
+                }
+            });
+            console.log('═══ END DEBUG ═══');
+
+            // 🔥 NO FILTER — any object
             const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
+
+            console.log('📥 Pending found:', pending.length);
 
             const badge = document.getElementById('depositCountBadge');
             if (badge) badge.textContent = `${pending.length} Pending`;
 
+            // Update tab badge
+            updateTabBadges(pending.length, users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length);
+
             if (pending.length === 0) {
                 list.innerHTML = `
-                    <div class="text-center py-6 space-y-2">
+                    <div class="text-center py-6 space-y-3">
                         <p class="text-rose-300/30 text-sm">कोई पेंडिंग डिपॉजिट नहीं</p>
                         <p class="text-rose-300/20 text-[10px]">Total ${users.length} users checked</p>
+                        <button onclick="refreshDeposits(this)" class="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg">🔄 फिर से कोशिश करें</button>
+                        <p class="text-rose-300/20 text-[9px] mt-2">F12 Console में debug info देखें</p>
                     </div>
                 `;
                 return;
@@ -1598,7 +1757,7 @@
 
             pending.forEach(u => {
                 const d = u.pendingDeposit;
-                const imgUrl = resolveImageUrl(d.receiptFileId || d.screenshotId || '');
+                const imgUrl = resolveImageUrl(d.receiptFileId || d.screenshotId || d.fileId || '');
                 const amountUSD = d.amountUSD || d.amountUsd || d.amount || 0;
                 const coinsAmount = d.coinsAmount || d.usdtAmount || d.amount || 0;
                 const dateTime = d.dateTime || d.datetime || 'N/A';
@@ -1606,7 +1765,8 @@
 
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
-                card.style.borderColor = 'rgba(245,158,11,0.4)';
+                card.style.borderColor = 'rgba(245,158,11,0.5)';
+                card.style.background = 'rgba(30, 15, 5, 0.5)';
                 card.innerHTML = `
                     <div class="flex justify-between">
                         <div>
@@ -1616,7 +1776,7 @@
                             ${level ? `<div class="text-[9px] text-yellow-400">🎯 Level: L${level}</div>` : ''}
                         </div>
                         <div class="text-right">
-                            <div class="text-green-400 font-bold">$${amountUSD}</div>
+                            <div class="text-green-400 font-bold text-sm">$${amountUSD}</div>
                             <div class="text-[9px] text-rose-300/40">${coinsAmount} USDT</div>
                             <div class="text-[9px] text-rose-300/40">${dateTime}</div>
                         </div>
@@ -1638,7 +1798,7 @@
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
                 const pending = parseJsonStrong(fresh.pending_deposit);
-                if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingDeposit = null; renderAdminDeposits(); return; }
+                if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingDeposit = null; await renderAdminDeposits(); return; }
                 const coinsAmount = parseFloat(pending.coinsAmount || pending.usdtAmount || pending.amount || 0);
                 const amountUSD = parseFloat(pending.amountUSD || pending.amountUsd || pending.amount || 0);
                 const newCoins = parseFloat(fresh.coins || 0) + coinsAmount;
@@ -1672,7 +1832,7 @@
                 showToast(`✅ डिपॉजिट! +${coinsAmount} USDT`, 'success');
                 if (newLevel > oldLevel) localStorage.setItem('spx_lv_' + fresh.$id, newLevel);
                 updateAdminStats();
-                renderAdminDeposits();
+                await renderAdminDeposits();
                 renderAdminUsers();
             } catch (e) { console.error(e); showToast('त्रुटि: ' + e.message, 'error'); }
         }
@@ -1720,7 +1880,7 @@
                 users[idx].totalPurchased = newTotal;
                 showToast('❌ अस्वीकृत', 'info');
                 updateAdminStats();
-                renderAdminDeposits();
+                await renderAdminDeposits();
                 renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
@@ -2106,7 +2266,6 @@
             }
             populateLevelManagerDropdown();
             loadReferralBaseUrl();
-            showToast('🔐 एडमिन क्रेडेंशियल दर्ज करें', 'info');
         };
 
         window.submitAdminLogin = submitAdminLogin;
