@@ -255,7 +255,7 @@
             box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
         }
         .admin-tab-btn:hover:not(.active) { border-color: rgba(255, 0, 85, 0.5); color: #ff6699; }
-        
+
         .admin-tab-btn .badge-count {
             position: absolute;
             top: -4px;
@@ -800,9 +800,9 @@
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
         // ============================================================
-        // ADMIN TEAM ID (Appwrite Console → Auth → Teams)
+        // ADMIN TEAM ID
         // ============================================================
-        const _TID = "YOUR_TEAM_ID_HERE";
+        const _TID = "6a9508a4002c7bb3b799";
 
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
@@ -1048,11 +1048,6 @@
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            if (_TID === "YOUR_TEAM_ID_HERE") {
-                showToast('⚠️ पहले code में Team ID सेट करें!', 'error');
-                return;
-            }
-
             setButtonLoading(btn, true);
             document.getElementById('loadingOverlay').classList.add('show');
 
@@ -1066,13 +1061,13 @@
                     const teamList = await teams.list();
                     isAdmin = teamList.teams.some(t => t.$id === _TID);
                 } catch (teamErr) {
-                    console.warn('Team check:', teamErr);
+                    console.warn('Team check error:', teamErr);
                 }
 
                 if (!isAdmin) {
                     await account.deleteSession('current');
                     document.getElementById('loadingOverlay').classList.remove('show');
-                    showToast('❌ अनऑथराइज़्ड एक्सेस!', 'error');
+                    showToast('❌ अनऑथराइज़्ड एक्सेस! आप एडमिन टीम में नहीं हैं।', 'error');
                     setButtonLoading(btn, false);
                     return;
                 }
@@ -1110,7 +1105,7 @@
         }
 
         // ============================================================
-        // AUTO REFRESH — हर 10 सेकंड में Badge Update
+        // AUTO REFRESH (हर 10 सेकंड)
         // ============================================================
         function startAutoRefresh() {
             stopAutoRefresh();
@@ -1119,22 +1114,22 @@
                 try {
                     const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
                     const freshUsers = res.documents.map(mapUserDoc);
-                    
-                    // Count pending
+
                     const depCount = freshUsers.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length;
                     const withCount = freshUsers.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
-                    
+
                     updateTabBadges(depCount, withCount);
-                    
-                    // Update users array
+
                     users = freshUsers;
+                    filteredUsers = [...users];
+                    levelManagerFiltered = [...users];
                     updateAdminStats();
-                    
-                    // Re-render current tab
-                    if (currentAdminTab === 'deposits') renderAdminDeposits();
+
+                    if (currentAdminTab === 'deposits') renderAdminDeposits(false);
                     if (currentAdminTab === 'withdrawals') renderAdminWithdrawals();
+                    if (currentAdminTab === 'users') renderAdminUsers();
                 } catch (e) { console.warn('Auto refresh fail:', e); }
-            }, 10000); // Every 10 seconds
+            }, 10000);
         }
 
         function stopAutoRefresh() {
@@ -1144,7 +1139,7 @@
         function updateTabBadges(depCount, withCount) {
             const depBadge = document.getElementById('depTabBadge');
             const withBadge = document.getElementById('withTabBadge');
-            
+
             if (depBadge) {
                 depBadge.textContent = depCount;
                 if (depCount > 0) depBadge.classList.add('show');
@@ -1171,15 +1166,14 @@
                 await loadGlobalSettings();
                 updateAdminStats();
                 renderAdminUsers();
-                await renderAdminDeposits();
+                await renderAdminDeposits(false);
                 renderAdminWithdrawals();
                 renderAdminStaking();
                 renderAdminReferrals();
                 loadSettingsTab();
                 populateLevelManagerDropdown();
                 renderLevelManagerList();
-                
-                // Update badges
+
                 const depCount = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object').length;
                 const withCount = users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length;
                 updateTabBadges(depCount, withCount);
@@ -1278,11 +1272,11 @@
             document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById('adminTab-' + tab);
             if (btn) btn.classList.add('active');
-            
+
             if (tab === 'users') renderAdminUsers();
             if (tab === 'levels') { populateLevelManagerDropdown(); renderLevelManagerList(); }
             if (tab === 'deposits') {
-                // ⚡ FORCE FRESH FETCH
+                // Fresh fetch + render
                 (async () => {
                     try {
                         const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
@@ -1290,7 +1284,7 @@
                         filteredUsers = [...users];
                         levelManagerFiltered = [...users];
                     } catch(e) { console.error('Fresh fetch fail:', e); }
-                    await renderAdminDeposits();
+                    await renderAdminDeposits(false);
                     updateAdminStats();
                 })();
             }
@@ -1548,7 +1542,7 @@
                 levelManagerFiltered = [...users];
                 const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
                 updateAdminStats();
-                await renderAdminDeposits();
+                await renderAdminDeposits(false);
                 renderAdminUsers();
                 updateTabBadges(pending.length, users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length);
                 showToast(`🔄 ${pending.length} पेंडिंग डिपॉजिट`, 'success');
@@ -1700,47 +1694,45 @@
         }
 
         // ============================================================
-        // ⚡ DEPOSITS — ULTRA FIXED (Fresh fetch, no filter, debug)
+        // DEPOSITS — FULLY FIXED
         // ============================================================
-        async function renderAdminDeposits() {
+        async function renderAdminDeposits(showLoader = true) {
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
-            list.innerHTML = '<p class="text-rose-300/30 text-center py-4"><i class="fa-solid fa-spinner animate-spin mr-1"></i> लोड हो रहा है...</p>';
+            if (showLoader) {
+                list.innerHTML = '<p class="text-rose-300/30 text-center py-4"><i class="fa-solid fa-spinner animate-spin mr-1"></i> लोड हो रहा है...</p>';
+            }
 
-            // 🔥 FRESH FETCH from DB
-            try {
-                const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
-                users = res.documents.map(mapUserDoc);
-                filteredUsers = [...users];
-                levelManagerFiltered = [...users];
-                console.log('🔥 Fresh fetch done. Users:', users.length);
-            } catch (e) {
-                console.error('❌ Fresh fetch failed:', e);
-                list.innerHTML = '<p class="text-red-400 text-center py-4">❌ डेटा लोड नहीं हो सका — Appwrite permissions check करें</p>';
-                return;
+            // Fresh fetch
+            if (showLoader) {
+                try {
+                    const res = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [Query.limit(500)]);
+                    users = res.documents.map(mapUserDoc);
+                    filteredUsers = [...users];
+                    levelManagerFiltered = [...users];
+                    console.log('🔥 Fresh fetch done. Users:', users.length);
+                } catch (e) {
+                    console.error('❌ Fresh fetch failed:', e);
+                    list.innerHTML = '<p class="text-red-400 text-center py-4">❌ डेटा लोड नहीं हो सका — Appwrite permissions check करें</p>';
+                    return;
+                }
             }
 
             list.innerHTML = '';
 
-            // 🔥 DEEP DEBUG
-            console.log('═══ DEPOSIT DEBUG START ═══');
+            // Debug
+            console.log('═══ DEPOSIT DEBUG ═══');
             users.forEach((u, i) => {
                 const raw = u.pendingDeposit;
-                if (raw) {
-                    console.log(`[${i+1}] ${u.name} (${u.email}):`, raw);
-                }
+                if (raw) console.log(`[${i+1}] ${u.name} (${u.email}):`, raw);
             });
-            console.log('═══ END DEBUG ═══');
 
-            // 🔥 NO FILTER — any object
             const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
-
             console.log('📥 Pending found:', pending.length);
 
             const badge = document.getElementById('depositCountBadge');
             if (badge) badge.textContent = `${pending.length} Pending`;
 
-            // Update tab badge
             updateTabBadges(pending.length, users.filter(u => u.pendingWithdrawal && typeof u.pendingWithdrawal === 'object').length);
 
             if (pending.length === 0) {
@@ -1798,7 +1790,7 @@
             try {
                 const fresh = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, id);
                 const pending = parseJsonStrong(fresh.pending_deposit);
-                if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingDeposit = null; await renderAdminDeposits(); return; }
+                if (!pending) { showToast('पहले ही प्रोसेस', 'info'); users[idx].pendingDeposit = null; await renderAdminDeposits(false); return; }
                 const coinsAmount = parseFloat(pending.coinsAmount || pending.usdtAmount || pending.amount || 0);
                 const amountUSD = parseFloat(pending.amountUSD || pending.amountUsd || pending.amount || 0);
                 const newCoins = parseFloat(fresh.coins || 0) + coinsAmount;
@@ -1810,8 +1802,6 @@
                 txs.push({ type: 'deposit', amountUSD: amountUSD, coinsAmount: coinsAmount, receiptFileId: pending.receiptFileId || '', dateTime: pending.dateTime || '', status: 'Approved', receiptId: receiptId });
                 const oldTotal = parseFloat(fresh.totalPurchased || 0);
                 const newTotal = oldTotal + amountUSD;
-                const oldLevel = Math.floor(oldTotal / LEVEL_TARGET);
-                const newLevel = Math.floor(newTotal / LEVEL_TARGET);
 
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, {
                     coins: newCoins,
@@ -1830,9 +1820,8 @@
                 if (fresh.referredBy) { await awardReferralBonus(fresh.referredBy, amountUSD, fresh); }
 
                 showToast(`✅ डिपॉजिट! +${coinsAmount} USDT`, 'success');
-                if (newLevel > oldLevel) localStorage.setItem('spx_lv_' + fresh.$id, newLevel);
                 updateAdminStats();
-                await renderAdminDeposits();
+                await renderAdminDeposits(false);
                 renderAdminUsers();
             } catch (e) { console.error(e); showToast('त्रुटि: ' + e.message, 'error'); }
         }
@@ -1880,7 +1869,7 @@
                 users[idx].totalPurchased = newTotal;
                 showToast('❌ अस्वीकृत', 'info');
                 updateAdminStats();
-                await renderAdminDeposits();
+                await renderAdminDeposits(false);
                 renderAdminUsers();
             } catch (e) { showToast('त्रुटि', 'error'); }
         }
