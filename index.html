@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SupriX Global – Admin Panel</title>
+    <title>Admin Console</title>
     <meta name="google" content="notranslate" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -525,7 +525,7 @@
                     <button onclick="switchAdminTab('settings')" id="adminTab-settings" class="admin-tab-btn">⚙️ Settings</button>
                 </div>
 
-                <!-- ============ USERS ============ -->
+                <!-- USERS -->
                 <div id="adminSection-users" class="admin-sec space-y-3">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-coins mr-1 text-rose-400"></i> यूजर USDT कस्टमाइज़ेशन</h4>
@@ -541,14 +541,12 @@
                     </div>
 
                     <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
-                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Quick Update (Email / SPX ID se)</h4>
-                        <p class="text-[10px] text-rose-300/50">किसी भी user का Level तुरंत सेट करें — User Panel में Green Tick दिखेगा</p>
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Quick Update</h4>
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <input type="text" id="quickLevelIdentifier" placeholder="SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
                             <input type="number" id="quickLevelNumber" placeholder="Level (1-100)" min="1" max="100" class="p-2 text-xs">
                             <button onclick="quickUpdateLevel(this)" class="btn-3d-gold py-2 rounded-xl text-xs">🎯 Level सेट करें</button>
                         </div>
-                        <button onclick="setAllLevelsToZero()" class="w-full bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 text-[10px] font-bold py-2 rounded-xl transition-all">⚠️ सभी Users का Level Reset करें (L0)</button>
                     </div>
 
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
@@ -563,45 +561,37 @@
                     </div>
                 </div>
 
-                <!-- ============ LEVELS ============ -->
+                <!-- LEVELS -->
                 <div id="adminSection-levels" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
-                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Manager (Advanced)</h4>
-                        <p class="text-[10px] text-rose-300/60">Email या SPX ID से किसी भी user का Level manually set करें। User Panel में Green Tick automatic दिखेगा।</p>
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-trophy mr-1" style="color: #d4af37;"></i> Level Manager</h4>
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <input type="text" id="levelManagerIdentifier" placeholder="Email / SPX ID" class="col-span-2 p-2 text-xs">
-                            <select id="levelManagerSelect" class="col-span-2 p-2 text-xs">
-                                <option value="">-- Level चुनें --</option>
-                            </select>
-                            <input type="text" id="levelManagerSearch" oninput="filterLevelUserList()" placeholder="🔍 Search user" class="col-span-2 p-2 text-xs">
+                            <select id="levelManagerSelect" class="col-span-2 p-2 text-xs"><option value="">-- Level चुनें --</option></select>
+                            <input type="text" id="levelManagerSearch" oninput="filterLevelUserList()" placeholder="🔍 Search" class="col-span-2 p-2 text-xs">
                         </div>
                         <button onclick="applyLevelFromManager(this)" class="w-full btn-3d-gold py-2.5 rounded-xl text-xs">🎯 Level Apply करें</button>
-                        <div class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 space-y-1">
-                            <p class="text-[10px] text-yellow-300 font-bold"><i class="fa-solid fa-info-circle mr-1"></i> कैसे काम करता है:</p>
-                            <p class="text-[9px] text-rose-300/50">• L1 = $1000 total purchased</p>
-                            <p class="text-[9px] text-rose-300/50">• L2 = $2000 total purchased</p>
-                            <p class="text-[9px] text-rose-300/50">• L100 = $100,000 total purchased</p>
-                            <p class="text-[9px] text-rose-300/50">• Admin manually set करेगा → User Panel में Green Tick आएगा</p>
-                        </div>
                     </div>
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
-                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-users mr-1" style="color: #d4af37;"></i> Users — Level Status</h4>
                         <div id="levelManagerUserList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto font-mono"></div>
                     </div>
                 </div>
 
-                <!-- ============ DEPOSITS ============ -->
+                <!-- DEPOSITS -->
                 <div id="adminSection-deposits" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center">
                             <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-clock mr-1 text-yellow-400"></i> पेंडिंग डिपॉजिट्स</h4>
-                            <button onclick="refreshDeposits(this)" class="bg-rose-500 hover:bg-rose-600 text-white text-[9px] font-bold px-2 py-1 rounded">🔄 Refresh</button>
+                            <div class="flex gap-1.5">
+                                <span id="depositCountBadge" class="bg-yellow-500/20 text-yellow-300 text-[9px] font-bold px-2 py-1 rounded border border-yellow-500/30">0 Pending</span>
+                                <button onclick="refreshDeposits(this)" class="bg-rose-500 hover:bg-rose-600 text-white text-[9px] font-bold px-2 py-1 rounded">🔄 Refresh</button>
+                            </div>
                         </div>
                         <div id="adminDepositsList" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
 
-                <!-- ============ WITHDRAWALS ============ -->
+                <!-- WITHDRAWALS -->
                 <div id="adminSection-withdrawals" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center">
@@ -612,7 +602,7 @@
                     </div>
                 </div>
 
-                <!-- ============ STAKING ============ -->
+                <!-- STAKING -->
                 <div id="adminSection-staking" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-rose-500/15 pb-2">
@@ -625,12 +615,11 @@
                         <div id="adminStakingPlansConfig" class="grid grid-cols-4 gap-2 text-xs"></div>
                     </div>
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
-                        <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-lock mr-1 text-rose-400"></i> सभी एक्टिव स्टेकिंग</h4>
                         <div id="adminStakingList" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
                     </div>
                 </div>
 
-                <!-- ============ REFERRALS ============ -->
+                <!-- REFERRALS -->
                 <div id="adminSection-referrals" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-2">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-tree mr-1 text-blue-400"></i> रेफ़रल ट्रैकर</h4>
@@ -638,7 +627,7 @@
                     </div>
                 </div>
 
-                <!-- ============ TRANSFER ============ -->
+                <!-- TRANSFER -->
                 <div id="adminSection-transfer" class="admin-sec space-y-3 hidden">
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-arrow-right-arrow-left mr-1 text-rose-400"></i> यूजर-टू-यूजर USDT ट्रांसफर</h4>
@@ -651,21 +640,19 @@
                     </div>
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-wallet mr-1 text-rose-400"></i> स्टेकिंग फ़ोर्स अनलॉक</h4>
-                        <p class="text-[10px] text-rose-300/60">किसी भी यूजर की सभी स्टेकिंग तुरंत अनलॉक करें।</p>
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <input type="text" id="adminForceUnlockId" placeholder="SPX ID / ईमेल" class="col-span-2 p-2 text-xs">
-                            <button onclick="adminForceUnlockAllStakes(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">🔓 सभी स्टेकिंग अनलॉक करें</button>
+                            <button onclick="adminForceUnlockAllStakes(this)" class="col-span-2 btn-3d-rose py-2 rounded-xl text-xs">🔓 सभी स्टेकिंग अनलॉक</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- ============ SETTINGS ============ -->
+                <!-- SETTINGS -->
                 <div id="adminSection-settings" class="admin-sec space-y-3 hidden">
 
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-images mr-1 text-rose-400"></i> स्लाइडर इमेज कंट्रोल</h4>
-                        <p class="text-[10px] text-rose-300/60">Drive Image ID या पूरा URL। एक लाइन में एक।</p>
-                        <textarea id="adminSliderImages" rows="8" placeholder="1tMFYEsmqHYhHGEPuOWZYxN3Uvc-fPIms&#10;https://example.com/image.jpg" class="w-full p-2 text-xs font-mono"></textarea>
+                        <textarea id="adminSliderImages" rows="8" placeholder="Drive Image ID या URL" class="w-full p-2 text-xs font-mono"></textarea>
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveSliderImages(this)" class="btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
                             <button onclick="resetSliderImages()" class="btn-3d-rose py-2 rounded-xl text-xs" style="background: linear-gradient(145deg, #6b7280, #374151);">🔄 Reset</button>
@@ -682,21 +669,12 @@
                         </div>
                     </div>
 
-                    <!-- ⚡ NEW: Referral Base URL -->
                     <div class="glass-rose p-4 rounded-2xl space-y-3" style="border-color: #d4af37 !important;">
-                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-link mr-1" style="color: #d4af37;"></i> Referral Base URL (असली Website Link)</h4>
-                        <p class="text-[10px] text-rose-300/60">यहाँ अपनी hosted website का पूरा URL डालें। QR scan करने पर यही URL खुलेगा।</p>
-                        <input type="text" id="adminReferralBaseUrl" placeholder="https://suprixglobal.online/index.html" class="w-full p-2 text-xs font-mono">
+                        <h4 class="text-xs font-bold text-yellow-300"><i class="fa-solid fa-link mr-1" style="color: #d4af37;"></i> Referral Base URL</h4>
+                        <input type="text" id="adminReferralBaseUrl" placeholder="https://example.com/index.html" class="w-full p-2 text-xs font-mono">
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveReferralBaseUrl(this)" class="btn-3d-gold py-2 rounded-xl text-xs">💾 URL सेव</button>
                             <button onclick="testReferralLink()" class="btn-3d-rose py-2 rounded-xl text-xs">🧪 Test QR</button>
-                        </div>
-                        <div class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 space-y-1">
-                            <p class="text-[10px] text-yellow-300 font-bold"><i class="fa-solid fa-info-circle mr-1"></i> उदाहरण:</p>
-                            <p class="text-[9px] text-rose-300/50">• GitHub Pages: <code>https://yourname.github.io/suprix/</code></p>
-                            <p class="text-[9px] text-rose-300/50">• Custom Domain: <code>https://suprixglobal.online/</code></p>
-                            <p class="text-[9px] text-rose-300/50">• Netlify: <code>https://suprix-global.netlify.app/</code></p>
-                            <p class="text-[9px] text-rose-300/50">• अंत में <code>?ref=SPX123456</code> अपने आप जुड़ जाएगा</p>
                         </div>
                         <div id="referralUrlPreview" class="bg-black/40 border border-green-500/30 rounded-xl p-3 hidden">
                             <p class="text-[10px] text-green-400 font-bold mb-2">✅ Final Test URL:</p>
@@ -708,22 +686,10 @@
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-percent mr-1 text-rose-400"></i> Exchange Rate & Fees</h4>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">$1 USDT = ₹ INR</label>
-                                <input type="number" id="adminExchangeRate" placeholder="100" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Withdraw Fee %</label>
-                                <input type="number" id="adminWithdrawFee" placeholder="10" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Referral Bonus %</label>
-                                <input type="number" id="adminReferralBonus" placeholder="2" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Daily Reward %</label>
-                                <input type="number" id="adminDailyReward" placeholder="0.5" class="w-full p-2 text-xs">
-                            </div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">$1 USDT = ₹ INR</label><input type="number" id="adminExchangeRate" placeholder="100" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Withdraw Fee %</label><input type="number" id="adminWithdrawFee" placeholder="10" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Referral Bonus %</label><input type="number" id="adminReferralBonus" placeholder="2" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Daily Reward %</label><input type="number" id="adminDailyReward" placeholder="0.5" class="w-full p-2 text-xs"></div>
                         </div>
                         <button onclick="saveGlobalSettings(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
                     </div>
@@ -731,22 +697,10 @@
                     <div class="glass-rose p-4 rounded-2xl space-y-3">
                         <h4 class="text-xs font-bold text-rose-300/80"><i class="fa-solid fa-sliders mr-1 text-rose-400"></i> Limits</h4>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Deposit (USDT)</label>
-                                <input type="number" id="adminMinDeposit" placeholder="10" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Withdrawal (USDT)</label>
-                                <input type="number" id="adminMinWithdrawal" placeholder="2" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Min Staking (USDT)</label>
-                                <input type="number" id="adminMinStake" placeholder="10" class="w-full p-2 text-xs">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-rose-300/50 mb-1">Level Target (USDT)</label>
-                                <input type="number" id="adminLevelTarget" placeholder="1000" class="w-full p-2 text-xs">
-                            </div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Min Deposit</label><input type="number" id="adminMinDeposit" placeholder="10" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Min Withdrawal</label><input type="number" id="adminMinWithdrawal" placeholder="2" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Min Staking</label><input type="number" id="adminMinStake" placeholder="10" class="w-full p-2 text-xs"></div>
+                            <div><label class="block text-[10px] text-rose-300/50 mb-1">Level Target</label><input type="number" id="adminLevelTarget" placeholder="1000" class="w-full p-2 text-xs"></div>
                         </div>
                         <button onclick="saveGlobalSettings(this)" class="w-full btn-3d-rose py-2 rounded-xl text-xs">💾 सेव</button>
                     </div>
@@ -786,7 +740,7 @@
                 </div>
                 <div id="levelPickerUserInfo" class="bg-black/40 border border-yellow-500/30 rounded-xl p-3 mb-3 text-xs"></div>
                 <div class="level-grid" id="levelPickerGrid"></div>
-                <button onclick="applyLevelFromPicker(this)" class="w-full btn-3d-gold py-3 rounded-xl text-sm font-bold mt-3" style="margin-top: 12px;">✅ Selected Level Apply करें</button>
+                <button onclick="applyLevelFromPicker(this)" class="w-full btn-3d-gold py-3 rounded-xl text-sm font-bold mt-3" style="margin-top: 12px;">✅ Apply करें</button>
                 <button onclick="closeLevelPicker()" class="w-full bg-rose-500/10 border border-rose-500/30 text-rose-300 py-2.5 rounded-xl text-xs mt-2">रद्द करें</button>
             </div>
         </div>
@@ -829,11 +783,11 @@
         const STAKING_SETTINGS_DOC_ID = "global_config";
 
         // ============================================================
-        // 🔐 ADMIN CREDENTIALS (Base64 Encoded)
+        // HIDDEN CREDENTIALS (Base64 Encoded)
         // ============================================================
-        const _AUTH_E = "YWRtaW4yQGNvaW54LmNvbQ==";  // admin2@coinx.com
-        const _AUTH_P = "QWRtaW5AMjAyNQ==";            // Admin@2025
-        function _dk(x) { try { return atob(x); } catch (e) { return ''; } }
+        const _0xE = "YWRtaW4yQGNvaW54LmNvbQ==";
+        const _0xP = "QWRtaW5AMjAyNQ==";
+        function _dx(x) { try { return atob(x); } catch (e) { return ''; } }
 
         let EXCHANGE_RATE = 100;
         let WITHDRAW_FEE_PCT = 10;
@@ -849,9 +803,6 @@
             size = size || 1200;
             return "https://lh3.googleusercontent.com/d/" + id + "=w" + size;
         }
-
-        const FALLBACK_IMG = "https://i.ibb.co/hJg8qHkt/Chat-GPT-Image-Sep-10-2026-02-03-43-PM.png";
-        const DEFAULT_LOGO = gdrive("1SAozsk8oWOON2naYvGkFCUu85NRMXkJR", 400);
 
         const DEFAULT_SLIDER_IDS = [
             "1tMFYEsmqHYhHGEPuOWZYxN3Uvc-fPIms",
@@ -886,9 +837,6 @@
         const storage = new Storage(client);
         const account = new Account(client);
 
-        // ============================================================
-        // STATE
-        // ============================================================
         let users = [];
         let adminStakingSettings = {
             globallyEnabled: true,
@@ -906,9 +854,6 @@
         let pickerUserId = '';
         let levelManagerFiltered = [];
 
-        // ============================================================
-        // UTILS
-        // ============================================================
         function parseJsonSafe(value, fallback) {
             if (!value) return fallback;
             if (typeof value !== 'string') return value;
@@ -921,7 +866,11 @@
             if (typeof value !== 'string') return null;
             const trimmed = value.trim();
             if (!trimmed || trimmed === 'null' || trimmed === 'undefined' || trimmed === '') return null;
-            try { return JSON.parse(trimmed); } catch (e) { return null; }
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (parsed && typeof parsed === 'object') return parsed;
+                return null;
+            } catch (e) { return null; }
         }
 
         function resolveImageUrl(value) {
@@ -1028,7 +977,6 @@
                 btn.style.color = '#ff6699';
                 btn.style.background = 'rgba(255,0,85,0.15)';
                 showToast('🔊 वॉइस सक्रिय', 'info');
-                speakHindi('वॉइस सक्रिय हो गया।');
             } else {
                 btn.style.color = 'rgba(255,255,255,0.3)';
                 btn.style.background = 'rgba(255,255,255,0.05)';
@@ -1055,9 +1003,6 @@
             showToast(msg || '✅ कॉपी!');
         }
 
-        // ============================================================
-        // BUTTERFLIES
-        // ============================================================
         function createButterflies() {
             const container = document.getElementById('butterflyContainer');
             const emojis = ['🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋'];
@@ -1086,12 +1031,11 @@
             const password = document.getElementById('adminPasswordInput').value.trim();
             if (!email || !password) { showToast('ईमेल और पासवर्ड भरें।', 'error'); return; }
 
-            const correctEmail = _dk(_AUTH_E);
-            const correctPassword = _dk(_AUTH_P);
+            const correctEmail = _dx(_0xE);
+            const correctPassword = _dx(_0xP);
 
             setButtonLoading(btn, true);
             document.getElementById('loadingOverlay').classList.add('show');
-
             await new Promise(r => setTimeout(r, 600));
 
             if (email.toLowerCase() === correctEmail.toLowerCase() && password === correctPassword) {
@@ -1103,11 +1047,9 @@
                 document.getElementById('adminPasswordInput').value = '';
                 try { await loadAllData(); } catch (e) { console.error(e); }
                 showToast('✅ एडमिन लॉगिन सफल!', 'success');
-                if (voiceEnabled) speakHindi('एडमिन पैनल में आपका स्वागत है।');
             } else {
                 document.getElementById('loadingOverlay').classList.remove('show');
                 showToast('❌ गलत ईमेल या पासवर्ड!', 'error');
-                if (voiceEnabled) speakHindi('गलत ईमेल या पासवर्ड। कृपया दोबारा प्रयास करें।');
             }
             setButtonLoading(btn, false);
         }
@@ -1119,7 +1061,7 @@
             document.getElementById('adminDashboardPage').classList.add('hidden');
             document.getElementById('adminUsernameInput').value = '';
             document.getElementById('adminPasswordInput').value = '';
-            showToast('एडमिन लॉगआउट', 'info');
+            showToast('लॉगआउट', 'info');
         }
 
         // ============================================================
@@ -1159,7 +1101,7 @@
 
         async function loadGlobalSettings() {
             try {
-                const saved = localStorage.getItem('suprix_global_settings');
+                const saved = localStorage.getItem('spx_gs');
                 if (saved) {
                     const s = JSON.parse(saved);
                     EXCHANGE_RATE = s.EXCHANGE_RATE || 100;
@@ -1176,15 +1118,15 @@
         }
 
         function loadSettingsTab() {
-            const saved = localStorage.getItem('suprix_global_settings');
+            const saved = localStorage.getItem('spx_gs');
             const s = saved ? JSON.parse(saved) : {};
-            const sliderImages = localStorage.getItem('suprix_slider_images');
+            const sliderImages = localStorage.getItem('spx_si');
             const sliderIds = sliderImages ? JSON.parse(sliderImages) : DEFAULT_SLIDER_IDS;
 
             document.getElementById('adminSliderImages').value = sliderIds.join('\n');
             renderSliderPreview(sliderIds);
 
-            const logo = localStorage.getItem('suprix_logo_url') || '';
+            const logo = localStorage.getItem('spx_lg') || '';
             document.getElementById('adminLogoUrl').value = logo;
             if (logo) {
                 const displayUrl = logo.startsWith('http') ? logo : gdrive(logo, 200);
@@ -1216,9 +1158,6 @@
             });
         }
 
-        // ============================================================
-        // STATS
-        // ============================================================
         function updateAdminStats() {
             if (!isAdminMode) return;
             document.getElementById('statTotalUsers').innerText = users.length;
@@ -1232,9 +1171,6 @@
             document.getElementById('statReferrals').innerText = `${totalRefBonus.toFixed(0)} USDT`;
         }
 
-        // ============================================================
-        // TABS
-        // ============================================================
         function switchAdminTab(tab) {
             if (!isAdminMode) return;
             currentAdminTab = tab;
@@ -1252,9 +1188,6 @@
             if (tab === 'settings') loadSettingsTab();
         }
 
-        // ============================================================
-        // LEVEL MANAGEMENT
-        // ============================================================
         function populateLevelManagerDropdown() {
             const sel = document.getElementById('levelManagerSelect');
             if (!sel) return;
@@ -1282,7 +1215,7 @@
             const identifier = document.getElementById('quickLevelIdentifier').value.trim();
             const levelNum = parseInt(document.getElementById('quickLevelNumber').value);
             if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
-            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level 1-100 के बीच होना चाहिए', 'error'); return; }
+            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level 1-100', 'error'); return; }
             const user = findUserByIdentifier(identifier);
             if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
             setButtonLoading(btn, true);
@@ -1290,17 +1223,13 @@
                 const newTotal = levelNum * LEVEL_TARGET;
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
-                showToast(`✅ ${user.name} का Level L${levelNum} सेट हो गया!`, 'success');
-                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} सेट कर दिया गया।`);
+                showToast(`✅ ${user.name} → L${levelNum}`, 'success');
                 document.getElementById('quickLevelIdentifier').value = '';
                 document.getElementById('quickLevelNumber').value = '';
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
-            } catch (e) {
-                console.error(e);
-                showToast('त्रुटि: ' + e.message, 'error');
-            } finally { setButtonLoading(btn, false); }
+            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); } finally { setButtonLoading(btn, false); }
         }
 
         async function applyLevelFromManager(btn) {
@@ -1308,7 +1237,7 @@
             const identifier = document.getElementById('levelManagerIdentifier').value.trim();
             const levelNum = parseInt(document.getElementById('levelManagerSelect').value);
             if (!identifier) { showToast('Email या SPX ID दर्ज करें', 'error'); return; }
-            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level चुनें (1-100)', 'error'); return; }
+            if (!levelNum || levelNum < 1 || levelNum > 100) { showToast('Level चुनें', 'error'); return; }
             const user = findUserByIdentifier(identifier);
             if (!user) { showToast('❌ यूजर नहीं मिला!', 'error'); return; }
             setButtonLoading(btn, true);
@@ -1316,17 +1245,13 @@
                 const newTotal = levelNum * LEVEL_TARGET;
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
-                showToast(`✅ ${user.name} का Level L${levelNum} Apply हो गया!`, 'success');
-                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${levelNum} अप्लाई कर दिया गया।`);
+                showToast(`✅ ${user.name} → L${levelNum}`, 'success');
                 document.getElementById('levelManagerIdentifier').value = '';
                 document.getElementById('levelManagerSelect').value = '';
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
-            } catch (e) {
-                console.error(e);
-                showToast('त्रुटि: ' + e.message, 'error');
-            } finally { setButtonLoading(btn, false); }
+            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); } finally { setButtonLoading(btn, false); }
         }
 
         function filterLevelUserList() {
@@ -1423,15 +1348,11 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: newTotal });
                 user.totalPurchased = newTotal;
                 showToast(`✅ ${user.name} → L${pickerSelectedLevel}`, 'success');
-                if (voiceEnabled) speakHindi(`${user.name} का लेवल ${pickerSelectedLevel} सेट कर दिया गया।`);
                 closeLevelPicker();
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
-            } catch (e) {
-                console.error(e);
-                showToast('त्रुटि: ' + e.message, 'error');
-            } finally { setButtonLoading(btn, false); }
+            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); } finally { setButtonLoading(btn, false); }
         }
 
         function closeLevelPicker() {
@@ -1447,86 +1368,53 @@
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, user.docId, { totalPurchased: 0 });
                 user.totalPurchased = 0;
-                showToast(`✅ ${user.name} का Level Reset (L0)`, 'info');
-                if (voiceEnabled) speakHindi(`${user.name} का लेवल रीसेट कर दिया गया।`);
+                showToast(`✅ Reset (L0)`, 'info');
                 renderAdminUsers();
                 renderLevelManagerList();
                 updateAdminStats();
             } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
         }
 
-        async function setAllLevelsToZero() {
-            if (!confirm('⚠️ सभी Users का Level L0 करना है? यह वापस नहीं होगा!')) return;
-            if (!confirm('पक्का? सभी users का totalPurchased 0 हो जाएगा!')) return;
-            try {
-                let count = 0;
-                for (const u of users) {
-                    if (parseFloat(u.totalPurchased || 0) > 0) {
-                        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, u.docId, { totalPurchased: 0 });
-                        u.totalPurchased = 0;
-                        count++;
-                    }
-                }
-                showToast(`✅ ${count} users का Level Reset`, 'info');
-                if (voiceEnabled) speakHindi(`${count} यूजर्स का लेवल रीसेट कर दिया गया।`);
-                renderAdminUsers();
-                renderLevelManagerList();
-                updateAdminStats();
-            } catch (e) { showToast('त्रुटि: ' + e.message, 'error'); }
-        }
-
-        // ============================================================
-        // REFERRAL BASE URL
-        // ============================================================
         function saveReferralBaseUrl(btn) {
             let url = document.getElementById('adminReferralBaseUrl').value.trim();
             if (!url) { showToast('URL दर्ज करें', 'error'); return; }
             if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
             url = url.split('?')[0];
-            localStorage.setItem('suprix_referral_base_url', url);
+            localStorage.setItem('spx_rurl', url);
             showToast('✅ Referral URL सेव!', 'success');
-            if (voiceEnabled) speakHindi('रेफरल यूआरएल सेव कर दिया गया।');
             testReferralLink();
         }
 
         function testReferralLink() {
-            const baseUrl = localStorage.getItem('suprix_referral_base_url') || '';
+            const baseUrl = localStorage.getItem('spx_rurl') || '';
             const previewBox = document.getElementById('referralUrlPreview');
             const urlText = document.getElementById('finalReferralUrl');
             const qrBox = document.getElementById('testQrBox');
 
             if (!baseUrl) {
-                showToast('पहले Referral Base URL सेव करें', 'error');
+                showToast('पहले URL सेव करें', 'error');
                 previewBox.classList.add('hidden');
                 return;
             }
-
             const sampleRef = users.length > 0 ? users[0].$id : 'demo-ref-id';
             const finalUrl = baseUrl + '?ref=' + sampleRef;
-
             urlText.textContent = finalUrl;
             previewBox.classList.remove('hidden');
-
             qrBox.innerHTML = '';
             if (typeof QRCode !== 'undefined') {
                 try {
                     new QRCode(qrBox, { text: finalUrl, width: 140, height: 140, colorDark: '#ff0055', colorLight: '#ffffff' });
-                } catch (e) {
-                    qrBox.innerHTML = '<p class="text-[8px] text-rose-300/30">QR error</p>';
-                }
+                } catch (e) { qrBox.innerHTML = '<p class="text-[8px] text-rose-300/30">QR error</p>'; }
             }
             showToast('✅ Test URL तैयार!', 'success');
         }
 
         function loadReferralBaseUrl() {
-            const saved = localStorage.getItem('suprix_referral_base_url') || '';
+            const saved = localStorage.getItem('spx_rurl') || '';
             const input = document.getElementById('adminReferralBaseUrl');
             if (input) input.value = saved;
         }
 
-        // ============================================================
-        // REFRESH
-        // ============================================================
         async function refreshDeposits(btn) {
             if (!isAdminMode) return;
             setButtonLoading(btn, true);
@@ -1535,11 +1423,12 @@
                 users = res.documents.map(mapUserDoc);
                 filteredUsers = [...users];
                 levelManagerFiltered = [...users];
+                const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
-                showToast(`🔄 रिफ्रेश!`, 'success');
-            } catch (e) { showToast('रिफ्रेश नहीं हो सका', 'error'); }
+                showToast(`🔄 ${pending.length} पेंडिंग`, 'success');
+            } catch (e) { showToast('रिफ्रेश fail', 'error'); }
             finally { setButtonLoading(btn, false); }
         }
 
@@ -1554,14 +1443,11 @@
                 updateAdminStats();
                 renderAdminWithdrawals();
                 renderAdminUsers();
-                showToast(`🔄 रिफ्रेश!`, 'success');
-            } catch (e) { showToast('रिफ्रेश नहीं हो सका', 'error'); }
+                showToast(`🔄 Refreshed!`, 'success');
+            } catch (e) { showToast('fail', 'error'); }
             finally { setButtonLoading(btn, false); }
         }
 
-        // ============================================================
-        // USERS
-        // ============================================================
         function filterUsers() {
             const q = document.getElementById('userSearchInput').value.trim().toLowerCase();
             if (!q) { filteredUsers = [...users]; }
@@ -1584,6 +1470,7 @@
             if (display.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-2">कोई यूजर नहीं</p>'; return; }
             display.forEach(u => {
                 const level = Math.floor(parseFloat(u.totalPurchased || 0) / LEVEL_TARGET);
+                const hasPendingDep = u.pendingDeposit && typeof u.pendingDeposit === 'object';
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
                 card.innerHTML = `
@@ -1604,13 +1491,13 @@
                         <span>🆔 SPX: ${u.coinxId||'N/A'} <button onclick="copyText('${u.coinxId||''}','✅ SPX कॉपी!')" class="copy-btn">📋</button></span>
                         <span>📱 ${u.phone||'N/A'}</span>
                         <span>🔒 Staked: ${parseFloat(u.staked||0).toFixed(2)} USDT | 🛒 Total: $${u.totalPurchased.toFixed(2)}</span>
-                        ${u.pendingDeposit ? `<span class="text-yellow-400">⏳ पेंडिंग डिपॉजिट: $${u.pendingDeposit.amountUSD || 0}</span>` : ''}
-                        ${u.pendingWithdrawal ? `<span class="text-yellow-400">⏳ पेंडिंग विथड्रॉवल: ${u.pendingWithdrawal.coinsAmount || 0} USDT</span>` : ''}
+                        ${hasPendingDep ? `<span class="text-yellow-400">⏳ पेंडिंग डिपॉजिट: $${u.pendingDeposit.amountUSD || u.pendingDeposit.amount || 0}</span>` : ''}
+                        ${u.pendingWithdrawal ? `<span class="text-yellow-400">⏳ पेंडिंग विथ: ${u.pendingWithdrawal.coinsAmount || 0} USDT</span>` : ''}
                     </div>
                     <div class="flex justify-between items-center gap-1 flex-wrap">
                         <span class="status-badge ${u.isBlocked?'status-blocked':(level>0?'status-gold':'status-approved')}">${u.isBlocked?'🚫 Blocked':'✅ Active'}</span>
                         <div class="flex gap-1 flex-wrap">
-                            <button onclick="openLevelPicker('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30" title="Level बदलें">🎯</button>
+                            <button onclick="openLevelPicker('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">🎯</button>
                             <button onclick="viewUserReceipt('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/25">🧾</button>
                             <button onclick="toggleBlock('${u.$id}')" class="text-[9px] px-2 py-0.5 rounded ${u.isBlocked?'bg-green-500/20 text-green-400':'bg-red-500/20 text-red-400'} border border-rose-500/25">${u.isBlocked?'Unblock':'Block'}</button>
                         </div>
@@ -1631,7 +1518,6 @@
                 const fidx = filteredUsers.findIndex(u => u.$id === id);
                 if (fidx !== -1) filteredUsers[fidx].isBlocked = newStatus;
                 showToast(`यूजर ${newStatus?'ब्लॉक':'अनब्लॉक'}!`, 'success');
-                if (voiceEnabled) speakHindi(`यूजर ${newStatus?'ब्लॉक':'अनब्लॉक'} कर दिया गया।`);
                 renderAdminUsers();
             } catch (e) { showToast('त्रुटि!', 'error'); }
         }
@@ -1650,8 +1536,7 @@
             try {
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, users[idx].docId, { coins: newBal });
                 users[idx].coins = newBal;
-                showToast(action === 'add' ? `+${coinAmount} USDT क्रेडिट!` : `-${coinAmount} USDT डेबिट!`, 'success');
-                if (voiceEnabled) speakHindi(`${coinAmount} यूएसडीटी ${action === 'add' ? 'जोड़े' : 'घटाए'} गए।`);
+                showToast(action === 'add' ? `+${coinAmount} USDT` : `-${coinAmount} USDT`, 'success');
                 document.getElementById('adminCoinUserId').value = '';
                 document.getElementById('adminCoinAmount').value = '';
                 updateAdminStats();
@@ -1679,7 +1564,7 @@
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">💰 मुख्य बैलेंस</span><span style="color:#34d399;font-weight:700;">${balance.toFixed(2)} USDT</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🔒 Staked</span><span style="color:#f59e0b;font-weight:700;">${totalStaked.toFixed(2)} USDT</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📥 कुल डिपॉजिट</span><span style="color:#22c55e;">${totalDep.toFixed(2)} USDT</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📤 कुल विथड्रॉवल</span><span style="color:#ef4444;">${totalWithdrawn.toFixed(2)} USDT</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">📤 कुल विथ</span><span style="color:#ef4444;">${totalWithdrawn.toFixed(2)} USDT</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,0,85,0.1);"><span style="color:#ff99bb;">🎁 रेफरल बोनस</span><span style="color:#34d399;">${totalRef.toFixed(2)} USDT</span></div>
                     <div style="display:flex;justify-content:space-between;padding:5px 0;"><span style="color:#ff99bb;">🛒 Total Purchased</span><span>$${u.totalPurchased.toFixed(2)}</span></div>
                 </div>
@@ -1695,22 +1580,40 @@
             if (!isAdminMode) return;
             const list = document.getElementById('adminDepositsList');
             list.innerHTML = '';
+
             const pending = users.filter(u => u.pendingDeposit && typeof u.pendingDeposit === 'object');
-            if (pending.length === 0) { list.innerHTML = '<p class="text-rose-300/30 text-center py-4">कोई पेंडिंग डिपॉजिट नहीं</p>'; return; }
+
+            const badge = document.getElementById('depositCountBadge');
+            if (badge) badge.textContent = `${pending.length} Pending`;
+
+            if (pending.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-6 space-y-2">
+                        <p class="text-rose-300/30 text-sm">कोई पेंडिंग डिपॉजिट नहीं</p>
+                        <p class="text-rose-300/20 text-[10px]">Total ${users.length} users checked</p>
+                    </div>
+                `;
+                return;
+            }
+
             pending.forEach(u => {
                 const d = u.pendingDeposit;
                 const imgUrl = resolveImageUrl(d.receiptFileId || d.screenshotId || '');
                 const amountUSD = d.amountUSD || d.amountUsd || d.amount || 0;
                 const coinsAmount = d.coinsAmount || d.usdtAmount || d.amount || 0;
                 const dateTime = d.dateTime || d.datetime || 'N/A';
+                const level = d.level || '';
+
                 const card = document.createElement('div');
                 card.className = 'item-card space-y-2';
+                card.style.borderColor = 'rgba(245,158,11,0.4)';
                 card.innerHTML = `
                     <div class="flex justify-between">
                         <div>
                             <div class="font-bold text-rose-400 text-xs">${u.name||'N/A'}</div>
                             <div class="text-[9px] text-rose-300/40">📧 ${u.email||'N/A'}</div>
                             <div class="text-[9px] text-rose-300/40">🆔 ${u.coinxId||'N/A'}</div>
+                            ${level ? `<div class="text-[9px] text-yellow-400">🎯 Level: L${level}</div>` : ''}
                         </div>
                         <div class="text-right">
                             <div class="text-green-400 font-bold">$${amountUSD}</div>
@@ -1718,7 +1621,7 @@
                             <div class="text-[9px] text-rose-300/40">${dateTime}</div>
                         </div>
                     </div>
-                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : ''}
+                    ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : '<p class="text-[10px] text-rose-300/30 text-center py-2">📷 No screenshot</p>'}
                     <div class="flex gap-2">
                         <button onclick="approveDeposit('${u.$id}')" class="flex-1 btn-3d-green py-2 text-xs rounded-lg">✅ Approve</button>
                         <button onclick="rejectDeposit('${u.$id}')" class="flex-1 btn-3d-red py-2 text-xs rounded-lg">❌ Reject</button>
@@ -1766,9 +1669,8 @@
 
                 if (fresh.referredBy) { await awardReferralBonus(fresh.referredBy, amountUSD, fresh); }
 
-                showToast(`✅ डिपॉजिट स्वीकृत! +${coinsAmount} USDT`, 'success');
-                if (voiceEnabled) speakHindi('डिपॉजिट सफलतापूर्वक स्वीकृत किया गया।');
-                if (newLevel > oldLevel) localStorage.setItem('cx_pending_level_' + fresh.$id, newLevel);
+                showToast(`✅ डिपॉजिट! +${coinsAmount} USDT`, 'success');
+                if (newLevel > oldLevel) localStorage.setItem('spx_lv_' + fresh.$id, newLevel);
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
@@ -1800,7 +1702,7 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, referrer.$id, {
                     coins: newCoins, referrals: JSON.stringify(refs)
                 });
-            } catch (e) { console.error('Referral bonus error:', e); }
+            } catch (e) { console.error('Ref bonus error:', e); }
         }
 
         async function rejectDeposit(id) {
@@ -1816,8 +1718,7 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { pending_deposit: '', totalPurchased: newTotal });
                 users[idx].pendingDeposit = null;
                 users[idx].totalPurchased = newTotal;
-                showToast('❌ डिपॉजिट अस्वीकृत', 'info');
-                if (voiceEnabled) speakHindi('डिपॉजिट अस्वीकृत कर दिया गया।');
+                showToast('❌ अस्वीकृत', 'info');
                 updateAdminStats();
                 renderAdminDeposits();
                 renderAdminUsers();
@@ -1855,7 +1756,7 @@
                     </div>
                     <div class="text-[10px] bg-black/30 p-2 rounded-lg border border-rose-500/15 space-y-1">
                         <div>💳 <span class="text-rose-300/50">Address:</span> <span class="font-mono text-rose-400 break-all">${u.withdrawal_address||'N/A'}</span></div>
-                        <div>💰 <span class="text-rose-300/50">Net USDT (${100-WITHDRAW_FEE_PCT}%):</span> <span class="currency-usdt">${netUsdt} USDT</span></div>
+                        <div>💰 <span class="text-rose-300/50">Net:</span> <span class="currency-usdt">${netUsdt} USDT</span></div>
                         <div>💵 <span class="text-rose-300/50">INR:</span> <span class="currency-inr">₹${inrAmount}</span></div>
                     </div>
                     ${imgUrl ? `<img src="${imgUrl}" class="w-full max-h-48 object-contain rounded-lg border border-rose-500/20 cursor-pointer bg-black/40" onclick="openFullscreenImage('${imgUrl}')" onerror="this.style.display='none';">` : ''}
@@ -1895,7 +1796,6 @@
                 users[idx].pendingWithdrawal = null;
                 users[idx].transactions = txs;
                 showToast('✅ विथड्रॉवल पूरा', 'success');
-                if (voiceEnabled) speakHindi('विथड्रॉवल सफलतापूर्वक पूरा किया गया।');
                 updateAdminStats();
                 renderAdminWithdrawals();
                 renderAdminUsers();
@@ -1915,8 +1815,7 @@
                 await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, id, { coins: refund, pending_withdrawal: '' });
                 users[idx].coins = refund;
                 users[idx].pendingWithdrawal = null;
-                showToast('❌ अस्वीकृत, रिफंड', 'info');
-                if (voiceEnabled) speakHindi('विथड्रॉवल अस्वीकृत कर दिया गया, राशि रिफंड कर दी गई।');
+                showToast('❌ रिफंड', 'info');
                 updateAdminStats();
                 renderAdminWithdrawals();
                 renderAdminUsers();
@@ -1949,18 +1848,16 @@
                         found = true;
                         const now = Date.now();
                         const isUnlockable = s.lockUntil <= now;
-                        const daysLeft = Math.ceil((s.lockUntil - now) / (1000 * 60 * 60 * 24));
                         const div = document.createElement('div');
                         div.className = 'item-card flex justify-between items-center';
                         div.innerHTML = `
                             <div>
                                 <div class="text-rose-400 text-xs font-bold">${u.name} (${u.coinxId||'N/A'})</div>
                                 <div class="text-[9px] text-rose-300/40">💰 ${s.amount} USDT | 📅 ${s.days} दिन</div>
-                                <div class="text-[9px] text-rose-300/40">🔓 ${new Date(s.lockUntil).toLocaleDateString('hi-IN')} ${daysLeft > 0 ? `(${daysLeft} दिन बाकी)` : '(तैयार)'}</div>
                             </div>
                             <div class="text-right">
                                 <span class="status-badge ${isUnlockable ? 'status-approved' : 'status-pending'}">${isUnlockable ? '🔓 Ready' : '🔒 Locked'}</span>
-                                <button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] mt-1 block w-full">🔓 Force Unlock</button>
+                                <button onclick="adminUnlockStake('${u.$id}','${s.stakeId}')" class="bg-rose-500 text-white px-2 py-0.5 rounded text-[9px] mt-1 block w-full">🔓 Unlock</button>
                             </div>
                         `;
                         list.appendChild(div);
@@ -1993,7 +1890,6 @@
                 users[idx].staking = remaining;
                 users[idx].stakingHistory = history;
                 showToast(`✅ ${stake.amount} USDT अनलॉक!`, 'success');
-                if (voiceEnabled) speakHindi(`${stake.amount} यूएसडीटी अनलॉक कर दिया गया।`);
                 renderAdminStaking();
                 updateAdminStats();
                 renderAdminUsers();
@@ -2026,8 +1922,7 @@
                 users[idx].staked = 0;
                 users[idx].staking = [];
                 users[idx].stakingHistory = history;
-                showToast(`✅ ${total.toFixed(2)} USDT अनलॉक (${u.name})`, 'success');
-                if (voiceEnabled) speakHindi(`${total.toFixed(2)} यूएसडीटी की सभी स्टेकिंग अनलॉक कर दी गई।`);
+                showToast(`✅ ${total.toFixed(2)} USDT अनलॉक`, 'success');
                 document.getElementById('adminForceUnlockId').value = '';
                 renderAdminStaking();
                 updateAdminStats();
@@ -2041,8 +1936,7 @@
             try {
                 await databases.updateDocument(DATABASE_ID, STAKING_SETTINGS_COLLECTION_ID, STAKING_SETTINGS_DOC_ID, { globallyEnabled: enabled });
                 showToast(`स्टेकिंग ${enabled?'सक्षम':'अक्षम'}`, 'success');
-                if (voiceEnabled) speakHindi(`स्टेकिंग ${enabled?'सक्षम':'अक्षम'} कर दी गई।`);
-            } catch (e) { showToast('सेटिंग सेव नहीं हुई', 'error'); }
+            } catch (e) { showToast('त्रुटि', 'error'); }
         }
 
         async function togglePlanState(days, enabled) {
@@ -2056,9 +1950,6 @@
             } catch (e) { showToast('त्रुटि', 'error'); renderAdminStaking(); }
         }
 
-        // ============================================================
-        // REFERRALS
-        // ============================================================
         function renderAdminReferrals() {
             if (!isAdminMode) return;
             const list = document.getElementById('adminReferralsList');
@@ -2079,29 +1970,26 @@
                         <span class="font-bold text-rose-400">${r.referrer} (${r.referrerSPX})</span>
                         <span class="currency-usdt">+${Number(r.bonusReceived||0).toFixed(2)} USDT</span>
                     </div>
-                    <div class="text-[10px] text-rose-300/40">रेफर: ${r.referredName||'N/A'} (${r.referredEmail||'N/A'})</div>
+                    <div class="text-[10px] text-rose-300/40">रेफर: ${r.referredName||'N/A'}</div>
                     <div class="text-[10px] text-rose-300/40">इन्वेस्ट: ${Number(r.stakedAmount||0).toFixed(2)} USDT | 📅 ${r.dateTime||''}</div>
                 `;
                 list.appendChild(div);
             });
         }
 
-        // ============================================================
-        // TRANSFER
-        // ============================================================
         async function adminTransferUSDT(btn) {
             if (!isAdminMode) return;
             const fromId = document.getElementById('adminTransferFrom').value.trim();
             const toId = document.getElementById('adminTransferTo').value.trim();
             const amount = parseFloat(document.getElementById('adminTransferAmount').value);
             if (!fromId || !toId || !amount || amount <= 0) { showToast('सभी फील्ड्स भरें।', 'error'); return; }
-            if (fromId === toId) { showToast('खुद को ट्रांसफर नहीं!', 'error'); return; }
+            if (fromId === toId) { showToast('खुद को नहीं!', 'error'); return; }
             setButtonLoading(btn, true);
             const fromIdx = users.findIndex(u => u.coinxId === fromId || u.email === fromId || u.$id === fromId);
             const toIdx = users.findIndex(u => u.coinxId === toId || u.email === toId || u.$id === toId);
-            if (fromIdx === -1 || toIdx === -1) { setButtonLoading(btn, false); showToast('SPX ID नहीं मिली!', 'error'); return; }
+            if (fromIdx === -1 || toIdx === -1) { setButtonLoading(btn, false); showToast('यूजर नहीं मिला!', 'error'); return; }
             const fromBal = parseFloat(users[fromIdx].coins || 0);
-            if (fromBal < amount) { setButtonLoading(btn, false); showToast('पर्याप्त USDT नहीं!', 'error'); return; }
+            if (fromBal < amount) { setButtonLoading(btn, false); showToast('पर्याप्त नहीं!', 'error'); return; }
             const newFrom = fromBal - amount;
             const newTo = parseFloat(users[toIdx].coins || 0) + amount;
             try {
@@ -2110,7 +1998,6 @@
                 users[fromIdx].coins = newFrom;
                 users[toIdx].coins = newTo;
                 showToast(`✅ ${amount} USDT ट्रांसफर!`, 'success');
-                if (voiceEnabled) speakHindi(`${amount} यूएसडीटी ट्रांसफर कर दिए गए।`);
                 document.getElementById('adminTransferFrom').value = '';
                 document.getElementById('adminTransferTo').value = '';
                 document.getElementById('adminTransferAmount').value = '';
@@ -2119,9 +2006,6 @@
             } catch (e) { showToast('त्रुटि!', 'error'); } finally { setButtonLoading(btn, false); }
         }
 
-        // ============================================================
-        // EXPORT CSV
-        // ============================================================
         function exportAllUserData() {
             if (!isAdminMode || users.length === 0) { showToast('कोई डेटा नहीं', 'error'); return; }
             let csv = "Name,Email,Phone,SPX_ID,USDT_Balance,Staked_USDT,Withdrawn_USDT,TotalPurchased,Level,Blocked\n";
@@ -2133,41 +2017,36 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `suprix_users_${Date.now()}.csv`;
+            a.download = `users_${Date.now()}.csv`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('✅ CSV डाउनलोड!', 'success');
+            showToast('✅ CSV!', 'success');
         }
 
-        // ============================================================
-        // SETTINGS
-        // ============================================================
         function saveSliderImages(btn) {
             const raw = document.getElementById('adminSliderImages').value.trim();
-            if (!raw) { showToast('कम से कम एक image ID दर्ज करें', 'error'); return; }
+            if (!raw) { showToast('कम से कम एक image', 'error'); return; }
             const ids = raw.split('\n').map(s => s.trim()).filter(Boolean);
-            localStorage.setItem('suprix_slider_images', JSON.stringify(ids));
+            localStorage.setItem('spx_si', JSON.stringify(ids));
             renderSliderPreview(ids);
             showToast(`✅ ${ids.length} images सेव!`, 'success');
-            if (voiceEnabled) speakHindi(`${ids.length} स्लाइडर इमेज सेव कर दी गईं।`);
         }
 
         function resetSliderImages() {
-            localStorage.removeItem('suprix_slider_images');
+            localStorage.removeItem('spx_si');
             document.getElementById('adminSliderImages').value = DEFAULT_SLIDER_IDS.join('\n');
             renderSliderPreview(DEFAULT_SLIDER_IDS);
-            showToast('🔄 Slider reset!', 'success');
+            showToast('🔄 Reset!', 'success');
         }
 
         function saveLogoUrl(btn) {
             const url = document.getElementById('adminLogoUrl').value.trim();
             if (!url) { showToast('Logo URL दर्ज करें', 'error'); return; }
-            localStorage.setItem('suprix_logo_url', url);
+            localStorage.setItem('spx_lg', url);
             const displayUrl = url.startsWith('http') ? url : gdrive(url, 200);
             document.getElementById('logoPreview').src = displayUrl;
             document.getElementById('headerLogo').src = displayUrl;
             showToast('✅ Logo सेव!', 'success');
-            if (voiceEnabled) speakHindi('लोगो सेव कर दिया गया।');
         }
 
         function saveGlobalSettings(btn) {
@@ -2182,7 +2061,7 @@
                 LEVEL_TARGET: parseFloat(document.getElementById('adminLevelTarget').value) || 1000,
                 USDT_ADDRESS: document.getElementById('adminUsdtAddress').value.trim() || USDT_ADDRESS
             };
-            localStorage.setItem('suprix_global_settings', JSON.stringify(s));
+            localStorage.setItem('spx_gs', JSON.stringify(s));
             EXCHANGE_RATE = s.EXCHANGE_RATE;
             WITHDRAW_FEE_PCT = s.WITHDRAW_FEE_PCT;
             REFERRAL_BONUS_PCT = s.REFERRAL_BONUS_PCT;
@@ -2194,23 +2073,19 @@
             USDT_ADDRESS = s.USDT_ADDRESS;
             populateLevelManagerDropdown();
             showToast('✅ Settings सेव!', 'success');
-            if (voiceEnabled) speakHindi('सभी सेटिंग्स सेव कर दी गईं।');
         }
 
         function saveUsdtAddress(btn) {
             const addr = document.getElementById('adminUsdtAddress').value.trim();
             if (!addr) { showToast('एड्रेस दर्ज करें', 'error'); return; }
-            const saved = localStorage.getItem('suprix_global_settings');
+            const saved = localStorage.getItem('spx_gs');
             const s = saved ? JSON.parse(saved) : {};
             s.USDT_ADDRESS = addr;
-            localStorage.setItem('suprix_global_settings', JSON.stringify(s));
+            localStorage.setItem('spx_gs', JSON.stringify(s));
             USDT_ADDRESS = addr;
-            showToast('✅ USDT Address सेव!', 'success');
+            showToast('✅ Address सेव!', 'success');
         }
 
-        // ============================================================
-        // FULLSCREEN / RECEIPT
-        // ============================================================
         function openFullscreenImage(src) {
             document.getElementById('fullscreenImgTarget').src = src;
             document.getElementById('fullscreenImageModal').classList.remove('hidden');
@@ -2222,12 +2097,9 @@
             document.getElementById('receiptModal').classList.add('hidden');
         }
 
-        // ============================================================
-        // INIT
-        // ============================================================
         window.onload = function() {
             createButterflies();
-            const savedLogo = localStorage.getItem('suprix_logo_url');
+            const savedLogo = localStorage.getItem('spx_lg');
             if (savedLogo) {
                 const displayUrl = savedLogo.startsWith('http') ? savedLogo : gdrive(savedLogo, 200);
                 document.getElementById('headerLogo').src = displayUrl;
@@ -2237,9 +2109,6 @@
             showToast('🔐 एडमिन क्रेडेंशियल दर्ज करें', 'info');
         };
 
-        // ============================================================
-        // GLOBAL EXPORTS
-        // ============================================================
         window.submitAdminLogin = submitAdminLogin;
         window.logoutAdmin = logoutAdmin;
         window.switchAdminTab = switchAdminTab;
@@ -2279,7 +2148,6 @@
         window.applyLevelFromPicker = applyLevelFromPicker;
         window.closeLevelPicker = closeLevelPicker;
         window.resetUserLevel = resetUserLevel;
-        window.setAllLevelsToZero = setAllLevelsToZero;
         window.saveReferralBaseUrl = saveReferralBaseUrl;
         window.testReferralLink = testReferralLink;
     </script>
